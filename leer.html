@@ -333,6 +333,7 @@
   }
 
   async function abrirLibro(id) {
+    capActual = null;
     libroActual = indice.find(l => l.id === id);
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = libroActual.nombre;
