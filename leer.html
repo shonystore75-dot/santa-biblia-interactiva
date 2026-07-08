@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leer · Santa Biblia Reina Valera Interactiva</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap');
+
+  :root {
+    --ciruela: #3D1F3E;
+    --naranja: #D9622F;
+    --dorado: #F5B942;
+    --dorado-brillante: #FFDD8A;
+    --papiro: #FBF0D9;
+    --tinta: #3D2419;
+    --terracota: #B9502E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: #2A1A2E;
+    font-family: 'Source Serif 4', serif;
+    color: var(--tinta);
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--papiro);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  @media (min-width: 500px) {
+    html, body { height: auto; }
+    body { padding: 24px 0; }
+    .phone {
+      height: 760px;
+      border-radius: 30px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 3px var(--tinta);
+    }
+  }
+
+  /* Encabezado compacto */
+  header {
+    flex: 0 0 auto;
+    background: linear-gradient(135deg, var(--ciruela) 0%, #5A2A4A 100%);
+    padding: 2.2vh 5vw 1.6vh;
+    display: flex;
+    align-items: center;
+    gap: 3vw;
+    border-bottom: 2px solid var(--dorado);
+    position: relative;
+  }
+
+  .btn-atras {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,221,138,0.4);
+    color: var(--dorado-brillante);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  #titulo-header {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: clamp(15px, 3vh, 19px);
+    flex: 1;
+  }
+
+  #subtitulo-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--dorado-brillante);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 2vh 5vw 3vh;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tabs AT / NT */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2vh;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 4px 14px 4px 14px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    background: #fff;
+    color: var(--terracota);
+    border: 1.5px solid rgba(185,80,46,0.25);
+    cursor: pointer;
+  }
+  .tab.activo {
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 10px rgba(185,80,46,0.35);
+  }
+
+  /* Lista de libros */
+  .lista-libros {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .item-libro {
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 4px 14px 4px 14px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 3px solid var(--dorado);
+    box-shadow: 0 3px 10px rgba(61,31,62,0.1);
+    cursor: pointer;
+  }
+  .item-libro .nombre {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ciruela);
+  }
+  .item-libro .caps {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--terracota);
+  }
+
+  /* Grid de capítulos */
+  .grid-capitulos {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .num-capitulo {
+    aspect-ratio: 1;
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 4px 12px 4px 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--terracota);
+    border-bottom: 2px solid var(--dorado);
+    box-shadow: 0 3px 8px rgba(61,31,62,0.12);
+    cursor: pointer;
+  }
+
+  /* Vista de lectura */
+  #vista-lectura h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(17px, 3.4vh, 21px);
+    color: var(--ciruela);
+    text-align: center;
+    margin-bottom: 2vh;
+  }
+  .verso {
+    font-size: clamp(14px, 2.6vh, 16px);
+    line-height: 1.7;
+    margin-bottom: 1vh;
+    color: var(--tinta);
+  }
+  .verso .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--terracota);
+    font-weight: 700;
+    vertical-align: super;
+    margin-right: 3px;
+  }
+
+  .nav-capitulos {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 3vh;
+    padding-top: 2vh;
+    border-top: 1px dashed rgba(185,80,46,0.3);
+  }
+  .btn-nav-cap {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px 14px 4px 14px;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .btn-nav-cap.oculto { visibility: hidden; }
+
+  .cargando {
+    text-align: center;
+    padding: 4vh 0;
+    color: var(--terracota);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  nav {
+    flex: 0 0 auto;
+    background: var(--ciruela);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 max(14px, env(safe-area-inset-bottom));
+    border-top: 2px solid var(--dorado);
+  }
+  nav .item {
+    text-align: center;
+    color: #C9A8C0;
+    font-size: 10.5px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  nav .item.activo { color: var(--dorado-brillante); text-shadow: 0 0 8px rgba(255,221,138,0.6); }
+  .icono-nav {
+    width: 26px; height: 26px;
+    margin: 0 auto 4px;
+    background-size: cover;
+    background-position: center;
+    mix-blend-mode: screen;
+    filter: brightness(1.15);
+  }
+  .item.activo .icono-nav { filter: brightness(1.4); }
+  #nav-inicio { background-image: url('nav-inicio.png'); }
+  #nav-leer { background-image: url('nav-leer.png'); }
+  #nav-guia { background-image: url('nav-guia.png'); }
+  #nav-favoritos { background-image: url('nav-favoritos.png'); }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <div class="btn-atras" id="btn-atras" style="visibility:hidden;">←</div>
+      <div>
+        <div id="titulo-header">Leer</div>
+        <div id="subtitulo-header">Reina Valera · 1909</div>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="cargando">Cargando libros…</div>
+    </main>
+
+    <nav>
+      <a class="item" id="tab-inicio" href="index.html"><div class="icono-nav" id="nav-inicio"></div>Inicio</a>
+      <a class="item activo" href="leer.html"><div class="icono-nav" id="nav-leer"></div>Leer</a>
+      <a class="item" href="#"><div class="icono-nav" id="nav-guia"></div>Guía</a>
+      <a class="item" href="#"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</a>
+    </nav>
+  </div>
+
+<script>
+  const main = document.getElementById('main');
+  const btnAtras = document.getElementById('btn-atras');
+  const tituloHeader = document.getElementById('titulo-header');
+  const subtituloHeader = document.getElementById('subtitulo-header');
+
+  let indice = [];
+  let testamentoActivo = 'AT';
+  let libroActual = null;
+  let capActual = null;
+  let cacheLibros = {};
+
+  async function cargarIndice() {
+    const res = await fetch('indice.json');
+    indice = await res.json();
+    mostrarListaLibros();
+  }
+
+  function mostrarListaLibros() {
+    libroActual = null; capActual = null;
+    btnAtras.style.visibility = 'hidden';
+    tituloHeader.textContent = 'Leer';
+    subtituloHeader.textContent = 'Reina Valera · 1909';
+
+    const libros = indice.filter(l => l.testamento === testamentoActivo);
+    const html = `
+      <div class="tabs">
+        <div class="tab ${testamentoActivo==='AT'?'activo':''}" onclick="cambiarTestamento('AT')">Antiguo Testamento</div>
+        <div class="tab ${testamentoActivo==='NT'?'activo':''}" onclick="cambiarTestamento('NT')">Nuevo Testamento</div>
+      </div>
+      <div class="lista-libros">
+        ${libros.map(l => `
+          <div class="item-libro" onclick="abrirLibro('${l.id}')">
+            <span class="nombre">${l.nombre}</span>
+            <span class="caps">${l.capitulos} cap.</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    main.innerHTML = html;
+    main.scrollTop = 0;
+  }
+
+  function cambiarTestamento(t) {
+    testamentoActivo = t;
+    mostrarListaLibros();
+  }
+
+  async function abrirLibro(id) {
+    libroActual = indice.find(l => l.id === id);
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = libroActual.nombre;
+    subtituloHeader.textContent = `${libroActual.capitulos} capítulos`;
+
+    if (!cacheLibros[id]) {
+      main.innerHTML = '<div class="cargando">Cargando ' + libroActual.nombre + '…</div>';
+      const res = await fetch(`libro-${id}.json`);
+      cacheLibros[id] = await res.json();
+    }
+
+    const total = libroActual.capitulos;
+    let botones = '';
+    for (let i = 1; i <= total; i++) {
+      botones += `<div class="num-capitulo" onclick="abrirCapitulo(${i})">${i}</div>`;
+    }
+    main.innerHTML = `<div class="grid-capitulos">${botones}</div>`;
+    main.scrollTop = 0;
+  }
+
+  function abrirCapitulo(numCap) {
+    capActual = numCap;
+    tituloHeader.textContent = `${libroActual.nombre} ${numCap}`;
+    subtituloHeader.textContent = 'Reina Valera · 1909';
+
+    const datosLibro = cacheLibros[libroActual.id];
+    const capitulo = datosLibro.find(c => c.c === numCap);
+    const versos = capitulo.v.map(([num, texto]) =>
+      `<p class="verso"><span class="num">${num}</span>${texto}</p>`
+    ).join('');
+
+    const esPrimero = numCap === 1;
+    const esUltimo = numCap === libroActual.capitulos;
+
+    main.innerHTML = `
+      <div id="vista-lectura">
+        ${versos}
+        <div class="nav-capitulos">
+          <div class="btn-nav-cap ${esPrimero?'oculto':''}" onclick="abrirCapitulo(${numCap-1})">‹ Anterior</div>
+          <div class="btn-nav-cap ${esUltimo?'oculto':''}" onclick="abrirCapitulo(${numCap+1})">Siguiente ›</div>
+        </div>
+      </div>
+    `;
+    main.scrollTop = 0;
+  }
+
+  btnAtras.addEventListener('click', () => {
+    if (capActual !== null) {
+      abrirLibro(libroActual.id);
+    } else if (libroActual !== null) {
+      mostrarListaLibros();
+    }
+  });
+
+  cargarIndice();
+</script>
+</body>
+</html>
