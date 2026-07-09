@@ -295,6 +295,7 @@
   let libroActual = null;
   let capActual = null;
   let cacheLibros = {};
+  let vinoDeHistorias = false;
 
   async function cargarIndice() {
     const res = await fetch('indice.json');
@@ -306,6 +307,7 @@
     if (libroParam && indice.some(l => l.id === libroParam)) {
       await abrirLibro(libroParam);
       if (capParam) abrirCapitulo(parseInt(capParam, 10));
+      vinoDeHistorias = document.referrer.includes('historias.html');
       return;
     }
     mostrarListaLibros();
@@ -390,6 +392,11 @@
   }
 
   btnAtras.addEventListener('click', () => {
+    if (vinoDeHistorias) {
+      vinoDeHistorias = false;
+      window.location.href = 'historias.html';
+      return;
+    }
     if (capActual !== null) {
       abrirLibro(libroActual.id);
     } else if (libroActual !== null) {
