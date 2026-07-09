@@ -299,6 +299,15 @@
   async function cargarIndice() {
     const res = await fetch('indice.json');
     indice = await res.json();
+
+    const params = new URLSearchParams(window.location.search);
+    const libroParam = params.get('libro');
+    const capParam = params.get('capitulo');
+    if (libroParam && indice.some(l => l.id === libroParam)) {
+      await abrirLibro(libroParam);
+      if (capParam) abrirCapitulo(parseInt(capParam, 10));
+      return;
+    }
     mostrarListaLibros();
   }
 

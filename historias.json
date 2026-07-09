@@ -1,0 +1,98 @@
+[
+  {
+    "id": "creacion",
+    "titulo": "La Creación",
+    "referencia": "Génesis 1-2",
+    "libro": "gn", "capitulo": 1,
+    "resumen": "En seis días, Dios formó los cielos, la tierra, el mar y toda criatura viviente.",
+    "texto": "En el principio no había nada más que oscuridad y vacío, hasta que Dios habló. Con su palabra hizo la luz, separó los cielos de las aguas, formó la tierra seca y los mares, y llenó el mundo de plantas, estrellas, peces, aves y animales. El sexto día, formó al hombre del polvo de la tierra y sopló en él aliento de vida, y de una de sus costillas formó a la mujer. Al séptimo día, Dios descansó de toda su obra, y bendijo ese día como santo."
+  },
+  {
+    "id": "caida",
+    "titulo": "Adán, Eva y la Caída",
+    "referencia": "Génesis 3",
+    "libro": "gn", "capitulo": 3,
+    "resumen": "La serpiente engaña a Eva, y la desobediencia entra al huerto del Edén.",
+    "texto": "Dios puso al hombre y a la mujer en el huerto del Edén, con un solo mandamiento: no comer del árbol del conocimiento del bien y del mal. La serpiente, la más astuta de las bestias, engañó a Eva diciéndole que no moriría, sino que sería como Dios. Ella comió del fruto, y también le dio a Adán. Al instante supieron que estaban desnudos y se escondieron de Dios. Como consecuencia, fueron expulsados del huerto, y el pecado entró al mundo."
+  },
+  {
+    "id": "cain-abel",
+    "titulo": "Caín y Abel",
+    "referencia": "Génesis 4",
+    "libro": "gn", "capitulo": 4,
+    "resumen": "Los primeros hermanos de la historia, y el primer homicidio.",
+    "texto": "Adán y Eva tuvieron dos hijos: Caín, labrador de la tierra, y Abel, pastor de ovejas. Ambos trajeron ofrenda a Dios, pero solo la de Abel fue aceptada, lo que llenó a Caín de ira y celos. Dios le advirtió que el pecado estaba a la puerta, pero Caín no lo resistió: llevó a su hermano al campo y lo mató. Cuando Dios le preguntó dónde estaba Abel, Caín respondió con la famosa frase: '¿Soy yo guarda de mi hermano?'. Como castigo, fue condenado a vagar por la tierra."
+  },
+  {
+    "id": "diluvio",
+    "titulo": "Noé y el Diluvio",
+    "referencia": "Génesis 6-9",
+    "libro": "gn", "capitulo": 6,
+    "resumen": "Dios salva a Noé, su familia y los animales de un diluvio que cubrió toda la tierra.",
+    "texto": "La maldad de los hombres había llenado la tierra, y Dios decidió enviar un diluvio para destruirla. Pero Noé halló gracia ante sus ojos: Dios le ordenó construir un arca enorme y llevar consigo a su familia y una pareja de cada animal. Llovió cuarenta días y cuarenta noches, y las aguas cubrieron hasta los montes más altos. Cuando las aguas bajaron, Noé soltó una paloma que regresó con una rama de olivo, señal de que la tierra estaba seca. Dios puso el arco iris en el cielo como pacto de que nunca más destruiría la tierra con un diluvio."
+  },
+  {
+    "id": "babel",
+    "titulo": "La Torre de Babel",
+    "referencia": "Génesis 11",
+    "libro": "gn", "capitulo": 11,
+    "resumen": "La humanidad, unida en un solo idioma, intenta construir una torre hasta el cielo.",
+    "texto": "Después del diluvio, toda la humanidad hablaba un mismo idioma. Se establecieron en la llanura de Sinar y decidieron construir una ciudad con una torre que llegara hasta el cielo, para hacerse un nombre y no ser dispersados. Dios vio su orgullo y confundió su lenguaje, de modo que ya no podían entenderse entre sí. Al no poder comunicarse, abandonaron la construcción, y desde ese lugar —llamado Babel, que significa 'confusión'— la gente se esparció por toda la faz de la tierra."
+  },
+  {
+    "id": "abraham",
+    "titulo": "El Llamado de Abraham",
+    "referencia": "Génesis 12",
+    "libro": "gn", "capitulo": 12,
+    "resumen": "Dios llama a Abram a dejar su tierra y le promete una gran nación.",
+    "texto": "Dios se le apareció a Abram y le pidió dejar su tierra, su parentela y la casa de su padre, para ir a una tierra que él le mostraría. Le prometió hacer de él una gran nación, bendecirlo, engrandecer su nombre, y que en él serían benditas todas las familias de la tierra. Abram, ya anciano y sin hijos, obedeció por fe, tomó a su esposa Sarai y a su sobrino Lot, y partió hacia Canaán sin saber exactamente a dónde lo llevaría el camino."
+  },
+  {
+    "id": "isaac",
+    "titulo": "Isaac y el Sacrificio",
+    "referencia": "Génesis 22",
+    "libro": "gn", "capitulo": 22,
+    "resumen": "Dios pone a prueba la fe de Abraham, pidiéndole lo más preciado que tenía.",
+    "texto": "Para probar la fe de Abraham, Dios le pidió que ofreciera a su hijo Isaac —el hijo de la promesa, esperado por décadas— como holocausto en el monte Moriah. Abraham obedeció sin cuestionar, y subió al monte con su hijo, la leña y el cuchillo. Cuando ya tenía la mano extendida para sacrificarlo, un ángel del Señor lo detuvo: Dios había visto su fe y proveyó un carnero enredado en un zarzal para el sacrificio en su lugar. Por su obediencia, Dios renovó su promesa de bendecir a su descendencia como las estrellas del cielo."
+  },
+  {
+    "id": "jacob-esau",
+    "titulo": "Jacob y Esaú",
+    "referencia": "Génesis 25 y 27",
+    "libro": "gn", "capitulo": 25,
+    "resumen": "Dos hermanos gemelos, una primogenitura vendida y una bendición robada.",
+    "texto": "Isaac y Rebeca tuvieron gemelos: Esaú, el mayor, cazador y hombre del campo, y Jacob, más tranquilo y astuto. Un día, hambriento, Esaú vendió su primogenitura a Jacob por un plato de lentejas. Años después, con la ayuda de su madre, Jacob engañó a su padre ciego, haciéndose pasar por Esaú, y recibió la bendición que le correspondía al hermano mayor. Esaú, furioso, juró matarlo, y Jacob tuvo que huir de su hogar, comenzando un largo camino que años más tarde lo llevaría de regreso, reconciliado con su hermano."
+  },
+  {
+    "id": "jose",
+    "titulo": "José y sus Hermanos",
+    "referencia": "Génesis 37-45",
+    "libro": "gn", "capitulo": 37,
+    "resumen": "Vendido como esclavo por sus propios hermanos, José termina salvando a toda su familia.",
+    "texto": "José, hijo favorito de Jacob, tuvo sueños donde sus hermanos se inclinaban ante él, lo cual despertó su envidia. Lo vendieron como esclavo a unos mercaderes que lo llevaron a Egipto. Allí, tras ser injustamente encarcelado, interpretó los sueños del Faraón y fue puesto como gobernador, encargado de administrar el grano durante los años de hambre que se avecinaban. Cuando sus hermanos llegaron a Egipto buscando alimento, sin reconocerlo, José se dio a conocer y, en lugar de vengarse, los perdonó y salvó a toda su familia de morir de hambre."
+  },
+  {
+    "id": "moises-exodo",
+    "titulo": "Moisés y el Éxodo",
+    "referencia": "Éxodo 1-14",
+    "libro": "ex", "capitulo": 3,
+    "resumen": "Dios llama a Moisés desde una zarza ardiente para liberar a su pueblo de la esclavitud.",
+    "texto": "Los israelitas vivían esclavizados en Egipto cuando Dios se le apareció a Moisés en una zarza que ardía sin consumirse, y lo envió a exigirle al Faraón que dejara ir a su pueblo. El Faraón se negó repetidamente, incluso después de diez plagas devastadoras. Finalmente, tras la última plaga, el pueblo fue liberado, pero el Faraón cambió de parecer y los persiguió hasta el mar Rojo. Dios abrió las aguas en dos, y los israelitas cruzaron en seco, mientras el ejército egipcio que los perseguía quedó sepultado cuando las aguas volvieron a su lugar."
+  },
+  {
+    "id": "mandamientos",
+    "titulo": "Los Diez Mandamientos",
+    "referencia": "Éxodo 20",
+    "libro": "ex", "capitulo": 20,
+    "resumen": "En el monte Sinaí, Dios entrega a Moisés la ley que guiaría a su pueblo.",
+    "texto": "Tres meses después de salir de Egipto, el pueblo de Israel acampó frente al monte Sinaí. Dios descendió sobre el monte entre truenos, relámpagos y una densa nube, y llamó a Moisés a subir. Allí le entregó los Diez Mandamientos, escritos en tablas de piedra: amar a Dios sobre todas las cosas, no tener otros dioses, honrar a los padres, no matar, no robar, no mentir, no codiciar, y guardar el día de reposo, entre otros. Estas leyes se convirtieron en el fundamento moral y espiritual del pueblo de Israel."
+  },
+  {
+    "id": "david-goliat",
+    "titulo": "David y Goliat",
+    "referencia": "1 Samuel 17",
+    "libro": "1s", "capitulo": 17,
+    "resumen": "Un joven pastor enfrenta al gigante filisteo que todo un ejército temía.",
+    "texto": "El ejército filisteo desafiaba a Israel a través de Goliat, un gigante guerrero de más de dos metros que ningún soldado israelita se atrevía a enfrentar. David, un joven pastor que había ido a llevar comida a sus hermanos en el campo de batalla, se ofreció a pelear contra él, confiando no en armadura ni espada, sino en el nombre del Dios de Israel. Con solo una honda y cinco piedras lisas del arroyo, David derribó al gigante con un solo golpe certero en la frente, y el ejército filisteo, al ver caído a su campeón, huyó en desbandada."
+  }
+]

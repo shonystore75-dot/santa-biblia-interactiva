@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historias · Santa Biblia Reina Valera Interactiva</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap');
+
+  :root {
+    --ciruela: #3D1F3E;
+    --naranja: #D9622F;
+    --dorado: #F5B942;
+    --dorado-brillante: #FFDD8A;
+    --papiro: #FBF0D9;
+    --tinta: #3D2419;
+    --terracota: #B9502E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: #2A1A2E;
+    font-family: 'Source Serif 4', serif;
+    color: var(--tinta);
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--papiro);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  @media (min-width: 500px) {
+    html, body { height: auto; }
+    body { padding: 24px 0; }
+    .phone {
+      height: 760px;
+      border-radius: 30px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 3px var(--tinta);
+    }
+  }
+
+  header {
+    flex: 0 0 auto;
+    background: linear-gradient(135deg, var(--ciruela) 0%, #5A2A4A 100%);
+    padding: 2.2vh 5vw 1.6vh;
+    display: flex;
+    align-items: center;
+    gap: 3vw;
+    border-bottom: 2px solid var(--dorado);
+  }
+
+  .btn-atras {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,221,138,0.4);
+    color: var(--dorado-brillante);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  #titulo-header {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: clamp(15px, 3vh, 19px);
+    flex: 1;
+  }
+
+  #subtitulo-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--dorado-brillante);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 2vh 5vw 3vh;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Lista de historias */
+  .lista-historias {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tarjeta-historia {
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 6px 20px 6px 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(61,31,62,0.15);
+    border-bottom: 3px solid var(--dorado);
+    display: flex;
+    cursor: pointer;
+  }
+
+  .tarjeta-historia .miniatura {
+    width: 90px;
+    flex-shrink: 0;
+    background-image: url('historias.jpg');
+    background-size: cover;
+    background-position: center 55%;
+  }
+
+  .tarjeta-historia .info {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .tarjeta-historia .titulo {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ciruela);
+  }
+
+  .tarjeta-historia .referencia {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--terracota);
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+
+  .tarjeta-historia .resumen {
+    font-size: 11px;
+    color: #6B5842;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Vista de detalle */
+  #vista-detalle .imagen-grande {
+    width: 100%;
+    height: 20vh;
+    min-height: 130px;
+    border-radius: 6px 22px 6px 22px;
+    background-image: url('historias.jpg');
+    background-size: cover;
+    background-position: center 55%;
+    box-shadow: 0 10px 24px rgba(61,31,62,0.25);
+    margin-bottom: 2vh;
+  }
+
+  #vista-detalle .referencia-grande {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--terracota);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  #vista-detalle h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(18px, 3.6vh, 22px);
+    color: var(--ciruela);
+    margin-bottom: 1.6vh;
+  }
+
+  #vista-detalle .cuerpo {
+    font-size: clamp(13px, 2.4vh, 15px);
+    line-height: 1.65;
+    color: var(--tinta);
+    margin-bottom: 2.4vh;
+  }
+
+  .btn-leer-pasaje {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 13px;
+    border-radius: 4px 16px 4px 16px;
+    box-shadow: 0 8px 18px rgba(185,80,46,0.35);
+  }
+
+  .cargando {
+    text-align: center;
+    padding: 4vh 0;
+    color: var(--terracota);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  nav {
+    flex: 0 0 auto;
+    background: var(--ciruela);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 max(14px, env(safe-area-inset-bottom));
+    border-top: 2px solid var(--dorado);
+  }
+  nav .item {
+    text-align: center;
+    color: #C9A8C0;
+    font-size: 10.5px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  nav .item.activo { color: var(--dorado-brillante); text-shadow: 0 0 8px rgba(255,221,138,0.6); }
+  .icono-nav {
+    width: 26px; height: 26px;
+    margin: 0 auto 4px;
+    background-size: cover;
+    background-position: center;
+    mix-blend-mode: screen;
+    filter: brightness(1.15);
+  }
+  .item.activo .icono-nav { filter: brightness(1.4); }
+  #nav-inicio { background-image: url('nav-inicio.png'); }
+  #nav-leer { background-image: url('nav-leer.png'); }
+  #nav-guia { background-image: url('nav-guia.png'); }
+  #nav-favoritos { background-image: url('nav-favoritos.png'); }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <div class="btn-atras" id="btn-atras" style="visibility:hidden;">←</div>
+      <div>
+        <div id="titulo-header">Historias</div>
+        <div id="subtitulo-header">Relatos ilustrados</div>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="cargando">Cargando relatos…</div>
+    </main>
+
+    <nav>
+      <a class="item" href="index.html"><div class="icono-nav" id="nav-inicio"></div>Inicio</a>
+      <a class="item" href="leer.html"><div class="icono-nav" id="nav-leer"></div>Leer</a>
+      <div class="item"><div class="icono-nav" id="nav-guia"></div>Guía</div>
+      <div class="item"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</div>
+    </nav>
+  </div>
+
+<script>
+  const main = document.getElementById('main');
+  const btnAtras = document.getElementById('btn-atras');
+  const tituloHeader = document.getElementById('titulo-header');
+  const subtituloHeader = document.getElementById('subtitulo-header');
+
+  let historias = [];
+
+  async function cargarHistorias() {
+    const res = await fetch('historias.json');
+    historias = await res.json();
+    mostrarLista();
+  }
+
+  function mostrarLista() {
+    btnAtras.style.visibility = 'hidden';
+    tituloHeader.textContent = 'Historias';
+    subtituloHeader.textContent = 'Relatos ilustrados · Antiguo Testamento';
+
+    main.innerHTML = `
+      <div class="lista-historias">
+        ${historias.map(h => `
+          <div class="tarjeta-historia" onclick="mostrarDetalle('${h.id}')">
+            <div class="miniatura"></div>
+            <div class="info">
+              <div class="titulo">${h.titulo}</div>
+              <div class="referencia">${h.referencia}</div>
+              <div class="resumen">${h.resumen}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    main.scrollTop = 0;
+  }
+
+  function mostrarDetalle(id) {
+    const h = historias.find(x => x.id === id);
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = h.titulo;
+    subtituloHeader.textContent = h.referencia;
+
+    main.innerHTML = `
+      <div id="vista-detalle">
+        <div class="imagen-grande"></div>
+        <div class="referencia-grande">${h.referencia}</div>
+        <h2>${h.titulo}</h2>
+        <p class="cuerpo">${h.texto}</p>
+        <a class="btn-leer-pasaje" href="leer.html?libro=${h.libro}&capitulo=${h.capitulo}">Leer el pasaje completo →</a>
+      </div>
+    `;
+    main.scrollTop = 0;
+  }
+
+  btnAtras.addEventListener('click', mostrarLista);
+
+  cargarHistorias();
+</script>
+</body>
+</html>
