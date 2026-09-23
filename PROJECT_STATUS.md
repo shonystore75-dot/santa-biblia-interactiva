@@ -255,3 +255,15 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
   normalización de 6 variantes de boca del Escriba + fondo; demo funcional
   de animación labial por audio (Web Audio API) probado con éxito, con
   transición pendiente de pulir.
+- **Sesión de chat (2026-09-22, esta sesión):** Diego detectó mayúsculas fijas
+  al inicio de los capítulos de Esdras; al revisar se encontró que Esdras,
+  Ester y Nehemías habían quedado sin modernizar (texto 1909 casi crudo), y
+  que 1 Crónicas 14, 2 Crónicas 13, Isaías 55 y Job 37 tenían el mismo bug
+  puntual de mayúscula fija en un solo capítulo cada uno (el resto de esos 4
+  libros ya estaba bien). Se reconstruyó el motor de modernización desde cero
+  (el `modernizar.py` avanzado de sesiones anteriores se había perdido; solo
+  quedaba en GitHub una versión básica de 148 líneas) aplicando todas las
+  reglas documentadas en `NOTAS_MODERNIZACION.md`, más varias reglas y bugs
+  nuevos encontrados y corregidos en el proceso (ver ese archivo para el
+  detalle técnico completo). Los 7 libros quedaron modernizados y verificados
+  con lectura completa; cambios subidos a GitHub.

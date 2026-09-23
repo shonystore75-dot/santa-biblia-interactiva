@@ -8,13 +8,23 @@ retomar el trabajo sin perder contexto.
 
 ---
 
-## 🎉 Estado actual: PROYECTO COMPLETO
+## 🎉 Estado actual: PROYECTO COMPLETO (66/66 libros)
 
 Los **66 libros** de la Biblia (Antiguo Testamento + Nuevo Testamento) ya pasaron
 por el proceso completo de modernización y relectura fina, y están subidos a GitHub.
 
 - **Antiguo Testamento**: 35 libros ✅
 - **Nuevo Testamento**: 27 libros (Mateo a Apocalipsis) ✅
+
+> **Nota (2026-09-22):** una revisión de Esdras detectó que **Esdras, Ester y
+> Nehemías** habían quedado sin modernizar (texto 1909 crudo casi completo,
+> no solo las mayúsculas de inicio de capítulo), y que **1 Crónicas 14, 2
+> Crónicas 13, Isaías 55 y Job 37** tenían el bug puntual de mayúscula fija de
+> inicio de capítulo sin corregir (el resto de esos 4 libros sí estaba bien).
+> Los 7 libros ya fueron corregidos esta sesión (ver entrada en el historial
+> de sesiones más abajo). Causa probable: un lote de libros que no completó su
+> pasada de modernización en su momento y quedó marcado como terminado por
+> error.
 
 ---
 
@@ -92,6 +102,21 @@ Job 35:16. Hueco genuino de tradición en español (no llenar): 2 Corintios 13:1
 - "si" + subjuntivo futuro arcaico → indicativo presente (ej. "si dijereis"→"si decís")
 - "cuando" + subjuntivo futuro arcaico → subjuntivo presente (ej. "cuando
   vinieren"→"cuando vengan") — **distinto** al tratamiento de "si"
+- (2026-09-22) Extensión del caso anterior: "que"/"donde" + subjuntivo futuro en
+  cláusula relativa también → subjuntivo presente, por analogía (ej. "todo lo
+  que fuere necesario"→"todo lo que sea necesario", "donde peregrinare"→"donde
+  peregrine"). No estaba documentado explícitamente antes de esta sesión;
+  queda registrado aquí como regla general confirmada.
+- (2026-09-22) La forma irregular **"fuere"** (de ser/ir, no de "hallar") con
+  "si" también se resuelve, pero al indicativo presente del verbo real, no a
+  una forma de "fuere" en sí (ej. "Si fuere vuestro lanzamiento"→"Si va vuestro
+  lanzamiento"). El barrido original de 57 casos con endings -are/-iere no
+  cubría esta forma irregular; revisar libros ya "completos" si aparece algún
+  caso suelto de "fuere" que se haya escapado.
+- (2026-09-22) "[Nombre] sacerdote/profeta/profetisa/escriba" → "el/la
+  [título] [Nombre]": al reordenar, si el nombre iba precedido de "a"/"de" hay
+  que fusionar la contracción (a+el→al, de+el→del), no dejar "a el"/"de el"
+  sueltos. Bug real encontrado y corregido en Nehemías 13:13.
 - Apócope "grande"→"gran" con lista de exclusión para uso predicativo
 - "la mar"(femenino arcaico)→"el mar", con contracciones correctas del/al
 - "Fue palabra de Jehová"→"Vino palabra de Jehová" (fórmula fija)
@@ -107,6 +132,21 @@ hágase/levántase/quítase/Apártase/Ensúciese` (presente+se confundido con
 subjuntivo -ase→-ara), `"muerte he"/"parte ha"` (sustantivo confundido con
 infinitivo), `"si pare"/"cuando pare"/"cuando hiere"` (indicativo de
 parir/herir confundido con subjuntivo).
+- (2026-09-22) `oíase` (imperfecto "oía"+se, = "se oía") confundido con
+  subjuntivo -ase→-ara; `hágase/escríbase/concédase(le)` (imperativo usted+se,
+  ya en forma moderna correcta) también coincidían por casualidad con el
+  patrón -ase y se protegieron en un set de excepciones.
+- (2026-09-22) `constriñese` (imperfecto de subjuntivo de un verbo en -ñir) no
+  coincide con el patrón general `-iese→-iera` porque la ñ absorbe la "i";
+  necesita una regla propia `(\w+ñ)ese→\1era`.
+- (2026-09-22) `Hízose`/`púsose` (verbo irregular+"se" reflexivo) no coinciden
+  con el patrón general de pronombre pegado porque el acento no queda pegado
+  justo antes del pronombre; se resuelven como vocabulario irregular puntual,
+  igual que `díjole/hízole/trájolo(s)/trájola(s)`.
+- (2026-09-22) `callárame` (forma arcaica "-ara"+pronombre pegado, ej. Ester
+  7:4) no la cubre ninguna regla de pronombre pegado (esas solo cubren
+  pretérito/futuro, no esta forma); solo apareció 1 vez en toda la Biblia —
+  tratado como caso puntual.
 
 ## Ambigüedades que NUNCA deben ser regla general
 - "tornar" (volver / girar-doblar / convertir) — evaluar caso por caso
@@ -119,6 +159,18 @@ parir/herir confundido con subjuntivo).
   que más se repita en el propio 1909
 - RV1960 sirve de referencia para claridad/estructura, nunca para adoptar su
   interpretación si cambia el sentido del 1909 original
+
+## Limitaciones pendientes de revisar (declaradas, no resueltas)
+- (2026-09-22) En las listas genealógicas muy extensas de Esdras/Nehemías
+  (cap. 2, 7, 8, 10, 11, 12 — repatriados, porteros, levitas) se aplicó solo
+  la normalización mecánica de vocales con circunflejo (â→á, etc.) y el sufijo
+  "-chías", SIN verificar cada nombre uno por uno contra una Biblia de
+  referencia moderna (a diferencia del resto del proyecto, hecho verso por
+  verso). Son ~20+ nombres muy secundarios; bajo riesgo pero no verificado al
+  mismo estándar que el resto.
+- "Sesbassar" (gobernador, Esdras 1 y 5) se dejó con su doble-s del 1909 sin
+  normalizar — no había precedente ni certeza de si el estándar moderno usa
+  "Sesbasar" o "Sasabasar" según la tradición.
 
 ---
 
