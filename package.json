@@ -1,0 +1,27 @@
+{
+  "name": "santa-biblia-interactiva",
+  "version": "1.0.0",
+  "description": "App bíblica interactiva con avatares IA. Basada en la Biblia Reina Valera de 1909.",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/sync-web-assets.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shonystore75-dot/santa-biblia-interactiva.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shonystore75-dot/santa-biblia-interactiva/issues"
+  },
+  "homepage": "https://github.com/shonystore75-dot/santa-biblia-interactiva#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  }
+}
