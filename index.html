@@ -327,8 +327,8 @@
     <main>
       <div class="versiculo-dia">
         <div class="llama">🔥</div>
-        <p class="versiculo-texto">Lámpara es a mis pies tu palabra, y lumbrera á mi camino.</p>
-        <p class="versiculo-ref">SALMOS 119:105 — Versículo de hoy</p>
+        <p class="versiculo-texto" id="versiculo-texto">Lámpara es a mis pies tu palabra, y lumbrera a mi camino.</p>
+        <p class="versiculo-ref" id="versiculo-ref">SALMOS 119:105 — Versículo de hoy</p>
       </div>
 
       <div class="bloque-seccion">
@@ -366,5 +366,38 @@
       <div class="item"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</div>
     </nav>
   </div>
+
+<script>
+  async function cargarVersiculoDelDia() {
+    const textoEl = document.getElementById('versiculo-texto');
+    const refEl = document.getElementById('versiculo-ref');
+    try {
+      const [versiculos, indice] = await Promise.all([
+        fetch('versiculos-dia.json').then(r => r.json()),
+        fetch('indice.json').then(r => r.json())
+      ]);
+
+      const hoy = new Date();
+      const inicioAnio = new Date(hoy.getFullYear(), 0, 0);
+      const diaDelAnio = Math.floor((hoy - inicioAnio) / 86400000);
+      const elegido = versiculos[diaDelAnio % versiculos.length];
+
+      const datosLibro = await fetch(`libro-${elegido.libro}.json`).then(r => r.json());
+      const capitulo = datosLibro.find(c => c.c === elegido.capitulo);
+      const verso = capitulo.v.find(v => v[0] === elegido.versiculo);
+
+      const libroInfo = indice.find(l => l.id === elegido.libro);
+      const nombreLibro = (libroInfo ? libroInfo.nombre : elegido.libro).toUpperCase();
+
+      textoEl.textContent = verso[1];
+      refEl.textContent = `${nombreLibro} ${elegido.capitulo}:${elegido.versiculo} — Versículo de hoy`;
+    } catch (e) {
+      textoEl.textContent = 'Lámpara es a mis pies tu palabra, y lumbrera a mi camino.';
+      refEl.textContent = 'SALMOS 119:105 — Versículo de hoy';
+    }
+  }
+
+  cargarVersiculoDelDia();
+</script>
 </body>
 </html>
