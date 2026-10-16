@@ -301,6 +301,7 @@
   const subtituloHeader = document.getElementById('subtitulo-header');
 
   let historias = [];
+  let enLista = true;
 
   async function cargarHistorias() {
     const res = await fetch('historias.json');
@@ -309,7 +310,8 @@
   }
 
   function mostrarLista() {
-    btnAtras.style.visibility = 'hidden';
+    enLista = true;
+    btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Historias';
     subtituloHeader.textContent = 'Relatos ilustrados · Antiguo Testamento';
 
@@ -332,6 +334,7 @@
 
   function mostrarDetalle(id) {
     const h = historias.find(x => x.id === id);
+    enLista = false;
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = h.titulo;
     subtituloHeader.textContent = h.referencia;
@@ -359,7 +362,13 @@
     main.scrollTop = 0;
   }
 
-  btnAtras.addEventListener('click', mostrarLista);
+  btnAtras.addEventListener('click', () => {
+    if (enLista) {
+      window.location.href = 'index.html';
+    } else {
+      mostrarLista();
+    }
+  });
 
   cargarHistorias();
 </script>

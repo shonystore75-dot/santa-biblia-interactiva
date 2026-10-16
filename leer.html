@@ -315,7 +315,7 @@
 
   function mostrarListaLibros() {
     libroActual = null; capActual = null;
-    btnAtras.style.visibility = 'hidden';
+    btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Leer';
     subtituloHeader.textContent = 'Reina Valera · 1909';
 
@@ -401,6 +401,8 @@
       abrirLibro(libroActual.id);
     } else if (libroActual !== null) {
       mostrarListaLibros();
+    } else {
+      window.location.href = 'index.html';
     }
   });
 
