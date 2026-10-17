@@ -276,7 +276,7 @@
     color: var(--dorado-brillante);
     align-items: center;
     justify-content: center;
-    pointer-events: none;
+    cursor: pointer;
     z-index: 5;
     animation: respirar 2.4s ease-in-out infinite;
   }
@@ -431,6 +431,16 @@
     indIzq.classList.toggle('visible', !esPrimero);
     indDer.classList.toggle('visible', !esUltimo);
   }
+
+  indIzq.addEventListener('click', () => {
+    if (capActual === null || capActual === 1) return;
+    abrirCapitulo(capActual - 1);
+  });
+
+  indDer.addEventListener('click', () => {
+    if (capActual === null || capActual === libroActual.capitulos) return;
+    abrirCapitulo(capActual + 1);
+  });
 
   btnAtras.addEventListener('click', () => {
     if (vinoDeHistorias) {
