@@ -61,16 +61,19 @@
   }
 
   .btn-atras {
-    width: 34px; height: 34px;
+    width: 38px; height: 38px;
     border-radius: 50%;
     background: rgba(255,255,255,0.12);
     border: 1px solid rgba(255,221,138,0.4);
     color: var(--dorado-brillante);
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
     flex-shrink: 0;
     cursor: pointer;
+  }
+
+  .btn-atras svg {
+    width: 20px;
+    height: 20px;
   }
 
   #titulo-header {
@@ -296,7 +299,7 @@
 <body>
   <div class="phone">
     <header>
-      <div class="btn-atras" id="btn-atras" style="visibility:hidden;">←</div>
+      <div class="btn-atras" id="btn-atras" style="visibility:hidden;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
       <div>
         <div id="titulo-header">Historias</div>
         <div id="subtitulo-header">Relatos ilustrados</div>
