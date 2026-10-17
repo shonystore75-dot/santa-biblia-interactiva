@@ -430,6 +430,14 @@
 
     indIzq.classList.toggle('visible', !esPrimero);
     indDer.classList.toggle('visible', !esUltimo);
+
+    try {
+      localStorage.setItem('ultimaLectura', JSON.stringify({
+        libro: libroActual.id,
+        capitulo: numCap,
+        nombreLibro: libroActual.nombre
+      }));
+    } catch (e) {}
   }
 
   indIzq.addEventListener('click', () => {

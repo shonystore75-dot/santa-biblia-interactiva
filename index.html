@@ -334,10 +334,10 @@
       <div class="bloque-seccion">
         <div class="seccion-titulo">Explorar</div>
         <div class="grid-acciones">
-          <a class="tarjeta" href="leer.html" style="text-decoration:none; display:block;">
+          <a class="tarjeta" id="tarjeta-leer" href="leer.html" style="text-decoration:none; display:block;">
             <div class="icono-img" id="icono-leer"></div>
-            <div class="titulo">Leer</div>
-            <div class="desc">Libros y capítulos</div>
+            <div class="titulo" id="titulo-tarjeta-leer">Leer</div>
+            <div class="desc" id="desc-tarjeta-leer">Libros y capítulos</div>
           </a>
           <a class="tarjeta" href="historias.html" style="text-decoration:none; display:block;">
             <div class="icono-img" id="icono-historias"></div>
@@ -397,7 +397,19 @@
     }
   }
 
+  function configurarTarjetaLeer() {
+    try {
+      const guardado = localStorage.getItem('ultimaLectura');
+      if (!guardado) return;
+      const { libro, capitulo, nombreLibro } = JSON.parse(guardado);
+      document.getElementById('tarjeta-leer').href = `leer.html?libro=${libro}&capitulo=${capitulo}`;
+      document.getElementById('titulo-tarjeta-leer').textContent = 'Continuar leyendo';
+      document.getElementById('desc-tarjeta-leer').textContent = `${nombreLibro} ${capitulo}`;
+    } catch (e) {}
+  }
+
   cargarVersiculoDelDia();
+  configurarTarjetaLeer();
 </script>
 </body>
 </html>
