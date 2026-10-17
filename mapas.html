@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapas · Santa Biblia 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap');
+
+  :root {
+    --ciruela: #3D1F3E;
+    --naranja: #D9622F;
+    --dorado: #F5B942;
+    --dorado-brillante: #FFDD8A;
+    --papiro: #FBF0D9;
+    --tinta: #3D2419;
+    --terracota: #B9502E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: #2A1A2E;
+    font-family: 'Source Serif 4', serif;
+    color: var(--tinta);
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--papiro);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  @media (min-width: 500px) {
+    html, body { height: auto; }
+    body { padding: 24px 0; }
+    .phone {
+      height: 760px;
+      border-radius: 30px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 3px var(--tinta);
+    }
+  }
+
+  header {
+    flex: 0 0 auto;
+    background: linear-gradient(135deg, var(--ciruela) 0%, #5A2A4A 100%);
+    padding: 2.2vh 5vw 1.6vh;
+    display: flex;
+    align-items: center;
+    gap: 3vw;
+    border-bottom: 2px solid var(--dorado);
+  }
+
+  .btn-atras {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,221,138,0.4);
+    color: var(--dorado-brillante);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .btn-atras svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  #titulo-header {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: clamp(15px, 3vh, 19px);
+    flex: 1;
+  }
+
+  #subtitulo-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--dorado-brillante);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 2vh 5vw 3vh;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Lista de mapas */
+  .lista-mapas {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tarjeta-mapa {
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 6px 20px 6px 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(61,31,62,0.15);
+    border-bottom: 3px solid var(--dorado);
+    display: flex;
+    cursor: pointer;
+  }
+
+  .tarjeta-mapa .miniatura {
+    width: 70px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+
+  .tarjeta-mapa .info {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .tarjeta-mapa .titulo {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ciruela);
+  }
+
+  .tarjeta-mapa .referencia {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--terracota);
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+
+  .tarjeta-mapa .descripcion {
+    font-size: 11px;
+    color: #6B5842;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Vista de detalle del mapa */
+  #vista-detalle-mapa .referencia-grande {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--terracota);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  #vista-detalle-mapa h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(18px, 3.6vh, 22px);
+    color: var(--ciruela);
+    margin-bottom: 1vh;
+  }
+
+  .cuerpo-mapa {
+    font-size: clamp(12px, 2.2vh, 14px);
+    line-height: 1.5;
+    color: var(--tinta);
+    margin-bottom: 2vh;
+  }
+
+  .panel-mapa {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background:
+      radial-gradient(circle at 25% 20%, rgba(255,255,255,0.5), transparent 55%),
+      linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 6px 22px 6px 22px;
+    border: 1.5px solid rgba(185,80,46,0.25);
+    box-shadow: 0 10px 24px rgba(61,31,62,0.2);
+    margin-bottom: 2vh;
+    overflow: hidden;
+  }
+
+  .ruta-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  .ruta-svg polyline {
+    fill: none;
+    stroke: var(--terracota);
+    stroke-width: 0.6;
+    stroke-dasharray: 2.5 2.2;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+
+  .pin-mapa {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 11px;
+    box-shadow: 0 4px 10px rgba(61,31,62,0.35);
+    cursor: pointer;
+    border: 2px solid var(--papiro);
+  }
+
+  .pin-mapa.activo {
+    background: linear-gradient(135deg, var(--ciruela), #5A2A4A);
+    box-shadow: 0 0 0 4px rgba(245,185,66,0.4), 0 4px 10px rgba(61,31,62,0.35);
+  }
+
+  .info-punto {
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 6px 18px 6px 18px;
+    padding: 1.8vh 4vw;
+    border: 1.5px solid rgba(185,80,46,0.2);
+    box-shadow: 0 6px 16px rgba(61,31,62,0.12);
+  }
+
+  .info-punto-placeholder {
+    font-size: 12px;
+    color: var(--terracota);
+    text-align: center;
+    font-style: italic;
+  }
+
+  .info-punto-nombre {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ciruela);
+    margin-bottom: 6px;
+  }
+
+  .info-punto-texto {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--tinta);
+    margin-bottom: 1.6vh;
+  }
+
+  .btn-leer-pasaje {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 13px;
+    border-radius: 4px 16px 4px 16px;
+    box-shadow: 0 8px 18px rgba(185,80,46,0.35);
+  }
+
+  .cargando {
+    text-align: center;
+    padding: 4vh 0;
+    color: var(--terracota);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  nav {
+    flex: 0 0 auto;
+    background: var(--ciruela);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 max(14px, env(safe-area-inset-bottom));
+    border-top: 2px solid var(--dorado);
+  }
+  nav .item {
+    text-align: center;
+    color: #C9A8C0;
+    font-size: 10.5px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  nav .item.activo { color: var(--dorado-brillante); text-shadow: 0 0 8px rgba(255,221,138,0.6); }
+  .icono-nav {
+    width: 26px; height: 26px;
+    margin: 0 auto 4px;
+    background-size: cover;
+    background-position: center;
+    mix-blend-mode: screen;
+    filter: brightness(1.15);
+  }
+  .item.activo .icono-nav { filter: brightness(1.4); }
+  #nav-inicio { background-image: url('nav-inicio.png'); }
+  #nav-leer { background-image: url('nav-leer.png'); }
+  #nav-guia { background-image: url('nav-guia.png'); }
+  #nav-favoritos { background-image: url('nav-favoritos.png'); }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <div class="btn-atras" id="btn-atras" style="visibility:hidden;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+      <div>
+        <div id="titulo-header">Mapas</div>
+        <div id="subtitulo-header">Mapas bíblicos</div>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="cargando">Cargando mapas…</div>
+    </main>
+
+    <nav>
+      <a class="item" href="index.html"><div class="icono-nav" id="nav-inicio"></div>Inicio</a>
+      <a class="item" href="leer.html"><div class="icono-nav" id="nav-leer"></div>Leer</a>
+      <a class="item activo" href="mapas.html"><div class="icono-nav" id="nav-guia"></div>Guía</a>
+      <div class="item"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</div>
+    </nav>
+  </div>
+
+<script>
+  const main = document.getElementById('main');
+  const btnAtras = document.getElementById('btn-atras');
+  const tituloHeader = document.getElementById('titulo-header');
+  const subtituloHeader = document.getElementById('subtitulo-header');
+
+  let mapas = [];
+  let enLista = true;
+
+  async function cargarMapas() {
+    const res = await fetch('mapas.json');
+    mapas = await res.json();
+    mostrarLista();
+  }
+
+  function mostrarLista() {
+    enLista = true;
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = 'Mapas';
+    subtituloHeader.textContent = 'Mapas bíblicos';
+
+    main.innerHTML = `
+      <div class="lista-mapas">
+        ${mapas.map(m => `
+          <div class="tarjeta-mapa" onclick="mostrarDetalle('${m.id}')">
+            <div class="miniatura">🗺️</div>
+            <div class="info">
+              <div class="titulo">${m.titulo}</div>
+              <div class="referencia">${m.referencia}</div>
+              <div class="descripcion">${m.descripcion}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    main.scrollTop = 0;
+  }
+
+  function mostrarDetalle(id) {
+    const m = mapas.find(x => x.id === id);
+    enLista = false;
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = m.titulo;
+    subtituloHeader.textContent = m.referencia;
+
+    const puntosStr = m.puntos.map(p => `${p.x},${p.y}`).join(' ');
+    const pines = m.puntos.map((p, i) => `
+      <div class="pin-mapa" data-punto="${p.id}" style="left:${p.x}%; top:${p.y}%;" onclick="mostrarPunto('${m.id}', '${p.id}')">${i + 1}</div>
+    `).join('');
+
+    main.innerHTML = `
+      <div id="vista-detalle-mapa">
+        <div class="referencia-grande">${m.referencia}</div>
+        <h2>${m.titulo}</h2>
+        <p class="cuerpo-mapa">${m.descripcion}</p>
+        <div class="panel-mapa">
+          <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline points="${puntosStr}"></polyline>
+          </svg>
+          ${pines}
+        </div>
+        <div class="info-punto" id="info-punto">
+          <div class="info-punto-placeholder">Toca un punto del mapa para ver más información.</div>
+        </div>
+      </div>
+    `;
+    main.scrollTop = 0;
+  }
+
+  function mostrarPunto(mapaId, puntoId) {
+    const m = mapas.find(x => x.id === mapaId);
+    const p = m.puntos.find(x => x.id === puntoId);
+
+    document.getElementById('info-punto').innerHTML = `
+      <div class="info-punto-nombre">${p.nombre}</div>
+      <div class="info-punto-texto">${p.info}</div>
+      <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}">Leer el pasaje →</a>
+    `;
+
+    document.querySelectorAll('.pin-mapa').forEach(el => {
+      el.classList.toggle('activo', el.dataset.punto === puntoId);
+    });
+  }
+
+  btnAtras.addEventListener('click', () => {
+    if (enLista) {
+      window.location.href = 'index.html';
+    } else {
+      mostrarLista();
+    }
+  });
+
+  cargarMapas();
+</script>
+</body>
+</html>

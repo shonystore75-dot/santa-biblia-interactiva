@@ -1,0 +1,13 @@
+[
+  {
+    "id": "viajes-abraham",
+    "titulo": "Los viajes de Abraham",
+    "referencia": "Génesis 11-12",
+    "descripcion": "De Ur de los Caldeos a la tierra que Dios le prometió mostrarle.",
+    "puntos": [
+      { "id": "ur", "nombre": "Ur de los Caldeos", "x": 12, "y": 78, "info": "Ciudad natal de Abram, en Mesopotamia. Desde allí partió junto a su padre Taré, su esposa Sarai y su sobrino Lot.", "libro": "gn", "capitulo": 11 },
+      { "id": "haran", "nombre": "Harán", "x": 46, "y": 22, "info": "La familia de Taré se detuvo aquí e hizo vida por un tiempo. Abram continuó el viaje después de la muerte de su padre.", "libro": "gn", "capitulo": 11 },
+      { "id": "canaan", "nombre": "Canaán", "x": 84, "y": 58, "info": "La tierra que Dios le prometió mostrarle a Abram, donde finalmente se estableció y Dios renovó su pacto con él.", "libro": "gn", "capitulo": 12 }
+    ]
+  }
+]
