@@ -410,6 +410,33 @@
     }
   });
 
+  let toqueInicioX = 0;
+  let toqueInicioY = 0;
+  const UMBRAL_DESLIZAR = 60;
+
+  main.addEventListener('touchstart', (e) => {
+    toqueInicioX = e.changedTouches[0].screenX;
+    toqueInicioY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  main.addEventListener('touchend', (e) => {
+    if (capActual === null) return;
+
+    const deltaX = e.changedTouches[0].screenX - toqueInicioX;
+    const deltaY = e.changedTouches[0].screenY - toqueInicioY;
+
+    if (Math.abs(deltaX) < UMBRAL_DESLIZAR || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+    const esPrimero = capActual === 1;
+    const esUltimo = capActual === libroActual.capitulos;
+
+    if (deltaX < 0 && !esUltimo) {
+      abrirCapitulo(capActual + 1);
+    } else if (deltaX > 0 && !esPrimero) {
+      abrirCapitulo(capActual - 1);
+    }
+  }, { passive: true });
+
   cargarIndice();
 </script>
 </body>
