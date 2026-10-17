@@ -264,6 +264,31 @@
   #nav-leer { background-image: url('nav-leer.png'); }
   #nav-guia { background-image: url('nav-guia.png'); }
   #nav-favoritos { background-image: url('nav-favoritos.png'); }
+
+  .indicador-deslizar {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(61,31,62,0.4);
+    color: var(--dorado-brillante);
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 5;
+    animation: respirar 2.4s ease-in-out infinite;
+  }
+  .indicador-deslizar.visible { display: flex; }
+  .indicador-deslizar svg { width: 16px; height: 16px; }
+  .indicador-izquierda { left: 2vw; }
+  .indicador-derecha { right: 2vw; }
+
+  @keyframes respirar {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.8; }
+  }
 </style>
 </head>
 <body>
@@ -280,6 +305,9 @@
       <div class="cargando">Cargando libros…</div>
     </main>
 
+    <div class="indicador-deslizar indicador-izquierda" id="ind-izq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+    <div class="indicador-deslizar indicador-derecha" id="ind-der"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
     <nav>
       <a class="item" id="tab-inicio" href="index.html"><div class="icono-nav" id="nav-inicio"></div>Inicio</a>
       <a class="item activo" href="leer.html"><div class="icono-nav" id="nav-leer"></div>Leer</a>
@@ -293,6 +321,8 @@
   const btnAtras = document.getElementById('btn-atras');
   const tituloHeader = document.getElementById('titulo-header');
   const subtituloHeader = document.getElementById('subtitulo-header');
+  const indIzq = document.getElementById('ind-izq');
+  const indDer = document.getElementById('ind-der');
 
   let indice = [];
   let testamentoActivo = 'AT';
@@ -322,6 +352,8 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Leer';
     subtituloHeader.textContent = 'Reina Valera · 1909';
+    indIzq.classList.remove('visible');
+    indDer.classList.remove('visible');
 
     const libros = indice.filter(l => l.testamento === testamentoActivo);
     const html = `
@@ -353,6 +385,8 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = libroActual.nombre;
     subtituloHeader.textContent = `${libroActual.capitulos} capítulos`;
+    indIzq.classList.remove('visible');
+    indDer.classList.remove('visible');
 
     if (!cacheLibros[id]) {
       main.innerHTML = '<div class="cargando">Cargando ' + libroActual.nombre + '…</div>';
@@ -393,6 +427,9 @@
       </div>
     `;
     main.scrollTop = 0;
+
+    indIzq.classList.toggle('visible', !esPrimero);
+    indDer.classList.toggle('visible', !esUltimo);
   }
 
   btnAtras.addEventListener('click', () => {
