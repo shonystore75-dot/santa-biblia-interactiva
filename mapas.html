@@ -197,7 +197,94 @@
     box-shadow: 0 10px 24px rgba(61,31,62,0.2);
     margin-bottom: 2vh;
     overflow: hidden;
+    cursor: pointer;
   }
+
+  .panel-mapa .lupa-ampliar {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(61,31,62,0.65);
+    color: #FFDD8A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Visor de mapa a pantalla completa (pellizco para ampliar) */
+  .visor-mapa {
+    position: absolute;
+    inset: 0;
+    background: rgba(20,10,20,0.96);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+  }
+
+  .visor-mapa.activo { display: flex; }
+
+  .visor-cerrar {
+    position: absolute;
+    top: max(14px, env(safe-area-inset-top));
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,221,138,0.4);
+    color: var(--dorado-brillante);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    z-index: 1001;
+    cursor: pointer;
+  }
+
+  .visor-lienzo {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+  }
+
+  .visor-contenido {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-size: cover;
+    background-position: center;
+    transform-origin: 0 0;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .visor-info {
+    position: absolute;
+    left: 4vw;
+    right: 4vw;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 6px 18px 6px 18px;
+    padding: 1.6vh 4vw;
+    border: 1.5px solid rgba(185,80,46,0.2);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    display: none;
+    z-index: 1001;
+    max-height: 32vh;
+    overflow-y: auto;
+  }
+
+  .visor-info.activo { display: block; }
 
   .ruta-svg {
     position: absolute;
@@ -344,6 +431,14 @@
       <a class="item activo" href="mapas.html"><div class="icono-nav" id="nav-guia"></div>Guía</a>
       <div class="item"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</div>
     </nav>
+
+    <div class="visor-mapa" id="visor-mapa">
+      <div class="visor-cerrar" id="visor-cerrar">✕</div>
+      <div class="visor-lienzo" id="visor-lienzo">
+        <div class="visor-contenido" id="visor-contenido"></div>
+      </div>
+      <div class="visor-info" id="visor-info"></div>
+    </div>
   </div>
 
 <script>
@@ -393,7 +488,7 @@
 
     const puntosStr = m.puntos.map(p => `${p.x},${p.y}`).join(' ');
     const pines = m.puntos.map((p, i) => `
-      <div class="pin-mapa" data-punto="${p.id}" style="left:${p.x}%; top:${p.y}%;" onclick="mostrarPunto('${m.id}', '${p.id}')">${i + 1}</div>
+      <div class="pin-mapa" data-punto="${p.id}" style="left:${p.x}%; top:${p.y}%;" onclick="event.stopPropagation(); mostrarPunto('${m.id}', '${p.id}')">${i + 1}</div>
     `).join('');
     const estiloPanel = m.imagen
       ? ` style="background-image:url('${m.imagen}'); background-size:cover; background-position:center;"`
@@ -404,11 +499,12 @@
         <div class="referencia-grande">${m.referencia}</div>
         <h2>${m.titulo}</h2>
         <p class="cuerpo-mapa">${m.descripcion}</p>
-        <div class="panel-mapa"${estiloPanel}>
+        <div class="panel-mapa"${estiloPanel} onclick="abrirVisor('${m.id}')">
           <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
             <polyline points="${puntosStr}"></polyline>
           </svg>
           ${pines}
+          <div class="lupa-ampliar">⤢</div>
         </div>
         <div class="info-punto" id="info-punto">
           <div class="info-punto-placeholder">Toca un punto del mapa para ver más información.</div>
@@ -428,7 +524,7 @@
       <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}">Leer el pasaje →</a>
     `;
 
-    document.querySelectorAll('.pin-mapa').forEach(el => {
+    document.querySelectorAll('#vista-detalle-mapa .pin-mapa').forEach(el => {
       el.classList.toggle('activo', el.dataset.punto === puntoId);
     });
   }
@@ -440,6 +536,160 @@
       mostrarLista();
     }
   });
+
+  /* ---------- Visor de mapa a pantalla completa (pellizco para ampliar) ---------- */
+  const visorMapa = document.getElementById('visor-mapa');
+  const visorLienzo = document.getElementById('visor-lienzo');
+  const visorContenido = document.getElementById('visor-contenido');
+  const visorCerrar = document.getElementById('visor-cerrar');
+  const visorInfo = document.getElementById('visor-info');
+
+  let visorScale = 1, visorOffsetX = 0, visorOffsetY = 0;
+  const visorPointers = new Map();
+  let visorPrevDist = 0, visorPrevMid = null;
+  let visorPanInicio = null;
+
+  function distancia(p1, p2) {
+    return Math.hypot(p2.x - p1.x, p2.y - p1.y);
+  }
+
+  function puntoMedio(p1, p2) {
+    return { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+  }
+
+  function aplicarTransformVisor() {
+    visorContenido.style.transform = `translate(${visorOffsetX}px, ${visorOffsetY}px) scale(${visorScale})`;
+  }
+
+  let visorRafPendiente = false;
+  function solicitarAplicarTransform() {
+    if (visorRafPendiente) return;
+    visorRafPendiente = true;
+    requestAnimationFrame(() => {
+      aplicarTransformVisor();
+      visorRafPendiente = false;
+    });
+  }
+
+  function resetVisorTransform() {
+    visorScale = 1;
+    visorOffsetX = 0;
+    visorOffsetY = 0;
+    aplicarTransformVisor();
+  }
+
+  function abrirVisor(id) {
+    const m = mapas.find(x => x.id === id);
+    if (!m) return;
+
+    const puntosStr = m.puntos.map(p => `${p.x},${p.y}`).join(' ');
+    const pines = m.puntos.map((p, i) => `
+      <div class="pin-mapa" data-punto="${p.id}" style="left:${p.x}%; top:${p.y}%;" onclick="event.stopPropagation(); mostrarPuntoVisor('${m.id}', '${p.id}')">${i + 1}</div>
+    `).join('');
+
+    visorContenido.style.backgroundImage = m.imagen ? `url('${m.imagen}')` : '';
+    visorContenido.innerHTML = `
+      <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polyline points="${puntosStr}"></polyline>
+      </svg>
+      ${pines}
+    `;
+
+    visorInfo.classList.remove('activo');
+    visorInfo.innerHTML = '';
+    resetVisorTransform();
+    visorMapa.classList.add('activo');
+  }
+
+  function cerrarVisor() {
+    visorMapa.classList.remove('activo');
+    visorPointers.clear();
+    visorPanInicio = null;
+    visorPrevDist = 0;
+    visorPrevMid = null;
+  }
+
+  function mostrarPuntoVisor(mapaId, puntoId) {
+    const m = mapas.find(x => x.id === mapaId);
+    const p = m.puntos.find(x => x.id === puntoId);
+
+    visorInfo.innerHTML = `
+      <div class="info-punto-nombre">${p.nombre}</div>
+      <div class="info-punto-texto">${p.info}</div>
+      <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}">Leer el pasaje →</a>
+    `;
+    visorInfo.classList.add('activo');
+
+    visorContenido.querySelectorAll('.pin-mapa').forEach(el => {
+      el.classList.toggle('activo', el.dataset.punto === puntoId);
+    });
+  }
+
+  visorCerrar.addEventListener('click', cerrarVisor);
+
+  visorLienzo.addEventListener('pointerdown', (e) => {
+    visorPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (visorPointers.size === 1) {
+      visorPanInicio = {
+        x: e.clientX, y: e.clientY,
+        offsetX: visorOffsetX, offsetY: visorOffsetY
+      };
+    } else if (visorPointers.size === 2) {
+      const pts = Array.from(visorPointers.values());
+      visorPrevDist = distancia(pts[0], pts[1]);
+      visorPrevMid = puntoMedio(pts[0], pts[1]);
+    }
+  });
+
+  visorLienzo.addEventListener('pointermove', (e) => {
+    if (!visorPointers.has(e.pointerId)) return;
+    visorPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (visorPointers.size === 2) {
+      const pts = Array.from(visorPointers.values());
+      const dist = distancia(pts[0], pts[1]);
+      const mid = puntoMedio(pts[0], pts[1]);
+
+      let nuevaEscala = visorScale * (dist / (visorPrevDist || dist));
+      nuevaEscala = Math.min(4, Math.max(1, nuevaEscala));
+
+      visorOffsetX = mid.x - (visorPrevMid.x - visorOffsetX) * (nuevaEscala / visorScale);
+      visorOffsetY = mid.y - (visorPrevMid.y - visorOffsetY) * (nuevaEscala / visorScale);
+      visorScale = nuevaEscala;
+
+      visorPrevDist = dist;
+      visorPrevMid = mid;
+      solicitarAplicarTransform();
+    } else if (visorPointers.size === 1 && visorScale > 1 && visorPanInicio) {
+      visorOffsetX = visorPanInicio.offsetX + (e.clientX - visorPanInicio.x);
+      visorOffsetY = visorPanInicio.offsetY + (e.clientY - visorPanInicio.y);
+      solicitarAplicarTransform();
+    }
+  });
+
+  function visorPointerFin(e) {
+    visorPointers.delete(e.pointerId);
+
+    if (visorPointers.size === 1) {
+      const [[, p]] = Array.from(visorPointers.entries());
+      visorPanInicio = { x: p.x, y: p.y, offsetX: visorOffsetX, offsetY: visorOffsetY };
+    } else {
+      visorPanInicio = null;
+    }
+
+    if (visorPointers.size < 2) {
+      visorPrevDist = 0;
+      visorPrevMid = null;
+    }
+
+    if (visorScale <= 1) {
+      resetVisorTransform();
+    }
+  }
+
+  visorLienzo.addEventListener('pointerup', visorPointerFin);
+  visorLienzo.addEventListener('pointercancel', visorPointerFin);
 
   cargarMapas();
 </script>
