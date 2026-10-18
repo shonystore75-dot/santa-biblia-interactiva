@@ -207,11 +207,11 @@
 
   .ruta-svg polyline {
     fill: none;
-    stroke: var(--terracota);
-    stroke-width: 0.6;
-    stroke-dasharray: 2.5 2.2;
+    stroke: #963A20;
+    stroke-width: 0.8;
+    stroke-dasharray: 1.4 0.9;
     stroke-linecap: round;
-    opacity: 0.55;
+    opacity: 0.9;
   }
 
   .pin-mapa {
@@ -395,13 +395,16 @@
     const pines = m.puntos.map((p, i) => `
       <div class="pin-mapa" data-punto="${p.id}" style="left:${p.x}%; top:${p.y}%;" onclick="mostrarPunto('${m.id}', '${p.id}')">${i + 1}</div>
     `).join('');
+    const estiloPanel = m.imagen
+      ? ` style="background-image:url('${m.imagen}'); background-size:cover; background-position:center;"`
+      : '';
 
     main.innerHTML = `
       <div id="vista-detalle-mapa">
         <div class="referencia-grande">${m.referencia}</div>
         <h2>${m.titulo}</h2>
         <p class="cuerpo-mapa">${m.descripcion}</p>
-        <div class="panel-mapa">
+        <div class="panel-mapa"${estiloPanel}>
           <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
             <polyline points="${puntosStr}"></polyline>
           </svg>
