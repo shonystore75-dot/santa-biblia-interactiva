@@ -453,6 +453,16 @@
   async function cargarMapas() {
     const res = await fetch('mapas.json');
     mapas = await res.json();
+
+    const params = new URLSearchParams(window.location.search);
+    const mapaParam = params.get('mapa');
+    const puntoParam = params.get('punto');
+
+    if (mapaParam && mapas.some(m => m.id === mapaParam)) {
+      mostrarDetalle(mapaParam);
+      if (puntoParam) mostrarPunto(mapaParam, puntoParam);
+      return;
+    }
     mostrarLista();
   }
 
@@ -521,7 +531,7 @@
     document.getElementById('info-punto').innerHTML = `
       <div class="info-punto-nombre">${p.nombre}</div>
       <div class="info-punto-texto">${p.info}</div>
-      <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}">Leer el pasaje →</a>
+      <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}&mapa=${mapaId}&punto=${p.id}">Leer el pasaje →</a>
     `;
 
     document.querySelectorAll('#vista-detalle-mapa .pin-mapa').forEach(el => {
@@ -616,7 +626,7 @@
     visorInfo.innerHTML = `
       <div class="info-punto-nombre">${p.nombre}</div>
       <div class="info-punto-texto">${p.info}</div>
-      <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}">Leer el pasaje →</a>
+      <a class="btn-leer-pasaje" href="leer.html?libro=${p.libro}&capitulo=${p.capitulo}&mapa=${mapaId}&punto=${p.id}">Leer el pasaje →</a>
     `;
     visorInfo.classList.add('activo');
 

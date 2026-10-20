@@ -329,7 +329,7 @@
   let libroActual = null;
   let capActual = null;
   let cacheLibros = {};
-  let vinoDeHistorias = false;
+  let origenExterno = null; // { pagina: 'historias.html' } o { pagina: 'mapas.html', mapa, punto }
 
   async function cargarIndice() {
     const res = await fetch('indice.json');
@@ -338,10 +338,18 @@
     const params = new URLSearchParams(window.location.search);
     const libroParam = params.get('libro');
     const capParam = params.get('capitulo');
+    const mapaParam = params.get('mapa');
+    const puntoParam = params.get('punto');
+
     if (libroParam && indice.some(l => l.id === libroParam)) {
       await abrirLibro(libroParam);
       if (capParam) abrirCapitulo(parseInt(capParam, 10));
-      vinoDeHistorias = document.referrer.includes('historias.html');
+
+      if (mapaParam) {
+        origenExterno = { pagina: 'mapas.html', mapa: mapaParam, punto: puntoParam };
+      } else if (document.referrer.includes('historias.html')) {
+        origenExterno = { pagina: 'historias.html' };
+      }
       return;
     }
     mostrarListaLibros();
@@ -451,9 +459,16 @@
   });
 
   btnAtras.addEventListener('click', () => {
-    if (vinoDeHistorias) {
-      vinoDeHistorias = false;
-      window.location.href = 'historias.html';
+    if (origenExterno) {
+      const destino = origenExterno;
+      origenExterno = null;
+      if (destino.pagina === 'mapas.html') {
+        let url = 'mapas.html?mapa=' + encodeURIComponent(destino.mapa);
+        if (destino.punto) url += '&punto=' + encodeURIComponent(destino.punto);
+        window.location.href = url;
+      } else {
+        window.location.href = destino.pagina;
+      }
       return;
     }
     if (capActual !== null) {
