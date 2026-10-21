@@ -258,9 +258,7 @@
 
   .visor-contenido {
     position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    background-size: cover;
+    background-size: 100% 100%;
     background-position: center;
     transform-origin: 0 0;
     will-change: transform;
@@ -532,6 +530,7 @@
   }
 
   let observadorPanel = null;
+  let observadorVisor = null;
 
   function mostrarDetalle(id) {
     const m = mapas.find(x => x.id === id);
@@ -657,6 +656,20 @@
     visorInfo.innerHTML = '';
     resetVisorTransform();
     visorMapa.classList.add('activo');
+
+    ajustarTamanoVisor(m);
+    if (observadorVisor) observadorVisor.disconnect();
+    observadorVisor = new ResizeObserver(() => ajustarTamanoVisor(m));
+    observadorVisor.observe(visorLienzo);
+  }
+
+  function ajustarTamanoVisor(m) {
+    const contW = visorLienzo.clientWidth, contH = visorLienzo.clientHeight;
+    if (!contW || !contH) return;
+    const imgW = m.ancho || 1448, imgH = m.alto || 1086;
+    const ajuste = calcularAjusteContenido(contW, contH, imgW, imgH);
+    visorContenido.style.width = ajuste.anchoVisible + 'px';
+    visorContenido.style.height = ajuste.altoVisible + 'px';
   }
 
   function cerrarVisor() {
@@ -665,6 +678,7 @@
     visorPanInicio = null;
     visorPrevDist = 0;
     visorPrevMid = null;
+    if (observadorVisor) { observadorVisor.disconnect(); observadorVisor = null; }
   }
 
   function mostrarPuntoVisor(mapaId, puntoId) {

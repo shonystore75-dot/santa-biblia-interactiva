@@ -19,13 +19,13 @@
     "referencia": "Éxodo 12-20",
     "descripcion": "Moisés guía al pueblo de Israel fuera de la esclavitud en Egipto, cruzando el Mar Rojo hasta el Monte Sinaí, camino a la tierra prometida.",
     "imagen": "mapas/exodo-egipto-fondo.jpg",
-    "ancho": 1448,
-    "alto": 1086,
+    "ancho": 1086,
+    "alto": 1448,
     "puntos": [
-      { "id": "gosen", "nombre": "Gosén", "x": 16, "y": 25, "info": "Región de Egipto donde vivió el pueblo de Israel durante su esclavitud, antes de iniciar el éxodo.", "libro": "ex", "capitulo": 12 },
-      { "id": "marrojo", "nombre": "Mar Rojo", "x": 42, "y": 38, "info": "Dios abrió sus aguas para que Israel cruzara en seco, y luego las cerró sobre el ejército egipcio que los perseguía.", "libro": "ex", "capitulo": 14 },
-      { "id": "montesinai", "nombre": "Monte Sinaí", "x": 60, "y": 53, "info": "Aquí Dios entregó a Moisés los Diez Mandamientos y estableció su pacto con el pueblo de Israel.", "libro": "ex", "capitulo": 20 },
-      { "id": "canaanexodo", "nombre": "Canaán", "x": 72, "y": 21, "info": "La tierra prometida hacia la cual se dirigía el pueblo de Israel al final de su largo camino por el desierto.", "libro": "ex", "capitulo": 13 }
+      { "id": "gosen", "nombre": "Gosén", "x": 41, "y": 30, "info": "Región de Egipto donde vivió el pueblo de Israel durante su esclavitud, antes de iniciar el éxodo.", "libro": "ex", "capitulo": 12 },
+      { "id": "marrojo", "nombre": "Mar Rojo", "x": 37, "y": 40, "info": "Dios abrió sus aguas para que Israel cruzara en seco, y luego las cerró sobre el ejército egipcio que los perseguía.", "libro": "ex", "capitulo": 14 },
+      { "id": "montesinai", "nombre": "Monte Sinaí", "x": 51, "y": 39, "info": "Aquí Dios entregó a Moisés los Diez Mandamientos y estableció su pacto con el pueblo de Israel.", "libro": "ex", "capitulo": 20 },
+      { "id": "canaanexodo", "nombre": "Canaán", "x": 74, "y": 25, "info": "La tierra prometida hacia la cual se dirigía el pueblo de Israel al final de su largo camino por el desierto.", "libro": "ex", "capitulo": 13 }
     ]
   }
 ]
