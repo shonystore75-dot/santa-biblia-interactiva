@@ -5,10 +5,27 @@
     "referencia": "Génesis 11-12",
     "descripcion": "De Ur de los Caldeos a la tierra que Dios le prometió mostrarle.",
     "imagen": "mapas/viajes-abraham-fondo.jpg",
+    "ancho": 1448,
+    "alto": 1086,
     "puntos": [
       { "id": "ur", "nombre": "Ur de los Caldeos", "x": 84, "y": 66, "info": "Ciudad natal de Abram, en Mesopotamia. Desde allí partió junto a su padre Taré, su esposa Sarai y su sobrino Lot.", "libro": "gn", "capitulo": 11 },
       { "id": "haran", "nombre": "Harán", "x": 47, "y": 12, "info": "La familia de Taré se detuvo aquí e hizo vida por un tiempo. Abram continuó el viaje después de la muerte de su padre.", "libro": "gn", "capitulo": 11 },
       { "id": "canaan", "nombre": "Canaán", "x": 30, "y": 64, "info": "La tierra que Dios le prometió mostrarle a Abram, donde finalmente se estableció y Dios renovó su pacto con él.", "libro": "gn", "capitulo": 12 }
+    ]
+  },
+  {
+    "id": "exodo-egipto",
+    "titulo": "El Éxodo de Egipto",
+    "referencia": "Éxodo 12-20",
+    "descripcion": "Moisés guía al pueblo de Israel fuera de la esclavitud en Egipto, cruzando el Mar Rojo hasta el Monte Sinaí, camino a la tierra prometida.",
+    "imagen": "mapas/exodo-egipto-fondo.jpg",
+    "ancho": 1448,
+    "alto": 1086,
+    "puntos": [
+      { "id": "gosen", "nombre": "Gosén", "x": 16, "y": 25, "info": "Región de Egipto donde vivió el pueblo de Israel durante su esclavitud, antes de iniciar el éxodo.", "libro": "ex", "capitulo": 12 },
+      { "id": "marrojo", "nombre": "Mar Rojo", "x": 42, "y": 38, "info": "Dios abrió sus aguas para que Israel cruzara en seco, y luego las cerró sobre el ejército egipcio que los perseguía.", "libro": "ex", "capitulo": 14 },
+      { "id": "montesinai", "nombre": "Monte Sinaí", "x": 60, "y": 53, "info": "Aquí Dios entregó a Moisés los Diez Mandamientos y estableció su pacto con el pueblo de Israel.", "libro": "ex", "capitulo": 20 },
+      { "id": "canaanexodo", "nombre": "Canaán", "x": 72, "y": 21, "info": "La tierra prometida hacia la cual se dirigía el pueblo de Israel al final de su largo camino por el desierto.", "libro": "ex", "capitulo": 13 }
     ]
   }
 ]
