@@ -178,8 +178,7 @@
   .panel-mapa {
     position: relative;
     width: 100%;
-    flex: 1 1 auto;
-    min-height: 46vh;
+    aspect-ratio: var(--ar, 4 / 3);
     background:
       radial-gradient(circle at 25% 20%, rgba(255,255,255,0.5), transparent 55%),
       linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
@@ -469,8 +468,6 @@
     tituloHeader.textContent = 'Mapas';
     subtituloHeader.textContent = 'Mapas bíblicos';
 
-    if (observadorPanel) { observadorPanel.disconnect(); observadorPanel = null; }
-
     main.innerHTML = `
       <div class="lista-mapas">
         ${mapas.map(m => `
@@ -498,38 +495,6 @@
     return { escala, anchoVisible, altoVisible, offX, offY };
   }
 
-  function posicionarPuntosEnPanel(panelEl, m) {
-    if (!panelEl) return;
-    const contW = panelEl.clientWidth, contH = panelEl.clientHeight;
-    if (!contW || !contH) return;
-    const imgW = m.ancho || 1448, imgH = m.alto || 1086;
-    const ajuste = calcularAjusteContenido(contW, contH, imgW, imgH);
-
-    const aPorcentaje = (p) => {
-      const px = ajuste.offX + (p.x / 100) * ajuste.anchoVisible;
-      const py = ajuste.offY + (p.y / 100) * ajuste.altoVisible;
-      return { leftPct: (px / contW) * 100, topPct: (py / contH) * 100 };
-    };
-
-    panelEl.querySelectorAll('.pin-mapa').forEach(el => {
-      const p = m.puntos.find(x => x.id === el.dataset.punto);
-      if (!p) return;
-      const { leftPct, topPct } = aPorcentaje(p);
-      el.style.left = leftPct + '%';
-      el.style.top = topPct + '%';
-    });
-
-    const polyline = panelEl.querySelector('.ruta-svg polyline');
-    if (polyline) {
-      const pts = m.puntos.map(p => {
-        const { leftPct, topPct } = aPorcentaje(p);
-        return `${leftPct},${topPct}`;
-      }).join(' ');
-      polyline.setAttribute('points', pts);
-    }
-  }
-
-  let observadorPanel = null;
   let observadorVisor = null;
 
   function mostrarDetalle(id) {
@@ -540,19 +505,21 @@
     subtituloHeader.textContent = m.referencia;
 
     const pines = m.puntos.map((p, i) => `
-      <div class="pin-mapa" data-punto="${p.id}" onclick="event.stopPropagation(); mostrarPunto('${m.id}', '${p.id}')">${i + 1}</div>
+      <div class="pin-mapa" data-punto="${p.id}" style="left:${p.x}%; top:${p.y}%;" onclick="event.stopPropagation(); mostrarPunto('${m.id}', '${p.id}')">${i + 1}</div>
     `).join('');
     const imagenPanel = m.imagen
       ? `<div class="panel-mapa-imagen" style="background-image:url('${m.imagen}');"></div>`
       : '';
+    const puntosStr = m.puntos.map(p => `${p.x},${p.y}`).join(' ');
+    const ar = `${m.ancho || 1448} / ${m.alto || 1086}`;
 
     main.innerHTML = `
       <div id="vista-detalle-mapa">
         <p class="cuerpo-mapa">${m.descripcion}</p>
-        <div class="panel-mapa" onclick="abrirVisor('${m.id}')">
+        <div class="panel-mapa" style="--ar:${ar};" onclick="abrirVisor('${m.id}')">
           ${imagenPanel}
           <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <polyline points=""></polyline>
+            <polyline points="${puntosStr}"></polyline>
           </svg>
           ${pines}
           <div class="lupa-ampliar">⤢</div>
@@ -563,12 +530,6 @@
       </div>
     `;
     main.scrollTop = 0;
-
-    if (observadorPanel) observadorPanel.disconnect();
-    const panelEl = main.querySelector('.panel-mapa');
-    posicionarPuntosEnPanel(panelEl, m);
-    observadorPanel = new ResizeObserver(() => posicionarPuntosEnPanel(panelEl, m));
-    observadorPanel.observe(panelEl);
   }
 
   function mostrarPunto(mapaId, puntoId) {
