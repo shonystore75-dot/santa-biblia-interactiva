@@ -23,8 +23,8 @@
     "alto": 1448,
     "puntos": [
       { "id": "gosen", "nombre": "Gosén", "x": 15, "y": 28, "info": "Región de Egipto donde vivió el pueblo de Israel durante su esclavitud, antes de iniciar el éxodo.", "libro": "ex", "capitulo": 12 },
-      { "id": "marrojo", "nombre": "Mar Rojo", "x": 37, "y": 45, "info": "Dios abrió sus aguas para que Israel cruzara en seco, y luego las cerró sobre el ejército egipcio que los perseguía.", "libro": "ex", "capitulo": 14 },
-      { "id": "montesinai", "nombre": "Monte Sinaí", "x": 51, "y": 39, "info": "Aquí Dios entregó a Moisés los Diez Mandamientos y estableció su pacto con el pueblo de Israel.", "libro": "ex", "capitulo": 20 },
+      { "id": "marrojo", "nombre": "Mar Rojo", "x": 43, "y": 47, "info": "Dios abrió sus aguas para que Israel cruzara en seco, y luego las cerró sobre el ejército egipcio que los perseguía.", "libro": "ex", "capitulo": 14 },
+      { "id": "montesinai", "nombre": "Monte Sinaí", "x": 51, "y": 52, "info": "Aquí Dios entregó a Moisés los Diez Mandamientos y estableció su pacto con el pueblo de Israel.", "libro": "ex", "capitulo": 20 },
       { "id": "canaanexodo", "nombre": "Canaán", "x": 74, "y": 25, "info": "La tierra prometida hacia la cual se dirigía el pueblo de Israel al final de su largo camino por el desierto.", "libro": "ex", "capitulo": 13 }
     ]
   }

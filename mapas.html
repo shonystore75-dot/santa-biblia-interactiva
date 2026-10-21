@@ -173,6 +173,14 @@
     line-height: 1.5;
     color: var(--tinta);
     margin-bottom: 1.6vh;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cuerpo-mapa.oculto {
+    display: none;
   }
 
   .panel-mapa {
@@ -545,6 +553,9 @@
     document.querySelectorAll('#vista-detalle-mapa .pin-mapa').forEach(el => {
       el.classList.toggle('activo', el.dataset.punto === puntoId);
     });
+
+    const cuerpo = document.querySelector('#vista-detalle-mapa .cuerpo-mapa');
+    if (cuerpo) cuerpo.classList.add('oculto');
   }
 
   btnAtras.addEventListener('click', () => {
@@ -613,8 +624,8 @@
       ${pines}
     `;
 
-    visorInfo.classList.remove('activo');
-    visorInfo.innerHTML = '';
+    visorInfo.classList.add('activo');
+    visorInfo.innerHTML = '<div class="info-punto-placeholder">Toca un punto del mapa para ver más información.</div>';
     resetVisorTransform();
     visorMapa.classList.add('activo');
 
