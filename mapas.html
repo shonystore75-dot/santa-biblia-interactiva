@@ -419,6 +419,67 @@
   #nav-leer { background-image: url('nav-leer.png'); }
   #nav-guia { background-image: url('nav-guia.png'); }
   #nav-favoritos { background-image: url('nav-favoritos.png'); }
+
+  .espacio-publicidad {
+    flex: 0 0 auto;
+    margin: 0 5vw 1vh;
+    position: relative;
+    background: linear-gradient(160deg, var(--papiro) 0%, #F0E2C2 100%);
+    border: 1px solid rgba(61, 31, 62, 0.18);
+    border-radius: 4px 14px 4px 14px;
+    padding: 1.1vh 3.5vw 1vh;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .espacio-publicidad::before,
+  .espacio-publicidad::after {
+    content: '';
+    position: absolute;
+    top: 3px; bottom: 3px;
+    width: 2px;
+    background: repeating-linear-gradient(180deg, var(--dorado) 0 4px, transparent 4px 8px);
+  }
+  .espacio-publicidad::before { left: 3px; }
+  .espacio-publicidad::after { right: 3px; }
+
+  .etiqueta-ads {
+    position: absolute;
+    top: -1px;
+    left: 14px;
+    background: var(--ciruela);
+    color: var(--dorado-brillante);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 8px 3px;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .contenido-ads {
+    text-align: center;
+    width: 100%;
+  }
+
+  .contenido-ads .marcador {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10.5px;
+    color: var(--terracota);
+    letter-spacing: 0.3px;
+  }
+
+  .contenido-ads .marcador-sub {
+    font-size: 9px;
+    color: #8A6F55;
+    font-style: italic;
+    margin-top: 1px;
+  }
 </style>
 </head>
 <body>
@@ -434,6 +495,14 @@
     <main id="main">
       <div class="cargando">Cargando mapas…</div>
     </main>
+
+    <div class="espacio-publicidad" id="espacio-publicidad">
+      <span class="etiqueta-ads">Publicidad</span>
+      <div class="contenido-ads">
+        <div class="marcador">✦ Aquí aparecerá un anuncio ✦</div>
+        <div class="marcador-sub">Espacio reservado</div>
+      </div>
+    </div>
 
     <nav>
       <a class="item" href="index.html"><div class="icono-nav" id="nav-inicio"></div>Inicio</a>
