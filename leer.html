@@ -183,7 +183,7 @@
     flex: 1;
     font-family: 'Cinzel', serif;
     font-weight: 600;
-    font-size: 14px;
+    font-size: calc(14px * var(--escala-texto));
     color: var(--ciruela);
   }
   .libro-busqueda .cantidad {
@@ -220,7 +220,7 @@
   .resultado-verso .frag {
     display: block;
     font-family: 'Source Serif 4', serif;
-    font-size: 13px;
+    font-size: calc(13px * var(--escala-texto));
     line-height: 1.5;
     color: var(--tinta);
   }
@@ -292,12 +292,12 @@
   .item-libro .nombre {
     font-family: 'Cinzel', serif;
     font-weight: 600;
-    font-size: 14px;
+    font-size: calc(14px * var(--escala-texto));
     color: var(--ciruela);
   }
   .item-libro .caps {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: calc(10px * var(--escala-texto));
     color: var(--terracota);
   }
 
@@ -314,7 +314,7 @@
     display: flex; align-items: center; justify-content: center;
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: calc(15px * var(--escala-texto));
     color: var(--terracota);
     border-bottom: 2px solid var(--dorado);
     box-shadow: 0 3px 8px rgba(61,31,62,0.12);
