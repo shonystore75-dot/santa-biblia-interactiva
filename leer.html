@@ -15,6 +15,7 @@
     --papiro: #FBF0D9;
     --tinta: #3D2419;
     --terracota: #B9502E;
+    --escala-texto: 1;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -95,13 +96,154 @@
     margin-top: 2px;
   }
 
+  .control-tamano {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .btn-tamano {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,221,138,0.4);
+    color: var(--dorado-brillante);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  #tam-menos { font-size: 11px; }
+  #tam-mas { font-size: 13px; }
+  .btn-tamano:active { background: rgba(255,255,255,0.22); }
+  #btn-busqueda svg { width: 16px; height: 16px; }
+
+  /* Vista de búsqueda */
+  .caja-busqueda {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2vh;
+  }
+  #input-busqueda {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 14px;
+    border-radius: 4px 14px 4px 14px;
+    border: 1.5px solid rgba(185,80,46,0.25);
+    background: #fff;
+    color: var(--tinta);
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+  }
+  #input-busqueda:focus { outline: none; border-color: var(--terracota); }
+  .btn-buscar {
+    width: 42px; flex-shrink: 0;
+    border-radius: 4px 14px 4px 14px;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .btn-buscar svg { width: 18px; height: 18px; }
+
+  .resumen-busqueda {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--terracota);
+    margin-bottom: 1.6vh;
+  }
+  .sin-resultados {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    color: var(--terracota);
+    text-align: center;
+    padding: 3vh 0;
+  }
+  .lista-grupos-busqueda {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .grupo-busqueda {
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 4px 14px 4px 14px;
+    border-left: 3px solid var(--dorado);
+    box-shadow: 0 3px 10px rgba(61,31,62,0.1);
+    overflow: hidden;
+  }
+  .libro-busqueda {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+  }
+  .libro-busqueda .nombre {
+    flex: 1;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ciruela);
+  }
+  .libro-busqueda .cantidad {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--terracota);
+    background: rgba(185,80,46,0.1);
+    border-radius: 10px;
+    padding: 2px 8px;
+  }
+  .libro-busqueda .flecha {
+    font-size: 16px;
+    color: var(--terracota);
+    transition: transform 0.15s ease;
+  }
+  .libro-busqueda .flecha.abierto { transform: rotate(90deg); }
+  .versos-grupo-busqueda {
+    border-top: 1px dashed rgba(185,80,46,0.3);
+  }
+  .resultado-verso {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(185,80,46,0.12);
+    cursor: pointer;
+  }
+  .resultado-verso:last-child { border-bottom: none; }
+  .resultado-verso .ref {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--terracota);
+    margin-bottom: 2px;
+  }
+  .resultado-verso .frag {
+    display: block;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--tinta);
+  }
+  .resultado-verso mark {
+    background: rgba(245,185,66,0.55);
+    color: var(--ciruela);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
   main {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
     padding: 2vh 5vw 3vh;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(185,80,46,0.35) transparent;
   }
+  main::-webkit-scrollbar { width: 4px; }
+  main::-webkit-scrollbar-track { background: transparent; }
+  main::-webkit-scrollbar-thumb { background: rgba(185,80,46,0.35); border-radius: 4px; }
+  main::-webkit-scrollbar-thumb:hover { background: rgba(185,80,46,0.55); }
 
   /* Tabs AT / NT */
   .tabs {
@@ -182,13 +324,13 @@
   /* Vista de lectura */
   #vista-lectura h2 {
     font-family: 'Cinzel', serif;
-    font-size: clamp(17px, 3.4vh, 21px);
+    font-size: calc(clamp(17px, 3.4vh, 21px) * var(--escala-texto));
     color: var(--ciruela);
     text-align: center;
     margin-bottom: 2vh;
   }
   .verso {
-    font-size: clamp(14px, 2.6vh, 16px);
+    font-size: calc(clamp(14px, 2.6vh, 16px) * var(--escala-texto));
     line-height: 1.7;
     margin-bottom: 1vh;
     color: var(--tinta);
@@ -295,9 +437,14 @@
   <div class="phone">
     <header>
       <div class="btn-atras" id="btn-atras" style="visibility:hidden;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
-      <div>
+      <div style="flex:1; min-width:0;">
         <div id="titulo-header">Leer</div>
-        <div id="subtitulo-header">Reina Valera · 1909</div>
+        <div id="subtitulo-header">Reina Valera 1909 · Edición 2026</div>
+      </div>
+      <div class="control-tamano">
+        <button class="btn-tamano" id="btn-busqueda" aria-label="Buscar palabras" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+        <button class="btn-tamano" id="tam-menos" aria-label="Reducir tamaño de letra" type="button">A−</button>
+        <button class="btn-tamano" id="tam-mas" aria-label="Aumentar tamaño de letra" type="button">A+</button>
       </div>
     </header>
 
@@ -331,6 +478,44 @@
   let cacheLibros = {};
   let origenExterno = null; // { pagina: 'historias.html' } o { pagina: 'mapas.html', mapa, punto }
 
+  // Búsqueda por palabras
+  let todosLibrosCargados = false;
+  let busquedaUltima = null; // { consulta, palabras, grupos, totalGeneral }
+  let busquedaExpandido = null; // id del libro cuyos resultados están desplegados
+  let busquedaScroll = 0; // posición de scroll a restaurar
+  let estaEnBusqueda = false; // true mientras estamos dentro de la sección de búsqueda
+  let origenBusqueda = null; // { libroActual, capActual } de antes de abrir la búsqueda
+  let vinoDeBusqueda = false; // true si la lectura actual se abrió desde un resultado de búsqueda
+
+  // Tamaño de letra ajustable
+  const ESCALA_MIN = 0.8;
+  const ESCALA_MAX = 1.6;
+  const ESCALA_PASO = 0.1;
+  let escalaTexto = 1;
+
+  function cargarEscala() {
+    try {
+      const guardada = parseFloat(localStorage.getItem('escalaTexto'));
+      if (!isNaN(guardada)) escalaTexto = guardada;
+    } catch (e) {}
+    aplicarEscala();
+  }
+
+  function aplicarEscala() {
+    document.documentElement.style.setProperty('--escala-texto', escalaTexto);
+  }
+
+  function cambiarEscala(delta) {
+    escalaTexto = Math.round(Math.min(ESCALA_MAX, Math.max(ESCALA_MIN, escalaTexto + delta)) * 10) / 10;
+    aplicarEscala();
+    try { localStorage.setItem('escalaTexto', escalaTexto); } catch (e) {}
+  }
+
+  document.getElementById('tam-menos').addEventListener('click', () => cambiarEscala(-ESCALA_PASO));
+  document.getElementById('tam-mas').addEventListener('click', () => cambiarEscala(ESCALA_PASO));
+
+  cargarEscala();
+
   async function cargarIndice() {
     const res = await fetch('indice.json');
     indice = await res.json();
@@ -359,7 +544,7 @@
     libroActual = null; capActual = null;
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Leer';
-    subtituloHeader.textContent = 'Reina Valera · 1909';
+    subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
 
@@ -411,15 +596,187 @@
     main.scrollTop = 0;
   }
 
-  function abrirCapitulo(numCap) {
+  // --- Búsqueda por palabras ---
+
+  async function cargarTodosLosLibros() {
+    const faltantes = indice.filter(l => !cacheLibros[l.id]);
+    await Promise.all(faltantes.map(async l => {
+      const res = await fetch(`libro-${l.id}.json`);
+      cacheLibros[l.id] = await res.json();
+    }));
+  }
+
+  function patronTolerante(palabra) {
+    const mapa = { a:'[aáAÁ]', e:'[eéEÉ]', i:'[iíIÍ]', o:'[oóOÓ]', u:'[uúüUÚÜ]', n:'[nñNÑ]' };
+    let patron = '';
+    for (const ch of palabra) {
+      if (mapa[ch.toLowerCase()]) {
+        patron += mapa[ch.toLowerCase()];
+      } else {
+        patron += ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+    }
+    return patron;
+  }
+
+  function construirRegex(palabra) {
+    return new RegExp(patronTolerante(palabra), 'gi');
+  }
+
+  function resaltar(texto, palabras) {
+    let html = texto;
+    palabras.forEach(p => {
+      html = html.replace(construirRegex(p), (m) => `<mark>${m}</mark>`);
+    });
+    return html;
+  }
+
+  function abrirBusqueda() {
+    if (!estaEnBusqueda) {
+      origenBusqueda = { libroActual, capActual };
+    }
+    estaEnBusqueda = true;
+    mostrarBusqueda(true);
+  }
+
+  function mostrarBusqueda(conservarEstado) {
+    libroActual = null; capActual = null; vinoDeBusqueda = false;
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = 'Buscar';
+    subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
+    indIzq.classList.remove('visible');
+    indDer.classList.remove('visible');
+
+    const consultaPrevia = (conservarEstado && busquedaUltima) ? busquedaUltima.consulta : '';
+
+    main.innerHTML = `
+      <div id="vista-busqueda">
+        <div class="caja-busqueda">
+          <input type="text" id="input-busqueda" placeholder="Escribe una o más palabras…" value="${consultaPrevia.replace(/"/g,'&quot;')}">
+          <div class="btn-buscar" id="btn-ejecutar-busqueda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+        </div>
+        <div id="resultados-busqueda"></div>
+      </div>
+    `;
+    main.scrollTop = 0;
+
+    const input = document.getElementById('input-busqueda');
+    const ejecutar = () => ejecutarBusqueda(input.value);
+    document.getElementById('btn-ejecutar-busqueda').addEventListener('click', ejecutar);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') ejecutar(); });
+
+    if (conservarEstado && busquedaUltima) {
+      renderResultadosBusqueda();
+      main.scrollTop = busquedaScroll;
+    } else {
+      input.focus();
+    }
+  }
+
+  async function ejecutarBusqueda(consultaCruda) {
+    const consulta = consultaCruda.trim();
+    const resultadosDiv = document.getElementById('resultados-busqueda');
+    if (!consulta) {
+      busquedaUltima = null;
+      resultadosDiv.innerHTML = '';
+      return;
+    }
+
+    resultadosDiv.innerHTML = '<div class="cargando">Buscando…</div>';
+
+    if (!todosLibrosCargados) {
+      await cargarTodosLosLibros();
+      todosLibrosCargados = true;
+    }
+
+    const palabras = consulta.split(/\s+/).filter(Boolean);
+    const regexes = palabras.map(p => construirRegex(p));
+
+    const grupos = [];
+    for (const l of indice) {
+      const datos = cacheLibros[l.id];
+      if (!datos) continue;
+      const versos = [];
+      for (const ch of datos) {
+        for (const [num, texto] of ch.v) {
+          if (regexes.every(re => { re.lastIndex = 0; return re.test(texto); })) {
+            versos.push({ c: ch.c, num, texto });
+          }
+        }
+      }
+      if (versos.length) grupos.push({ id: l.id, nombre: l.nombre, total: versos.length, versos });
+    }
+
+    const totalGeneral = grupos.reduce((acc, g) => acc + g.total, 0);
+    busquedaUltima = { consulta, palabras, grupos, totalGeneral };
+    busquedaExpandido = null;
+    renderResultadosBusqueda();
+  }
+
+  function renderResultadosBusqueda() {
+    const cont = document.getElementById('resultados-busqueda');
+    if (!busquedaUltima) { cont.innerHTML = ''; return; }
+    const { consulta, palabras, grupos, totalGeneral } = busquedaUltima;
+
+    if (grupos.length === 0) {
+      cont.innerHTML = `<div class="sin-resultados">Sin resultados para "${consulta}".</div>`;
+      return;
+    }
+
+    cont.innerHTML = `
+      <div class="resumen-busqueda">${totalGeneral} resultado${totalGeneral===1?'':'s'} en ${grupos.length} libro${grupos.length===1?'':'s'}</div>
+      <div class="lista-grupos-busqueda">
+        ${grupos.map(g => `
+          <div class="grupo-busqueda">
+            <div class="libro-busqueda" onclick="toggleGrupoBusqueda('${g.id}')">
+              <span class="nombre">${g.nombre}</span>
+              <span class="cantidad">${g.total}</span>
+              <span class="flecha ${busquedaExpandido===g.id?'abierto':''}">›</span>
+            </div>
+            <div class="versos-grupo-busqueda" style="display:${busquedaExpandido===g.id?'block':'none'}">
+              ${g.versos.map(v => `
+                <div class="resultado-verso" onclick="irAVersoDesdeBusqueda('${g.id}', ${v.c}, ${v.num})">
+                  <span class="ref">${g.nombre} ${v.c}:${v.num}</span>
+                  <span class="frag">${resaltar(v.texto, palabras)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function toggleGrupoBusqueda(id) {
+    busquedaScroll = main.scrollTop;
+    busquedaExpandido = (busquedaExpandido === id) ? null : id;
+    renderResultadosBusqueda();
+  }
+
+  async function irAVersoDesdeBusqueda(libroId, cap, numVerso) {
+    busquedaScroll = main.scrollTop;
+    libroActual = indice.find(l => l.id === libroId);
+    await abrirCapitulo(cap, true);
+    requestAnimationFrame(() => {
+      const el = main.querySelector(`.verso[data-num="${numVerso}"]`);
+      if (el) el.scrollIntoView({ block: 'center' });
+    });
+  }
+
+  document.getElementById('btn-busqueda').addEventListener('click', abrirBusqueda);
+
+  // --- Fin búsqueda por palabras ---
+
+  function abrirCapitulo(numCap, desdeBusqueda) {
+    vinoDeBusqueda = !!desdeBusqueda;
     capActual = numCap;
     tituloHeader.textContent = `${libroActual.nombre} ${numCap}`;
-    subtituloHeader.textContent = 'Reina Valera · 1909';
+    subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
 
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === numCap);
     const versos = capitulo.v.map(([num, texto]) =>
-      `<p class="verso"><span class="num">${num}</span>${texto}</p>`
+      `<p class="verso" data-num="${num}"><span class="num">${num}</span>${texto}</p>`
     ).join('');
 
     const esPrimero = numCap === 1;
@@ -471,6 +828,28 @@
       }
       return;
     }
+
+    if (vinoDeBusqueda) {
+      vinoDeBusqueda = false;
+      mostrarBusqueda(true);
+      return;
+    }
+
+    if (estaEnBusqueda) {
+      estaEnBusqueda = false;
+      const origen = origenBusqueda;
+      origenBusqueda = null;
+      if (origen && origen.capActual !== null) {
+        libroActual = origen.libroActual;
+        abrirCapitulo(origen.capActual);
+      } else if (origen && origen.libroActual !== null) {
+        abrirLibro(origen.libroActual.id);
+      } else {
+        mostrarListaLibros();
+      }
+      return;
+    }
+
     if (capActual !== null) {
       abrirLibro(libroActual.id);
     } else if (libroActual !== null) {
