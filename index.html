@@ -312,6 +312,54 @@
   #nav-favoritos { background-image: url('nav-favoritos.png'); }
   #icono-leer { background-image: url('pergamino.jpg'); }
   #icono-historias { background-image: url('historias.jpg'); background-position: center 60%; }
+
+  .confirmar-salida {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 50;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8vw;
+  }
+  .confirmar-salida.visible { display: flex; }
+  .caja-confirmar {
+    background: var(--papiro);
+    border-radius: 6px 20px 6px 20px;
+    padding: 2.4vh 5vw;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    border: 1px solid var(--dorado);
+  }
+  .texto-confirmar {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--tinta);
+    text-align: center;
+    margin-bottom: 2vh;
+  }
+  .botones-confirmar { display: flex; gap: 10px; }
+  .btn-confirmar {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px 14px 4px 14px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .btn-confirmar.cancelar {
+    background: #fff;
+    color: var(--terracota);
+    border: 1.5px solid rgba(185,80,46,0.25);
+  }
+  .btn-confirmar.salir {
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+  }
 </style>
 </head>
 <body>
@@ -365,6 +413,16 @@
       <a class="item" href="mapas.html" style="text-decoration:none;"><div class="icono-nav" id="nav-guia"></div>Guía</a>
       <div class="item"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</div>
     </nav>
+
+    <div class="confirmar-salida" id="confirmar-salida">
+      <div class="caja-confirmar">
+        <div class="texto-confirmar">¿Deseas salir de la aplicación?</div>
+        <div class="botones-confirmar">
+          <div class="btn-confirmar cancelar" id="btn-cancelar-salida">Cancelar</div>
+          <div class="btn-confirmar salir" id="btn-salir-app">Salir</div>
+        </div>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -410,6 +468,26 @@
 
   cargarVersiculoDelDia();
   configurarTarjetaLeer();
+
+  // Botón físico de retroceder (Android): como esta es la pantalla de inicio,
+  // preguntar antes de salir de la app en vez de salir directo.
+  const confirmarSalida = document.getElementById('confirmar-salida');
+
+  document.getElementById('btn-cancelar-salida').addEventListener('click', () => {
+    confirmarSalida.classList.remove('visible');
+  });
+
+  document.getElementById('btn-salir-app').addEventListener('click', () => {
+    try {
+      window.Capacitor.Plugins.App.exitApp();
+    } catch (e) {}
+  });
+
+  if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+    window.Capacitor.Plugins.App.addListener('backButton', () => {
+      confirmarSalida.classList.add('visible');
+    });
+  }
 </script>
 </body>
 </html>

@@ -742,6 +742,18 @@
   visorLienzo.addEventListener('pointercancel', visorPointerFin);
 
   cargarMapas();
+
+  // Botón físico de retroceder (Android): si el visor de mapa a pantalla completa
+  // está abierto, lo cierra primero; si no, se comporta igual que la flecha en pantalla.
+  if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+    window.Capacitor.Plugins.App.addListener('backButton', () => {
+      if (visorMapa.classList.contains('activo')) {
+        cerrarVisor();
+      } else {
+        btnAtras.click();
+      }
+    });
+  }
 </script>
 </body>
 </html>

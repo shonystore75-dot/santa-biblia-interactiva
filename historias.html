@@ -429,6 +429,13 @@
   });
 
   cargarHistorias();
+
+  // Botón físico de retroceder (Android): se comporta igual que la flecha en pantalla.
+  if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+    window.Capacitor.Plugins.App.addListener('backButton', () => {
+      btnAtras.click();
+    });
+  }
 </script>
 </body>
 </html>
