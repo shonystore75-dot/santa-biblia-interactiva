@@ -343,6 +343,22 @@
     vertical-align: super;
     margin-right: 3px;
   }
+  .verso .estrella-fav {
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+    color: rgba(61,31,62,0.22);
+    user-select: none;
+    display: inline-block;
+  }
+  .verso .estrella-fav.activa {
+    color: var(--dorado);
+  }
+  .verso.resaltado {
+    background: rgba(245,185,66,0.25);
+    border-radius: 4px;
+    transition: background 1.5s ease;
+  }
 
   .nav-capitulos {
     display: flex;
@@ -528,7 +544,7 @@
       <a class="item" id="tab-inicio" href="index.html"><div class="icono-nav" id="nav-inicio"></div>Inicio</a>
       <a class="item activo" href="leer.html"><div class="icono-nav" id="nav-leer"></div>Leer</a>
       <a class="item" href="mapas.html"><div class="icono-nav" id="nav-guia"></div>Guía</a>
-      <a class="item" href="#"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</a>
+      <a class="item" href="favoritos.html"><div class="icono-nav" id="nav-favoritos"></div>Favoritos</a>
     </nav>
   </div>
 
@@ -594,6 +610,8 @@
     const capParam = params.get('capitulo');
     const mapaParam = params.get('mapa');
     const puntoParam = params.get('punto');
+    const versoParam = params.get('verso');
+    const desdeParam = params.get('desde');
 
     if (libroParam && indice.some(l => l.id === libroParam)) {
       await abrirLibro(libroParam);
@@ -601,8 +619,21 @@
 
       if (mapaParam) {
         origenExterno = { pagina: 'mapas.html', mapa: mapaParam, punto: puntoParam };
+      } else if (desdeParam === 'favoritos' || document.referrer.includes('favoritos.html')) {
+        origenExterno = { pagina: 'favoritos.html' };
       } else if (document.referrer.includes('historias.html')) {
         origenExterno = { pagina: 'historias.html' };
+      }
+
+      if (versoParam) {
+        requestAnimationFrame(() => {
+          const el = main.querySelector(`.verso[data-num="${versoParam}"]`);
+          if (el) {
+            el.scrollIntoView({ block: 'center' });
+            el.classList.add('resaltado');
+            setTimeout(() => el.classList.remove('resaltado'), 2000);
+          }
+        });
       }
       return;
     }
@@ -836,6 +867,45 @@
 
   // --- Fin búsqueda por palabras ---
 
+  function obtenerFavoritos() {
+    try {
+      const datos = JSON.parse(localStorage.getItem('favoritosVersos'));
+      return Array.isArray(datos) ? datos : [];
+    } catch (e) { return []; }
+  }
+
+  function guardarFavoritos(lista) {
+    try { localStorage.setItem('favoritosVersos', JSON.stringify(lista)); } catch (e) {}
+  }
+
+  function esFavorito(libroId, cap, num) {
+    return obtenerFavoritos().some(f => f.libro === libroId && f.capitulo === cap && f.verso === num);
+  }
+
+  function toggleFavorito(cap, num, elEstrella) {
+    const datosLibro = cacheLibros[libroActual.id];
+    const capitulo = datosLibro.find(c => c.c === cap);
+    const versoObj = capitulo.v.find(v => v[0] === num);
+    const texto = versoObj ? versoObj[1] : '';
+
+    let favoritos = obtenerFavoritos();
+    const idx = favoritos.findIndex(f => f.libro === libroActual.id && f.capitulo === cap && f.verso === num);
+    let ahoraFavorito;
+    if (idx >= 0) {
+      favoritos.splice(idx, 1);
+      ahoraFavorito = false;
+    } else {
+      favoritos.push({ libro: libroActual.id, nombreLibro: libroActual.nombre, capitulo: cap, verso: num, texto: texto, fecha: Date.now() });
+      ahoraFavorito = true;
+    }
+    guardarFavoritos(favoritos);
+
+    if (elEstrella) {
+      elEstrella.textContent = ahoraFavorito ? '★' : '☆';
+      elEstrella.classList.toggle('activa', ahoraFavorito);
+    }
+  }
+
   function abrirCapitulo(numCap, desdeBusqueda) {
     vinoDeBusqueda = !!desdeBusqueda;
     capActual = numCap;
@@ -844,9 +914,10 @@
 
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === numCap);
-    const versos = capitulo.v.map(([num, texto]) =>
-      `<p class="verso" data-num="${num}"><span class="num">${num}</span>${texto}</p>`
-    ).join('');
+    const versos = capitulo.v.map(([num, texto]) => {
+      const fav = esFavorito(libroActual.id, numCap, num);
+      return `<p class="verso" data-num="${num}"><span class="num">${num}</span><span class="estrella-fav ${fav ? 'activa' : ''}" onclick="toggleFavorito(${numCap}, ${num}, this)">${fav ? '★' : '☆'}</span>${texto}</p>`;
+    }).join('');
 
     const esPrimero = numCap === 1;
     const esUltimo = numCap === libroActual.capitulos;
