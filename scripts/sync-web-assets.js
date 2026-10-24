@@ -11,7 +11,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const DEST = path.join(ROOT, 'www');
 
-const EXCLUDE_DIRS = new Set(['node_modules', 'android', 'ios', '.git', '.github', 'www', 'scripts']);
+const EXCLUDE_DIRS = new Set(['node_modules', 'android', 'ios', '.git', '.github', 'www', 'scripts', 'resources']);
 const EXCLUDE_FILES = new Set([
   'package.json',
   'package-lock.json',
