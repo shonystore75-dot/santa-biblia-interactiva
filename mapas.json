@@ -27,5 +27,20 @@
       { "id": "montesinai", "nombre": "Monte Sinaí", "x": 51, "y": 52, "info": "Aquí Dios entregó a Moisés los Diez Mandamientos y estableció su pacto con el pueblo de Israel.", "libro": "ex", "capitulo": 20 },
       { "id": "canaanexodo", "nombre": "Canaán", "x": 74, "y": 25, "info": "La tierra prometida hacia la cual se dirigía el pueblo de Israel al final de su largo camino por el desierto.", "libro": "ex", "capitulo": 13 }
     ]
+  },
+  {
+    "id": "conquista-canaan",
+    "titulo": "La conquista de Canaán",
+    "referencia": "Josué 3-10",
+    "descripcion": "Josué guía al pueblo de Israel a cruzar el Jordán y conquistar la tierra prometida, ciudad por ciudad.",
+    "imagen": "mapas/conquista-canaan-fondo.jpg",
+    "ancho": 1086,
+    "alto": 1448,
+    "puntos": [
+      { "id": "jordan", "nombre": "Río Jordán", "x": 69, "y": 41, "info": "Las aguas del Jordán se detuvieron para que todo el pueblo de Israel cruzara en seco hacia la tierra prometida.", "libro": "js", "capitulo": 3 },
+      { "id": "jerico", "nombre": "Jericó", "x": 60, "y": 57, "info": "Tras rodear la ciudad siete días, sus murallas cayeron y Josué la conquistó, la primera ciudad tomada en Canaán.", "libro": "js", "capitulo": 6 },
+      { "id": "hai", "nombre": "Hai", "x": 44, "y": 38, "info": "Tras una primera derrota por el pecado de Acán, Israel conquistó esta ciudad con una emboscada.", "libro": "js", "capitulo": 8 },
+      { "id": "gabaon", "nombre": "Gabaón", "x": 43, "y": 20, "info": "Josué defendió a los gabaonitas de una alianza de reyes enemigos, y el sol se detuvo en el cielo hasta la victoria.", "libro": "js", "capitulo": 10 }
+    ]
   }
 ]
