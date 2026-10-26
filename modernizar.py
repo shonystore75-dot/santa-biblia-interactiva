@@ -11,6 +11,14 @@ ORTOGRAFIA = [
     (r'\bfué\b', 'fue'), (r'\bFué\b', 'Fue'), (r'\bFUÉ\b', 'FUE'),
     (r'\bdió\b', 'dio'), (r'\bDió\b', 'Dio'),
     (r'\bvió\b', 'vio'), (r'\bVió\b', 'Vio'),
+    # misma familia de monosílabos "-ió" que no llevan tilde en español moderno
+    # (fué/dió/vió ya cubiertos arriba): guió/crió/rió/fió y sus mayúsculas
+    (r'\bguió\b', 'guio'), (r'\bGuió\b', 'Guio'),
+    (r'\bcrió\b', 'crio'), (r'\bCrió\b', 'Crio'),
+    (r'\brió\b', 'rio'), (r'\bRió\b', 'Rio'),
+    (r'\bfió\b', 'fio'), (r'\bFió\b', 'Fio'),
+    (r'\blió\b', 'lio'), (r'\bLió\b', 'Lio'),
+    (r'\bfrió\b', 'frio'), (r'\bFrió\b', 'Frio'),
     (r'\bfuí\b', 'fui'), (r'\bFuí\b', 'Fui'),
     (r'\bá\b', 'a'), (r'\bÁ\b', 'A'),
     (r'\bé\b', 'e'),
