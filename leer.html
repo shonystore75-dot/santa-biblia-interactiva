@@ -371,6 +371,16 @@
     user-select: none;
     -webkit-touch-callout: none;
   }
+  .encabezado-salmo {
+    font-size: calc(clamp(13px, 2.3vh, 15px) * var(--escala-texto));
+    line-height: 1.5;
+    color: var(--tinta);
+    opacity: 0.68;
+    margin: 0 0 0.6vh 0;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
   .verso.seleccionado {
     background: rgba(245,185,66,0.22);
     border-radius: 6px;
@@ -416,6 +426,176 @@
   .popup-verso .compartir-verso svg {
     width: 13px;
     height: 13px;
+  }
+  .popup-verso .separador-btn,
+  .popup-verso .nota-btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    color: var(--terracota);
+    user-select: none;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .popup-verso .separador-btn.activa,
+  .popup-verso .nota-btn.activa {
+    color: #fff;
+    background: var(--terracota);
+  }
+  .popup-verso .nota-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+  .marca-separador,
+  .marca-nota {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    margin-right: 3px;
+    vertical-align: middle;
+    user-select: none;
+  }
+  .marca-separador {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--terracota);
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+  }
+  .marca-nota {
+    color: var(--terracota);
+    font-size: 12px;
+  }
+  .lista-guardados {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .item-guardado {
+    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
+    border-radius: 4px 14px 4px 14px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-left: 3px solid var(--dorado);
+    box-shadow: 0 3px 10px rgba(61,31,62,0.1);
+    cursor: pointer;
+  }
+  .item-guardado.vacio {
+    cursor: default;
+    color: var(--terracota);
+    opacity: 0.65;
+    font-style: italic;
+    border-left-color: rgba(185,80,46,0.25);
+  }
+  .item-guardado .num-separador {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--terracota);
+    font-size: 11px;
+  }
+  .item-guardado .ref-guardado {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: calc(13px * var(--escala-texto));
+    color: var(--ciruela);
+  }
+  .item-guardado .texto-nota-preview {
+    font-size: calc(12px * var(--escala-texto));
+    color: var(--tinta);
+    opacity: 0.8;
+  }
+  .overlay-pantalla {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 55;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6vw;
+  }
+  .overlay-pantalla.visible { display: flex; }
+  .caja-overlay {
+    background: var(--papiro);
+    border-radius: 6px 20px 6px 20px;
+    padding: 2.2vh 4vw;
+    width: 100%;
+    max-width: 340px;
+    max-height: 78vh;
+    overflow-y: auto;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    border: 1px solid var(--dorado);
+  }
+  .caja-overlay .titulo-overlay {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ciruela);
+    text-align: center;
+    margin-bottom: 1.6vh;
+  }
+  .caja-overlay .grid-capitulos {
+    margin-bottom: 0.5vh;
+  }
+  .btn-cerrar-overlay {
+    display: block;
+    text-align: center;
+    margin-top: 1.8vh;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--terracota);
+    cursor: pointer;
+  }
+  .caja-overlay textarea.texto-nota {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(185,80,46,0.3);
+    padding: 10px;
+    font-family: 'Source Serif 4', serif;
+    font-size: calc(14px * var(--escala-texto));
+    color: var(--tinta);
+    background: #fff;
+    resize: vertical;
+    margin-bottom: 1.6vh;
+  }
+  .botones-overlay { display: flex; gap: 10px; }
+  .btn-overlay {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px 14px 4px 14px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .btn-overlay.cancelar {
+    background: #fff;
+    color: var(--terracota);
+    border: 1.5px solid rgba(185,80,46,0.25);
+  }
+  .btn-overlay.guardar {
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+  }
+  .btn-overlay.eliminar {
+    background: #fff;
+    color: var(--terracota);
+    border: 1.5px solid rgba(185,80,46,0.25);
   }
   .toast-copiado {
     position: fixed;
@@ -720,6 +900,9 @@
         <div class="fila-menu" id="fila-at"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V8.5a2.5 2.5 0 0 1 5 0V20"></path><path d="M13 20V8.5a2.5 2.5 0 0 1 5 0V20"></path><line x1="3" y1="20" x2="8" y2="20"></line><line x1="13" y1="20" x2="18" y2="20"></line></svg>Antiguo Testamento</div>
         <div class="fila-menu" id="fila-nt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-1.6-1.3-3.7-2-6-2v12.5c2.3 0 4.4.7 6 2 1.6-1.3 3.7-2 6-2V4.5c-2.3 0-4.4.7-6 2z"></path><line x1="12" y1="6.5" x2="12" y2="19"></line></svg>Nuevo Testamento</div>
         <div class="fila-menu" id="fila-favoritos"><svg viewBox="0 0 24 24" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Favoritos</div>
+        <div class="fila-menu" id="fila-ir-verso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="7" x2="19" y2="7"></line><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="17" x2="13" y2="17"></line></svg>Ir a un versículo</div>
+        <div class="fila-menu" id="fila-separadores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21V3z"></path></svg>Mis separadores</div>
+        <div class="fila-menu" id="fila-notas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4V4z"></path><path d="M16 4v4h4"></path><line x1="7.5" y1="12" x2="16.5" y2="12"></line><line x1="7.5" y1="15.5" x2="14" y2="15.5"></line></svg>Mis notas</div>
         <div class="fila-menu fila-escala">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16L8.5 5l4.5 11"></path><line x1="5.3" y1="12.5" x2="11.7" y2="12.5"></line><path d="M15 10.5h3a2 2 0 0 1 0 4h-3v-7h2.8a1.9 1.9 0 0 1 0 3.8"></path></svg>
           <span>Tamaño de letra</span>
@@ -779,6 +962,9 @@
   let capActual = null;
   let cacheLibros = {};
   let origenExterno = null; // { pagina: 'historias.html' } o { pagina: 'mapas.html', mapa, punto }
+  let modoLecturaContinua = false; // true solo cuando se entró por la tarjeta "Continuar leyendo" de Inicio
+  let enListaSeparadores = false;
+  let enListaNotas = false;
 
   // Búsqueda por palabras
   let todosLibrosCargados = false;
@@ -845,6 +1031,10 @@
     }
 
     if (libroParam && indice.some(l => l.id === libroParam)) {
+      const esConsultaExterna = !!mapaParam || desdeParam === 'favoritos' ||
+        document.referrer.includes('favoritos.html') || document.referrer.includes('historias.html');
+      modoLecturaContinua = !esConsultaExterna;
+
       await abrirLibro(libroParam);
       if (capParam) abrirCapitulo(parseInt(capParam, 10));
 
@@ -873,6 +1063,7 @@
 
   function mostrarListaLibros() {
     libroActual = null; capActual = null;
+    modoLecturaContinua = false;
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Leer';
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
@@ -1136,6 +1327,222 @@
     }
   }
 
+  // --- Separadores (2 marcadores fijos) ---
+  function obtenerSeparadores() {
+    try {
+      const datos = JSON.parse(localStorage.getItem('separadoresVersos'));
+      return Array.isArray(datos) ? datos : [];
+    } catch (e) { return []; }
+  }
+
+  function guardarSeparadores(lista) {
+    try { localStorage.setItem('separadoresVersos', JSON.stringify(lista)); } catch (e) {}
+  }
+
+  function separadorEnVerso(libroId, cap, num) {
+    const sep = obtenerSeparadores().find(s => s.libro === libroId && s.capitulo === cap && s.verso === num);
+    return sep ? sep.slot : null;
+  }
+
+  function toggleSeparador(slot, cap, num, elBoton) {
+    let lista = obtenerSeparadores();
+    const yaAqui = lista.some(s => s.slot === slot && s.libro === libroActual.id && s.capitulo === cap && s.verso === num);
+    lista = lista.filter(s => s.slot !== slot);
+    if (!yaAqui) {
+      lista.push({ slot: slot, libro: libroActual.id, nombreLibro: libroActual.nombre, capitulo: cap, verso: num });
+    }
+    guardarSeparadores(lista);
+    if (elBoton) elBoton.classList.toggle('activa', !yaAqui);
+    reaplicarMarcas();
+    mostrarToast(yaAqui ? `Separador ${slot} quitado` : `Separador ${slot} colocado`);
+  }
+
+  // --- Notas por versículo ---
+  function obtenerNotas() {
+    try {
+      const datos = JSON.parse(localStorage.getItem('notasVersos'));
+      return Array.isArray(datos) ? datos : [];
+    } catch (e) { return []; }
+  }
+
+  function guardarNotas(lista) {
+    try { localStorage.setItem('notasVersos', JSON.stringify(lista)); } catch (e) {}
+  }
+
+  function notaDeVerso(libroId, cap, num) {
+    return obtenerNotas().find(n => n.libro === libroId && n.capitulo === cap && n.verso === num) || null;
+  }
+
+  function guardarNota(cap, num, texto) {
+    let lista = obtenerNotas();
+    const idx = lista.findIndex(n => n.libro === libroActual.id && n.capitulo === cap && n.verso === num);
+    if (!texto.trim()) {
+      if (idx >= 0) lista.splice(idx, 1);
+    } else if (idx >= 0) {
+      lista[idx].texto = texto.trim();
+      lista[idx].fecha = Date.now();
+    } else {
+      lista.push({ libro: libroActual.id, nombreLibro: libroActual.nombre, capitulo: cap, verso: num, texto: texto.trim(), fecha: Date.now() });
+    }
+    guardarNotas(lista);
+    reaplicarMarcas();
+  }
+
+  function reaplicarMarcas() {
+    if (capActual === null || !libroActual) return;
+    main.querySelectorAll('.verso').forEach(elVerso => {
+      const num = parseInt(elVerso.dataset.num, 10);
+      const marcaVieja = elVerso.querySelector('.marcas-verso');
+      if (marcaVieja) marcaVieja.remove();
+      const slot = separadorEnVerso(libroActual.id, capActual, num);
+      const nota = notaDeVerso(libroActual.id, capActual, num);
+      if (slot || nota) {
+        const marcas = document.createElement('span');
+        marcas.className = 'marcas-verso';
+        marcas.innerHTML = (slot ? `<span class="marca-separador">${slot}</span>` : '') + (nota ? '<span class="marca-nota">✎</span>' : '');
+        const spanNum = elVerso.querySelector('.num');
+        if (spanNum) spanNum.insertAdjacentElement('afterend', marcas);
+      }
+    });
+  }
+
+  function cerrarOverlay() {
+    const el = document.querySelector('.overlay-pantalla');
+    if (el) el.remove();
+  }
+
+  function mostrarGridVersos() {
+    if (capActual === null || !libroActual) {
+      mostrarToast('Primero abre un capítulo');
+      return;
+    }
+    const datosLibro = cacheLibros[libroActual.id];
+    const capitulo = datosLibro.find(c => c.c === capActual);
+    const botones = capitulo.v.map(([num]) => `<div class="num-capitulo" onclick="irAVersoEnCapitulo(${num})">${num}</div>`).join('');
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay-pantalla visible';
+    overlay.innerHTML = `
+      <div class="caja-overlay">
+        <div class="titulo-overlay">Ir a un versículo — ${libroActual.nombre} ${capActual}</div>
+        <div class="grid-capitulos">${botones}</div>
+        <div class="btn-cerrar-overlay">Cerrar</div>
+      </div>
+    `;
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) cerrarOverlay(); });
+    overlay.querySelector('.btn-cerrar-overlay').addEventListener('click', cerrarOverlay);
+    document.body.appendChild(overlay);
+  }
+
+  function irAVersoEnCapitulo(num) {
+    cerrarOverlay();
+    requestAnimationFrame(() => {
+      const el = main.querySelector(`.verso[data-num="${num}"]`);
+      if (el) {
+        el.scrollIntoView({ block: 'center' });
+        el.classList.add('resaltado');
+        setTimeout(() => el.classList.remove('resaltado'), 2000);
+      }
+    });
+  }
+
+  async function irAVersoGuardado(libroId, cap, num) {
+    enListaSeparadores = false;
+    enListaNotas = false;
+    const lib = indice.find(l => l.id === libroId);
+    if (lib) testamentoActivo = lib.testamento;
+    await abrirLibro(libroId);
+    abrirCapitulo(cap);
+    requestAnimationFrame(() => {
+      const el = main.querySelector(`.verso[data-num="${num}"]`);
+      if (el) {
+        el.scrollIntoView({ block: 'center' });
+        el.classList.add('resaltado');
+        setTimeout(() => el.classList.remove('resaltado'), 2000);
+      }
+    });
+  }
+
+  function mostrarSeparadores() {
+    enListaSeparadores = true;
+    enListaNotas = false;
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = 'Mis separadores';
+    subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
+    indIzq.classList.remove('visible');
+    indDer.classList.remove('visible');
+    const lista = obtenerSeparadores();
+    const filas = [1, 2].map(slot => {
+      const sep = lista.find(s => s.slot === slot);
+      if (!sep) {
+        return `<div class="item-guardado vacio"><span class="num-separador">Separador ${slot}</span><span class="ref-guardado">Sin usar todavía</span></div>`;
+      }
+      return `<div class="item-guardado" onclick="irAVersoGuardado('${sep.libro}', ${sep.capitulo}, ${sep.verso})"><span class="num-separador">Separador ${slot}</span><span class="ref-guardado">${sep.nombreLibro} ${sep.capitulo}:${sep.verso}</span></div>`;
+    }).join('');
+    main.innerHTML = `<div class="lista-guardados">${filas}</div>`;
+    main.scrollTop = 0;
+  }
+
+  function mostrarNotas() {
+    enListaNotas = true;
+    enListaSeparadores = false;
+    btnAtras.style.visibility = 'visible';
+    tituloHeader.textContent = 'Mis notas';
+    subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
+    indIzq.classList.remove('visible');
+    indDer.classList.remove('visible');
+    const notas = obtenerNotas().slice().sort((a, b) => b.fecha - a.fecha);
+    if (!notas.length) {
+      main.innerHTML = '<div class="lista-guardados"><div class="item-guardado vacio"><span class="ref-guardado">Todavía no tienes notas guardadas.</span></div></div>';
+      main.scrollTop = 0;
+      return;
+    }
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const filas = notas.map(n => `
+      <div class="item-guardado" onclick="irAVersoGuardado('${n.libro}', ${n.capitulo}, ${n.verso})">
+        <span class="ref-guardado">${n.nombreLibro} ${n.capitulo}:${n.verso}</span>
+        <span class="texto-nota-preview">${esc((n.texto || '').slice(0, 90))}</span>
+      </div>
+    `).join('');
+    main.innerHTML = `<div class="lista-guardados">${filas}</div>`;
+    main.scrollTop = 0;
+  }
+
+  function abrirModalNota(cap, num) {
+    const existente = notaDeVerso(libroActual.id, cap, num);
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay-pantalla visible';
+    overlay.innerHTML = `
+      <div class="caja-overlay">
+        <div class="titulo-overlay">Nota — ${libroActual.nombre} ${cap}:${num}</div>
+        <textarea class="texto-nota" placeholder="Escribe tu nota aquí…"></textarea>
+        <div class="botones-overlay">
+          ${existente ? '<div class="btn-overlay eliminar">Eliminar</div>' : ''}
+          <div class="btn-overlay cancelar">Cancelar</div>
+          <div class="btn-overlay guardar">Guardar</div>
+        </div>
+      </div>
+    `;
+    const textarea = overlay.querySelector('.texto-nota');
+    textarea.value = existente ? existente.texto : '';
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) cerrarOverlay(); });
+    overlay.querySelector('.cancelar').addEventListener('click', cerrarOverlay);
+    overlay.querySelector('.guardar').addEventListener('click', () => {
+      guardarNota(cap, num, textarea.value);
+      cerrarOverlay();
+      limpiarSeleccionVerso();
+    });
+    const btnEliminar = overlay.querySelector('.eliminar');
+    if (btnEliminar) {
+      btnEliminar.addEventListener('click', () => {
+        guardarNota(cap, num, '');
+        cerrarOverlay();
+        limpiarSeleccionVerso();
+      });
+    }
+    document.body.appendChild(overlay);
+    textarea.focus();
+  }
+
   let temporizadorToast = null;
 
   function mostrarToast(mensaje) {
@@ -1179,6 +1586,12 @@
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === numCap);
     const versos = capitulo.v.map(([num, texto]) => {
+      const matchEncabezado = texto.match(/^(<em>.*?<\/em>)\s*/);
+      if (matchEncabezado) {
+        const encabezado = matchEncabezado[1];
+        const resto = texto.slice(matchEncabezado[0].length);
+        return `<p class="encabezado-salmo">${encabezado}</p><p class="verso" data-num="${num}" data-cap="${numCap}"><span class="num">${num}</span><span class="texto-verso">${resto}</span></p>`;
+      }
       return `<p class="verso" data-num="${num}" data-cap="${numCap}"><span class="num">${num}</span><span class="texto-verso">${texto}</span></p>`;
     }).join('');
 
@@ -1195,17 +1608,20 @@
       </div>
     `;
     main.scrollTop = 0;
+    reaplicarMarcas();
 
     indIzq.classList.toggle('visible', !esPrimero);
     indDer.classList.toggle('visible', !esUltimo);
 
-    try {
-      localStorage.setItem('ultimaLectura', JSON.stringify({
-        libro: libroActual.id,
-        capitulo: numCap,
-        nombreLibro: libroActual.nombre
-      }));
-    } catch (e) {}
+    if (modoLecturaContinua) {
+      try {
+        localStorage.setItem('ultimaLectura', JSON.stringify({
+          libro: libroActual.id,
+          capitulo: numCap,
+          nombreLibro: libroActual.nombre
+        }));
+      } catch (e) {}
+    }
   }
 
   indIzq.addEventListener('click', () => {
@@ -1253,6 +1669,19 @@
       return;
     }
 
+    if (enListaSeparadores || enListaNotas) {
+      enListaSeparadores = false;
+      enListaNotas = false;
+      if (capActual !== null) {
+        abrirCapitulo(capActual);
+      } else if (libroActual !== null) {
+        abrirLibro(libroActual.id);
+      } else {
+        mostrarListaLibros();
+      }
+      return;
+    }
+
     if (capActual !== null) {
       abrirLibro(libroActual.id);
     } else if (libroActual !== null) {
@@ -1287,10 +1716,12 @@
     const numCap = parseInt(elVerso.dataset.cap, 10);
     const num = parseInt(elVerso.dataset.num, 10);
     const fav = esFavorito(libroActual.id, numCap, num);
+    const slotActivo = separadorEnVerso(libroActual.id, numCap, num);
+    const tieneNota = !!notaDeVerso(libroActual.id, numCap, num);
 
     const popup = document.createElement('span');
     popup.className = 'popup-verso';
-    popup.innerHTML = `<span class="estrella-fav ${fav ? 'activa' : ''}" aria-label="Marcar como favorito"><svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span><span class="compartir-verso" aria-label="Compartir versículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="19" r="2.6"></circle><line x1="8.3" y1="10.7" x2="15.7" y2="6.3"></line><line x1="8.3" y1="13.3" x2="15.7" y2="17.7"></line></svg></span>`;
+    popup.innerHTML = `<span class="estrella-fav ${fav ? 'activa' : ''}" aria-label="Marcar como favorito"><svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span><span class="compartir-verso" aria-label="Compartir versículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="19" r="2.6"></circle><line x1="8.3" y1="10.7" x2="15.7" y2="6.3"></line><line x1="8.3" y1="13.3" x2="15.7" y2="17.7"></line></svg></span><span class="separador-btn ${slotActivo===1?'activa':''}" aria-label="Separador 1">1</span><span class="separador-btn ${slotActivo===2?'activa':''}" aria-label="Separador 2">2</span><span class="nota-btn ${tieneNota?'activa':''}" aria-label="Agregar nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4V4z"></path><path d="M16 4v4h4"></path><line x1="7.5" y1="12" x2="16.5" y2="12"></line><line x1="7.5" y1="15.5" x2="14" y2="15.5"></line></svg></span>`;
 
     const btnEstrella = popup.querySelector('.estrella-fav');
     btnEstrella.addEventListener('click', (e) => {
@@ -1301,6 +1732,22 @@
     btnCompartir.addEventListener('click', (e) => {
       e.stopPropagation();
       compartirVerso(numCap, num);
+    });
+    const [btnSep1, btnSep2] = popup.querySelectorAll('.separador-btn');
+    btnSep1.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSeparador(1, numCap, num, btnSep1);
+      btnSep2.classList.remove('activa');
+    });
+    btnSep2.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSeparador(2, numCap, num, btnSep2);
+      btnSep1.classList.remove('activa');
+    });
+    const btnNota = popup.querySelector('.nota-btn');
+    btnNota.addEventListener('click', (e) => {
+      e.stopPropagation();
+      abrirModalNota(numCap, num);
     });
 
     elVerso.appendChild(popup);
@@ -1410,6 +1857,12 @@
   if (filaNT) filaNT.addEventListener('click', () => cambiarTestamento('NT'));
   const filaFavoritos = document.getElementById('fila-favoritos');
   if (filaFavoritos) filaFavoritos.addEventListener('click', () => { window.location.href = 'favoritos.html'; });
+  const filaIrVerso = document.getElementById('fila-ir-verso');
+  if (filaIrVerso) filaIrVerso.addEventListener('click', mostrarGridVersos);
+  const filaSeparadores = document.getElementById('fila-separadores');
+  if (filaSeparadores) filaSeparadores.addEventListener('click', mostrarSeparadores);
+  const filaNotas = document.getElementById('fila-notas');
+  if (filaNotas) filaNotas.addEventListener('click', mostrarNotas);
   const filaAcerca = document.getElementById('fila-acerca');
   if (filaAcerca) filaAcerca.addEventListener('click', () => { window.location.href = 'acerca.html'; });
   const escalaMenosMenu = document.getElementById('escala-menos-menu');
