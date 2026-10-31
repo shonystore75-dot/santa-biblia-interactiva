@@ -156,15 +156,21 @@
   }
 
   .btn-copiar-lista {
-    text-align: center;
+    display: block;
+    width: fit-content;
+    margin: 0 auto 16px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
     font-family: 'Cinzel', serif;
     font-weight: 600;
     font-size: 12px;
-    color: var(--terracota);
-    margin-bottom: 14px;
+    text-align: center;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(61,31,62,0.25);
   }
-  .btn-copiar-lista:active { opacity: 0.6; }
+  .btn-copiar-lista:active { opacity: 0.75; }
 
   .tarjeta-favorito {
     background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
@@ -494,6 +500,23 @@
   const main = document.getElementById('main');
   const btnAtras = document.getElementById('btn-atras');
 
+  let ordenLibros = {};
+  async function cargarOrdenLibros() {
+    try {
+      const res = await fetch('indice.json');
+      const lista = await res.json();
+      lista.forEach((libro, i) => { ordenLibros[libro.id] = i; });
+    } catch (e) {}
+  }
+
+  function compararPorOrdenBiblico(a, b) {
+    const oa = ordenLibros[a.libro] ?? 999;
+    const ob = ordenLibros[b.libro] ?? 999;
+    if (oa !== ob) return oa - ob;
+    if (a.capitulo !== b.capitulo) return a.capitulo - b.capitulo;
+    return a.verso - b.verso;
+  }
+
   function obtenerFavoritos() {
     try {
       const datos = JSON.parse(localStorage.getItem('favoritosVersos'));
@@ -517,7 +540,7 @@
   }
 
   function mostrarLista() {
-    const favoritos = obtenerFavoritos().slice().sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+    const favoritos = obtenerFavoritos().slice().sort(compararPorOrdenBiblico);
 
     if (favoritos.length === 0) {
       main.innerHTML = `
@@ -547,7 +570,7 @@
   }
 
   function copiarListaFavoritos() {
-    const favoritos = obtenerFavoritos().slice().sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+    const favoritos = obtenerFavoritos().slice().sort(compararPorOrdenBiblico);
     if (!favoritos.length) return;
     const quitarEtiquetas = (s) => String(s || '').replace(/<[^>]+>/g, '');
     const mensaje = favoritos.map(f => `${f.nombreLibro} ${f.capitulo}:${f.verso} — ${quitarEtiquetas(f.texto)}`).join('\n');
@@ -564,7 +587,7 @@
     window.location.href = 'index.html';
   });
 
-  mostrarLista();
+  cargarOrdenLibros().then(mostrarLista);
 
   function elegirTema(nombre) {
     try {
