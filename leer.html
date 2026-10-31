@@ -1111,7 +1111,7 @@
       </div>
       <div class="lista-libros">
         ${libros.map(l => `
-          <div class="item-libro" onclick="abrirLibro('${l.id}')">
+          <div class="item-libro" onclick="continuarLecturaDesdeLista('${l.id}')">
             <span class="nombre">${l.nombre}</span>
             <span class="caps">${l.capitulos} cap.</span>
           </div>
@@ -1125,6 +1125,14 @@
   function cambiarTestamento(t) {
     testamentoActivo = t;
     mostrarListaLibros();
+  }
+
+  function continuarLecturaDesdeLista(id) {
+    // El usuario eligió este libro directamente desde el listado de "Leer":
+    // a partir de aquí sí debe guardarse como su lectura en curso.
+    modoLecturaContinua = true;
+    origenExterno = null;
+    abrirLibro(id);
   }
 
   async function abrirLibro(id) {
@@ -1245,7 +1253,7 @@
     }
 
     const palabras = consulta.split(/\s+/).filter(Boolean);
-    const regexes = palabras.map(p => construirRegex(p));
+    const regexFrase = new RegExp(palabras.map(patronTolerante).join('\\s+'), 'gi');
 
     const grupos = [];
     for (const l of indice) {
@@ -1254,7 +1262,8 @@
       const versos = [];
       for (const ch of datos) {
         for (const [num, texto] of ch.v) {
-          if (regexes.every(re => { re.lastIndex = 0; return re.test(texto); })) {
+          regexFrase.lastIndex = 0;
+          if (regexFrase.test(texto)) {
             versos.push({ c: ch.c, num, texto });
           }
         }
@@ -1512,6 +1521,8 @@
   async function irAVersoGuardado(libroId, cap, num) {
     enListaSeparadores = false;
     enListaNotas = false;
+    modoLecturaContinua = true;
+    origenExterno = null;
     const lib = indice.find(l => l.id === libroId);
     if (lib) testamentoActivo = lib.testamento;
     await abrirLibro(libroId);
