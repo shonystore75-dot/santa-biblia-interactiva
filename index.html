@@ -817,6 +817,11 @@
   }
   function compartirApp() {
     const mensaje = 'Estoy usando "Santa Biblia 2026", una app para leer la Biblia Reina Valera de 1909 en lenguaje actualizado. 🙏📖';
+    const pluginCompartir = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share;
+    if (pluginCompartir) {
+      pluginCompartir.share({ text: mensaje, title: 'Santa Biblia 2026', dialogTitle: 'Santa Biblia 2026' }).catch(() => {});
+      return;
+    }
     if (navigator.share) {
       navigator.share({ text: mensaje, title: 'Santa Biblia 2026' }).catch(() => {});
       return;
