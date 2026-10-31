@@ -372,7 +372,7 @@
     -webkit-touch-callout: none;
   }
   .palabras-jesus {
-    color: #8B1A1A;
+    color: #9B1024;
   }
   .encabezado-salmo {
     font-size: calc(clamp(13px, 2.3vh, 15px) * var(--escala-texto));
@@ -540,6 +540,19 @@
     overflow-y: auto;
     box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     border: 1px solid var(--dorado);
+    scrollbar-width: thin;
+    scrollbar-color: var(--terracota) rgba(185,80,46,0.12);
+  }
+  .caja-overlay::-webkit-scrollbar {
+    width: 7px;
+  }
+  .caja-overlay::-webkit-scrollbar-track {
+    background: rgba(185,80,46,0.12);
+    border-radius: 10px;
+  }
+  .caja-overlay::-webkit-scrollbar-thumb {
+    background: var(--terracota);
+    border-radius: 10px;
   }
   .caja-overlay .titulo-overlay {
     font-family: 'Cinzel', serif;
@@ -648,6 +661,24 @@
     font-size: 12px;
     cursor: pointer;
   }
+  .btn-ir-verso-flotante {
+    position: fixed;
+    right: calc(50% - min(480px, 100vw) / 2 + 16px);
+    bottom: 20px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(61,31,62,0.35);
+    border: 2px solid var(--dorado-brillante);
+    cursor: pointer;
+    z-index: 20;
+  }
+  .btn-ir-verso-flotante svg { width: 20px; height: 20px; }
   .btn-nav-cap.oculto { visibility: hidden; }
 
   .cargando {
@@ -903,7 +934,6 @@
         <div class="fila-menu" id="fila-at"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V8.5a2.5 2.5 0 0 1 5 0V20"></path><path d="M13 20V8.5a2.5 2.5 0 0 1 5 0V20"></path><line x1="3" y1="20" x2="8" y2="20"></line><line x1="13" y1="20" x2="18" y2="20"></line></svg>Antiguo Testamento</div>
         <div class="fila-menu" id="fila-nt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-1.6-1.3-3.7-2-6-2v12.5c2.3 0 4.4.7 6 2 1.6-1.3 3.7-2 6-2V4.5c-2.3 0-4.4.7-6 2z"></path><line x1="12" y1="6.5" x2="12" y2="19"></line></svg>Nuevo Testamento</div>
         <div class="fila-menu" id="fila-favoritos"><svg viewBox="0 0 24 24" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Favoritos</div>
-        <div class="fila-menu" id="fila-ir-verso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="7" x2="19" y2="7"></line><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="17" x2="13" y2="17"></line></svg>Ir a un versículo</div>
         <div class="fila-menu" id="fila-separadores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21V3z"></path></svg>Mis separadores</div>
         <div class="fila-menu" id="fila-notas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4V4z"></path><path d="M16 4v4h4"></path><line x1="7.5" y1="12" x2="16.5" y2="12"></line><line x1="7.5" y1="15.5" x2="14" y2="15.5"></line></svg>Mis notas</div>
         <div class="fila-menu fila-escala">
@@ -1115,7 +1145,7 @@
     const total = libroActual.capitulos;
     let botones = '';
     for (let i = 1; i <= total; i++) {
-      botones += `<div class="num-capitulo" onclick="abrirCapitulo(${i})">${i}</div>`;
+      botones += `<div class="num-capitulo" onclick="mostrarGridVersosParaCapitulo(${i})">${i}</div>`;
     }
     main.innerHTML = `<div class="grid-capitulos">${botones}</div>`;
     main.scrollTop = 0;
@@ -1448,6 +1478,37 @@
     });
   }
 
+  function mostrarGridVersosParaCapitulo(numCap) {
+    const datosLibro = cacheLibros[libroActual.id];
+    const capitulo = datosLibro.find(c => c.c === numCap);
+    const botones = capitulo.v.map(([num]) => `<div class="num-capitulo" onclick="abrirCapituloEnVerso(${numCap}, ${num})">${num}</div>`).join('');
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay-pantalla visible';
+    overlay.innerHTML = `
+      <div class="caja-overlay">
+        <div class="titulo-overlay">${libroActual.nombre} ${numCap} — elige un versículo</div>
+        <div class="grid-capitulos">${botones}</div>
+        <div class="btn-cerrar-overlay">Cerrar</div>
+      </div>
+    `;
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) cerrarOverlay(); });
+    overlay.querySelector('.btn-cerrar-overlay').addEventListener('click', cerrarOverlay);
+    document.body.appendChild(overlay);
+  }
+
+  function abrirCapituloEnVerso(numCap, numVerso) {
+    cerrarOverlay();
+    abrirCapitulo(numCap);
+    requestAnimationFrame(() => {
+      const el = main.querySelector(`.verso[data-num="${numVerso}"]`);
+      if (el) {
+        el.scrollIntoView({ block: 'center' });
+        el.classList.add('resaltado');
+        setTimeout(() => el.classList.remove('resaltado'), 2000);
+      }
+    });
+  }
+
   async function irAVersoGuardado(libroId, cap, num) {
     enListaSeparadores = false;
     enListaNotas = false;
@@ -1609,6 +1670,7 @@
           <div class="btn-nav-cap ${esUltimo?'oculto':''}" onclick="abrirCapitulo(${numCap+1})">Siguiente ›</div>
         </div>
       </div>
+      <div class="btn-ir-verso-flotante" id="btn-ir-verso-flotante" onclick="mostrarGridVersos()" aria-label="Ir a un versículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="7" x2="19" y2="7"></line><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="17" x2="13" y2="17"></line></svg></div>
     `;
     main.scrollTop = 0;
     reaplicarMarcas();
@@ -1860,8 +1922,6 @@
   if (filaNT) filaNT.addEventListener('click', () => cambiarTestamento('NT'));
   const filaFavoritos = document.getElementById('fila-favoritos');
   if (filaFavoritos) filaFavoritos.addEventListener('click', () => { window.location.href = 'favoritos.html'; });
-  const filaIrVerso = document.getElementById('fila-ir-verso');
-  if (filaIrVerso) filaIrVerso.addEventListener('click', mostrarGridVersos);
   const filaSeparadores = document.getElementById('fila-separadores');
   if (filaSeparadores) filaSeparadores.addEventListener('click', mostrarSeparadores);
   const filaNotas = document.getElementById('fila-notas');
