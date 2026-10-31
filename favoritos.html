@@ -155,6 +155,17 @@
     gap: 12px;
   }
 
+  .btn-copiar-lista {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--terracota);
+    margin-bottom: 14px;
+    cursor: pointer;
+  }
+  .btn-copiar-lista:active { opacity: 0.6; }
+
   .tarjeta-favorito {
     background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
     border-radius: 6px 20px 6px 20px;
@@ -519,6 +530,7 @@
     }
 
     main.innerHTML = `
+      <div class="btn-copiar-lista" onclick="copiarListaFavoritos()">Copiar lista de favoritos</div>
       <div class="lista-favoritos">
         ${favoritos.map(f => `
           <div class="tarjeta-favorito">
@@ -532,6 +544,20 @@
       </div>
     `;
     main.scrollTop = 0;
+  }
+
+  function copiarListaFavoritos() {
+    const favoritos = obtenerFavoritos().slice().sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+    if (!favoritos.length) return;
+    const quitarEtiquetas = (s) => String(s || '').replace(/<[^>]+>/g, '');
+    const mensaje = favoritos.map(f => `${f.nombreLibro} ${f.capitulo}:${f.verso} — ${quitarEtiquetas(f.texto)}`).join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(mensaje)
+        .then(() => mostrarToastGlobal('Lista copiada'))
+        .catch(() => mostrarToastGlobal('No se pudo copiar'));
+    } else {
+      mostrarToastGlobal('No se pudo copiar');
+    }
   }
 
   btnAtras.addEventListener('click', () => {
