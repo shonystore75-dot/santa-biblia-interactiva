@@ -1622,7 +1622,7 @@
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === cap);
     const versoObj = capitulo.v.find(v => v[0] === num);
-    const texto = versoObj ? versoObj[1] : '';
+    const texto = (versoObj ? versoObj[1] : '').replace(/<[^>]+>/g, '');
     const referencia = `${libroActual.nombre} ${cap}:${num}`;
     const mensaje = `"${texto}"\n${referencia} (Santa Biblia 2026)`;
 
