@@ -333,7 +333,7 @@
   }
   .icono-leer-img { background-image: url('pergamino.jpg'); }
   .icono-historias-img { background-image: url('historias.jpg'); background-position: center 60%; }
-  .icono-oraciones-img { background: linear-gradient(135deg, var(--terracota), var(--naranja)); }
+  .icono-oraciones-img { background-image: url('oraciones.jpg'); }
 
   .rollo .titulo {
     font-family: 'Cinzel', serif;
@@ -826,10 +826,7 @@
   const tarjetasExplorar = [
     obtenerTarjetaLeer(),
     { href: 'historias.html', clase: 'icono-historias-img', titulo: 'Historias', desc: 'Relatos ilustrados' },
-    {
-      href: 'oraciones.html', clase: 'icono-oraciones-img', titulo: 'Oraciones', desc: 'Oraciones y cánticos',
-      interior: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px;"><path d="M12 21c-4-2.6-8-6.1-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 3.5C20 14.9 16 18.4 12 21z"></path></svg>',
-    },
+    { href: 'oraciones.html', clase: 'icono-oraciones-img', titulo: 'Oraciones', desc: 'Oraciones y cánticos' },
   ];
 
   // ---------- Texturas generadas con ruido con semilla ----------
