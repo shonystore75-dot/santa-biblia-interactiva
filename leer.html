@@ -1096,7 +1096,10 @@
 
   function mostrarListaLibros() {
     libroActual = null; capActual = null;
-    modoLecturaContinua = false;
+    // No se reinicia modoLecturaContinua aquí: si el usuario entró por "Continuar
+    // leyendo", debe seguir guardándose su posición aunque navegue por el listado
+    // de libros u otras pantallas; si entró directo a "Leer", ya estaba en false
+    // desde el inicio y así se queda.
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Leer';
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
@@ -1111,7 +1114,7 @@
       </div>
       <div class="lista-libros">
         ${libros.map(l => `
-          <div class="item-libro" onclick="continuarLecturaDesdeLista('${l.id}')">
+          <div class="item-libro" onclick="abrirLibro('${l.id}')">
             <span class="nombre">${l.nombre}</span>
             <span class="caps">${l.capitulos} cap.</span>
           </div>
@@ -1125,14 +1128,6 @@
   function cambiarTestamento(t) {
     testamentoActivo = t;
     mostrarListaLibros();
-  }
-
-  function continuarLecturaDesdeLista(id) {
-    // El usuario eligió este libro directamente desde el listado de "Leer":
-    // a partir de aquí sí debe guardarse como su lectura en curso.
-    modoLecturaContinua = true;
-    origenExterno = null;
-    abrirLibro(id);
   }
 
   async function abrirLibro(id) {
@@ -1521,8 +1516,6 @@
   async function irAVersoGuardado(libroId, cap, num) {
     enListaSeparadores = false;
     enListaNotas = false;
-    modoLecturaContinua = true;
-    origenExterno = null;
     const lib = indice.find(l => l.id === libroId);
     if (lib) testamentoActivo = lib.testamento;
     await abrirLibro(libroId);
