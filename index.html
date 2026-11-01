@@ -15,6 +15,7 @@
     --dorado: #F5B942;
     --dorado-brillante: #FFDD8A;
     --papiro: #FBF0D9;
+    --papiro-sombra: #E8D2A0;
     --tinta: #3D2419;
     --terracota: #B9502E;
   }
@@ -25,6 +26,7 @@
     --dorado: #D9B54A;
     --dorado-brillante: #F0DB95;
     --papiro: #EDEEDC;
+    --papiro-sombra: #D7D6B8;
     --tinta: #223126;
     --terracota: #2F6B4F;
     --fondo-exterior: #16211C;
@@ -35,6 +37,7 @@
     --dorado: #E6C34D;
     --dorado-brillante: #F6E6B0;
     --papiro: #EDF1F7;
+    --papiro-sombra: #D3D9E6;
     --tinta: #1A2238;
     --terracota: #2C4A86;
     --fondo-exterior: #141B33;
@@ -212,21 +215,142 @@
     background: repeating-linear-gradient(90deg, var(--dorado) 0 5px, transparent 5px 9px);
   }
 
-  .grid-acciones {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3vw;
+  .carrusel-3d-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 1.5vw;
+  }
+
+  .flecha-carrusel {
+    flex: 0 0 auto;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(61,31,62,0.75);
+    color: var(--dorado-brillante);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .flecha-carrusel svg { width: 16px; height: 16px; }
+
+  .escenario-3d {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 20vh;
+    min-height: 150px;
+    position: relative;
+    perspective: 1000px;
+  }
+
+  .anillo-3d {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+
+  /* Zonas planas (sin rotación 3D) para poder tocar directamente la
+     tarjeta lateral visible a cada lado: el área rotada real de esas
+     tarjetas no coincide con su posición aparente, así que se usa esto
+     en vez de depender del clic sobre la tarjeta girada. */
+  .zona-clic-lateral {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 21%;
+    z-index: 4;
+    cursor: pointer;
+  }
+  .zona-clic-izq { left: 0; }
+  .zona-clic-der { right: 0; }
+
+  .tarjeta-3d {
+    position: absolute;
+    top: 0; left: 50%;
+    width: 58%;
+    height: 100%;
+    margin-left: -29%;
+    transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .tarjeta-3d.lateral-izq,
+  .tarjeta-3d.lateral-der {
+    opacity: 0.6;
+    filter: brightness(0.82) saturate(0.85);
+  }
+  .tarjeta-3d.frontal {
+    opacity: 1;
+    filter: none;
+    z-index: 3;
+  }
+  .tarjeta-3d.oculta-3d {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .tarjeta-3d .tarjeta {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-decoration: none;
   }
 
   .tarjeta {
-    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
-    border-radius: 6px 20px 6px 20px;
-    padding: 1.6vh 3.5vw;
+    position: relative;
+    background:
+      /* manchas de vejez cerca de los bordes rasgados */
+      radial-gradient(ellipse 10px 4px at 12% 3%, rgba(120,80,40,0.28), transparent 70%),
+      radial-gradient(ellipse 9px 4px at 62% 2%, rgba(120,80,40,0.22), transparent 70%),
+      radial-gradient(ellipse 11px 4px at 88% 98%, rgba(120,80,40,0.26), transparent 70%),
+      radial-gradient(ellipse 9px 4px at 35% 98%, rgba(120,80,40,0.2), transparent 70%),
+      radial-gradient(circle at 18% 22%, rgba(139,90,43,0.14), transparent 42%),
+      radial-gradient(circle at 85% 78%, rgba(139,90,43,0.12), transparent 46%),
+      radial-gradient(circle at 70% 15%, rgba(139,90,43,0.08), transparent 35%),
+      linear-gradient(160deg, var(--papiro) 0%, var(--papiro-sombra) 55%, var(--papiro) 100%);
+    padding: 1.8vh 4vw;
     text-align: left;
-    box-shadow: 0 8px 20px rgba(61,31,62,0.15);
-    border-bottom: 3px solid var(--dorado);
-    overflow: hidden;
+    margin: 0 10px;
+    filter: drop-shadow(0 8px 12px rgba(61,31,62,0.3));
+    /* Borde irregular tipo papel envejecido/rasgado (solo arriba y abajo;
+       los costados quedan rectos porque ahí van los rodillos). Puntos
+       asimétricos y sin patrón repetido, para que no se vea artificial. */
+    clip-path: polygon(
+      0% 2.5%, 5.8% 1.8%, 10.9% 4.1%, 18% 0.4%, 22.8% 3.6%, 29.4% 1.4%,
+      35.4% 0.8%, 40.1% 0.7%, 46.6% 1.4%, 51.2% 3.5%, 57.4% 0.9%, 62.2% 2.5%,
+      67.1% 2.8%, 73.3% 1.7%, 81.1% 2.4%, 86.1% 0.5%, 91.5% 0.4%, 98.5% 1%,
+      100% 2.9%,
+      100% 97.1%, 99.2% 97.9%, 94.2% 96%, 85.8% 96.4%, 80.1% 98%, 72.7% 97.5%,
+      64.7% 97.4%, 58.1% 97%, 51.3% 98.5%, 45.8% 96.3%, 38.5% 97.5%, 30.8% 96.7%,
+      25.1% 97.1%, 18.8% 99.6%, 12% 97.8%, 6.2% 99.2%, 0% 96.8%
+    );
   }
+  /* Rodillos del pergamino: dos varas de madera rústica a los costados,
+     como las varillas donde se enrolla un rollo antiguo. Tonos café
+     mate (no metálicos) con vetas y algunos nudos de la madera. */
+  .tarjeta::before,
+  .tarjeta::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    width: 17px;
+    border-radius: 8px;
+    background:
+      radial-gradient(ellipse 5px 7px at 50% 18%, rgba(40,22,10,0.35), transparent 75%),
+      radial-gradient(ellipse 4px 6px at 42% 64%, rgba(40,22,10,0.3), transparent 75%),
+      repeating-linear-gradient(180deg,
+        rgba(35,18,8,0.22) 0px, rgba(35,18,8,0.22) 1px,
+        transparent 1px, transparent 4px,
+        rgba(35,18,8,0.12) 4px, transparent 6px,
+        transparent 9px, rgba(35,18,8,0.16) 10px, transparent 12px),
+      linear-gradient(90deg, #2E1B0E 0%, #5C3A20 22%, #7A5230 45%, #6B4526 58%, #4A2E17 78%, #2E1B0E 100%);
+    box-shadow: 0 3px 7px rgba(0,0,0,0.4), inset 0 0 2px rgba(0,0,0,0.5);
+  }
+  .tarjeta::before { left: -10px; }
+  .tarjeta::after { right: -10px; }
 
   .icono-img {
     width: 100%;
@@ -236,7 +360,14 @@
     background-position: center;
     margin-bottom: 1vh;
     box-shadow: 0 3px 8px rgba(61,31,62,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
+  .icono-leer-img { background-image: url('pergamino.jpg'); }
+  .icono-historias-img { background-image: url('historias.jpg'); background-position: center 60%; }
+  .icono-oraciones-img { background: linear-gradient(135deg, var(--terracota), var(--naranja)); }
 
   .tarjeta .titulo {
     font-family: 'Cinzel', serif;
@@ -340,8 +471,6 @@
   #nav-leer { background-image: url('nav-leer.png'); }
   #nav-guia { background-image: url('nav-guia.png'); }
   #nav-favoritos { background-image: url('nav-favoritos.png'); }
-  #icono-leer { background-image: url('pergamino.jpg'); }
-  #icono-historias { background-image: url('historias.jpg'); background-position: center 60%; }
 
   .espacio-publicidad {
     flex: 0 0 auto;
@@ -627,17 +756,14 @@
 
       <div class="bloque-seccion">
         <div class="seccion-titulo">Explorar</div>
-        <div class="grid-acciones">
-          <a class="tarjeta" id="tarjeta-leer" href="leer.html" style="text-decoration:none; display:block;">
-            <div class="icono-img" id="icono-leer"></div>
-            <div class="titulo" id="titulo-tarjeta-leer">Leer</div>
-            <div class="desc" id="desc-tarjeta-leer">Libros y capítulos</div>
-          </a>
-          <a class="tarjeta" href="historias.html" style="text-decoration:none; display:block;">
-            <div class="icono-img" id="icono-historias"></div>
-            <div class="titulo">Historias</div>
-            <div class="desc">Relatos ilustrados</div>
-          </a>
+        <div class="carrusel-3d-contenedor">
+          <div class="flecha-carrusel" id="carrusel-izq" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+          <div class="escenario-3d">
+            <div class="anillo-3d" id="anillo-3d"></div>
+            <div class="zona-clic-lateral zona-clic-izq" id="zona-clic-izq"></div>
+            <div class="zona-clic-lateral zona-clic-der" id="zona-clic-der"></div>
+          </div>
+          <div class="flecha-carrusel" id="carrusel-der" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
         </div>
       </div>
 
@@ -712,19 +838,114 @@
     }
   }
 
-  function configurarTarjetaLeer() {
+  function obtenerTarjetaLeer() {
     try {
       const guardado = localStorage.getItem('ultimaLectura');
-      if (!guardado) return;
-      const { libro, capitulo, nombreLibro } = JSON.parse(guardado);
-      document.getElementById('tarjeta-leer').href = `leer.html?libro=${libro}&capitulo=${capitulo}`;
-      document.getElementById('titulo-tarjeta-leer').textContent = 'Continuar leyendo';
-      document.getElementById('desc-tarjeta-leer').textContent = `${nombreLibro} ${capitulo}`;
+      if (guardado) {
+        const { libro, capitulo, nombreLibro } = JSON.parse(guardado);
+        return {
+          href: `leer.html?libro=${libro}&capitulo=${capitulo}`,
+          clase: 'icono-leer-img',
+          titulo: 'Continuar leyendo',
+          desc: `${nombreLibro} ${capitulo}`,
+        };
+      }
     } catch (e) {}
+    return { href: 'leer.html', clase: 'icono-leer-img', titulo: 'Leer', desc: 'Libros y capítulos' };
   }
 
+  // Tarjetas de la sección "Explorar": el carrusel siempre muestra 2 a la vez
+  // y da la vuelta con las flechas. Pensado para poder agregar más tarjetas
+  // en el futuro (otros pendientes) sin cambiar esta lógica.
+  const tarjetasExplorar = [
+    obtenerTarjetaLeer(),
+    { href: 'historias.html', clase: 'icono-historias-img', titulo: 'Historias', desc: 'Relatos ilustrados' },
+    {
+      href: 'oraciones.html', clase: 'icono-oraciones-img', titulo: 'Oraciones', desc: 'Oraciones y cánticos',
+      interior: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px;"><path d="M12 21c-4-2.6-8-6.1-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 3.5C20 14.9 16 18.4 12 21z"></path></svg>',
+    },
+  ];
+  // Carrusel 3D tipo "coverflow": la tarjeta activa queda grande y de
+  // frente; sus dos vecinas quedan giradas y más chicas a los lados; el
+  // resto (si hubiera más de 3 tarjetas en el futuro) queda oculto detrás
+  // hasta que el usuario llega a ellas con las flechas. Así da la vuelta
+  // (circular) sin importar cuántas tarjetas haya.
+  let indiceCarrusel = 0;
+
+  function construirAnillo3D() {
+    const anillo = document.getElementById('anillo-3d');
+    if (!anillo) return;
+    anillo.innerHTML = tarjetasExplorar.map((t, i) => `
+      <div class="tarjeta-3d" id="tarjeta-3d-${i}" data-indice="${i}">
+        <a class="tarjeta" href="${t.href}">
+          <div class="icono-img ${t.clase}">${t.interior || ''}</div>
+          <div class="titulo">${t.titulo}</div>
+          <div class="desc">${t.desc}</div>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  function diferenciaCircular(idx, n) {
+    let d = idx - indiceCarrusel;
+    if (d > n / 2) d -= n;
+    if (d < -n / 2) d += n;
+    return d;
+  }
+
+  function actualizarAnillo3D() {
+    const anillo = document.getElementById('anillo-3d');
+    if (!anillo) return;
+    const n = tarjetasExplorar.length;
+    anillo.querySelectorAll('.tarjeta-3d').forEach(el => {
+      const idx = parseInt(el.dataset.indice, 10);
+      const d = diferenciaCircular(idx, n);
+      el.classList.remove('frontal', 'lateral-izq', 'lateral-der', 'oculta-3d');
+      if (d === 0) {
+        el.style.transform = 'translateX(0) translateZ(0) rotateY(0deg)';
+        el.classList.add('frontal');
+      } else if (d === 1 || (n === 2 && d === -1)) {
+        el.style.transform = 'translateX(64%) translateZ(-90px) rotateY(-38deg)';
+        el.classList.add('lateral-der');
+      } else if (d === -1) {
+        el.style.transform = 'translateX(-64%) translateZ(-90px) rotateY(38deg)';
+        el.classList.add('lateral-izq');
+      } else {
+        const lado = d > 0 ? 1 : -1;
+        el.style.transform = `translateX(${lado * 90}%) translateZ(-220px) rotateY(${-lado * 45}deg)`;
+        el.classList.add('oculta-3d');
+      }
+    });
+  }
+
+  function irATarjeta(idx) {
+    const n = tarjetasExplorar.length;
+    indiceCarrusel = ((idx % n) + n) % n;
+    actualizarAnillo3D();
+  }
+
+  function renderCarruselExplorar() {
+    construirAnillo3D();
+    actualizarAnillo3D();
+    const n = tarjetasExplorar.length;
+    const mostrarFlechas = n > 1;
+    const izq = document.getElementById('carrusel-izq');
+    const der = document.getElementById('carrusel-der');
+    if (izq) izq.style.display = mostrarFlechas ? 'flex' : 'none';
+    if (der) der.style.display = mostrarFlechas ? 'flex' : 'none';
+  }
+
+  const carruselIzq = document.getElementById('carrusel-izq');
+  const carruselDer = document.getElementById('carrusel-der');
+  if (carruselIzq) carruselIzq.addEventListener('click', () => irATarjeta(indiceCarrusel - 1));
+  if (carruselDer) carruselDer.addEventListener('click', () => irATarjeta(indiceCarrusel + 1));
+  const zonaClicIzq = document.getElementById('zona-clic-izq');
+  const zonaClicDer = document.getElementById('zona-clic-der');
+  if (zonaClicIzq) zonaClicIzq.addEventListener('click', () => irATarjeta(indiceCarrusel - 1));
+  if (zonaClicDer) zonaClicDer.addEventListener('click', () => irATarjeta(indiceCarrusel + 1));
+  renderCarruselExplorar();
+
   cargarVersiculoDelDia();
-  configurarTarjetaLeer();
 
   // Botón físico de retroceder (Android): como esta es la pantalla de inicio,
   // preguntar antes de salir de la app en vez de salir directo.
