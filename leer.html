@@ -466,13 +466,17 @@
     font-size: 12px;
   }
 
-  /* --- Separadores: cintas de color arrastrables --- */
+  /* --- Separadores: cintas de color arrastrables ---
+     Cada cinta tiene una zona táctil (.cinta-mango / .cinta-colocada) bastante más
+     grande que el dibujo visible (.cinta-mango-visual / .cinta-colocada-visual),
+     para que sea fácil de agarrar con el dedo aunque el dibujo se vea del mismo
+     tamaño de antes. */
   .rincon-separadores {
     position: absolute;
     bottom: -15px;
     right: 6vw;
     display: flex;
-    gap: 7px;
+    gap: 2px;
     z-index: 30;
     padding: 6px;
     border-radius: 10px;
@@ -482,41 +486,59 @@
     background: rgba(0,0,0,0.18);
   }
   .rincon-separadores.oculta { display: none; }
-  .cinta-mango,
-  .cinta-colocada,
+  .cinta-mango-visual,
+  .cinta-colocada-visual,
   .cinta-arrastrando {
     clip-path: polygon(0 0, 100% 0, 100% 76%, 50% 100%, 0 76%);
+  }
+  .cinta-mango {
+    width: 44px;
+    height: 56px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
     cursor: grab;
     touch-action: none;
   }
-  .cinta-mango {
-    width: 20px;
-    height: 36px;
+  .cinta-mango.oculta { display: none; }
+  .cinta-mango-visual {
+    width: 22px;
+    height: 38px;
     border-radius: 3px 3px 1px 1px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.35);
     transition: opacity 0.15s ease, transform 0.15s ease;
+    pointer-events: none;
   }
-  .cinta-mango:active { transform: scale(1.08); }
-  .cinta-mango.oculta { display: none; }
-  .cinta-mango[data-slot="1"] { background: var(--terracota); }
-  .cinta-mango[data-slot="2"] { background: var(--dorado); }
+  .cinta-mango:active .cinta-mango-visual { transform: scale(1.08); }
+  .cinta-mango-visual[data-slot="1"] { background: var(--terracota); }
+  .cinta-mango-visual[data-slot="2"] { background: var(--dorado); }
   .cinta-colocada {
     position: absolute;
-    top: -1px;
+    top: -12px;
     right: -5vw;
-    width: 17px;
-    height: 28px;
-    border-radius: 3px 3px 1px 1px;
-    box-shadow: -2px 3px 7px rgba(0,0,0,0.3);
+    width: 40px;
+    height: 52px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    cursor: grab;
+    touch-action: none;
     z-index: 8;
   }
-  .cinta-colocada[data-slot="1"] { background: var(--terracota); }
-  .cinta-colocada[data-slot="2"] { background: var(--dorado); }
-  .cinta-colocada.arrastrando-origen { opacity: 0.22; }
+  .cinta-colocada-visual {
+    width: 18px;
+    height: 30px;
+    border-radius: 3px 3px 1px 1px;
+    box-shadow: -2px 3px 7px rgba(0,0,0,0.3);
+    pointer-events: none;
+  }
+  .cinta-colocada-visual[data-slot="1"] { background: var(--terracota); }
+  .cinta-colocada-visual[data-slot="2"] { background: var(--dorado); }
+  .cinta-colocada.arrastrando-origen .cinta-colocada-visual { opacity: 0.22; }
   .cinta-arrastrando {
     position: fixed;
-    width: 22px;
-    height: 38px;
+    width: 24px;
+    height: 40px;
     border-radius: 3px 3px 1px 1px;
     box-shadow: 0 6px 16px rgba(0,0,0,0.45);
     pointer-events: none;
@@ -1025,8 +1047,8 @@
         <div class="fila-menu disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Configuración<span class="etiqueta-pronto">Pronto</span></div>
       </div>
       <div class="rincon-separadores oculta" id="rincon-separadores">
-        <div class="cinta-mango" id="mango-sep-1" data-slot="1" aria-label="Separador 1. Mantén presionado y arrastra hasta un versículo."></div>
-        <div class="cinta-mango" id="mango-sep-2" data-slot="2" aria-label="Separador 2. Mantén presionado y arrastra hasta un versículo."></div>
+        <div class="cinta-mango" id="mango-sep-1" data-slot="1" aria-label="Separador 1. Mantén presionado y arrastra hasta un versículo."><div class="cinta-mango-visual" data-slot="1"></div></div>
+        <div class="cinta-mango" id="mango-sep-2" data-slot="2" aria-label="Separador 2. Mantén presionado y arrastra hasta un versículo."><div class="cinta-mango-visual" data-slot="2"></div></div>
       </div>
     </header>
 
@@ -1470,6 +1492,7 @@
 
   // --- Arrastre de las cintas de separador ---
   const rinconSeparadores = document.getElementById('rincon-separadores');
+  const headerApp = document.querySelector('header');
   let arrastreCinta = null; // { slot, origenColocado: bool, el, capOrigen, numOrigen }
 
   function obtenerPuntoEvento(e) {
@@ -1512,7 +1535,7 @@
     rinconSeparadores.classList.remove('resaltado-quitar');
     arrastreCinta.clon.classList.remove('soltando-para-quitar');
 
-    if (arrastreCinta.origenColocado && dentroDe(rinconSeparadores.getBoundingClientRect(), punto.x, punto.y)) {
+    if (arrastreCinta.origenColocado && dentroDe(headerApp.getBoundingClientRect(), punto.x, punto.y)) {
       rinconSeparadores.classList.add('resaltado-quitar');
       arrastreCinta.clon.classList.add('soltando-para-quitar');
       return;
@@ -1544,7 +1567,7 @@
     if (!arrastreCinta) return;
     const { slot, origenColocado, capOrigen, numOrigen } = arrastreCinta;
     const punto = obtenerPuntoEvento(e);
-    const seSuelta = dentroDe(rinconSeparadores.getBoundingClientRect(), punto.x, punto.y);
+    const seSuelta = dentroDe(headerApp.getBoundingClientRect(), punto.x, punto.y);
 
     if (origenColocado && seSuelta) {
       limpiarArrastreCinta();
@@ -1648,6 +1671,10 @@
         cinta.className = 'cinta-colocada';
         cinta.dataset.slot = String(slot);
         cinta.setAttribute('aria-label', `Separador ${slot} en este versículo. Mantén presionado para moverlo.`);
+        const visual = document.createElement('div');
+        visual.className = 'cinta-colocada-visual';
+        visual.dataset.slot = String(slot);
+        cinta.appendChild(visual);
         cinta.addEventListener('touchstart', (e) => iniciarArrastreCinta(e, slot, cinta, true, capActual, num), { passive: false });
         cinta.addEventListener('mousedown', (e) => iniciarArrastreCinta(e, slot, cinta, true, capActual, num));
         elVerso.appendChild(cinta);
