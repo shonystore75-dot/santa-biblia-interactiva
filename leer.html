@@ -430,7 +430,6 @@
     width: 13px;
     height: 13px;
   }
-  .popup-verso .separador-btn,
   .popup-verso .nota-btn {
     cursor: pointer;
     display: inline-flex;
@@ -447,7 +446,6 @@
     font-weight: 700;
     font-size: 12px;
   }
-  .popup-verso .separador-btn.activa,
   .popup-verso .nota-btn.activa {
     color: #fff;
     background: var(--terracota);
@@ -456,7 +454,6 @@
     width: 13px;
     height: 13px;
   }
-  .marca-separador,
   .marca-nota {
     display: inline-flex;
     align-items: center;
@@ -465,19 +462,79 @@
     margin-right: 3px;
     vertical-align: middle;
     user-select: none;
-  }
-  .marca-separador {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--terracota);
-    color: #fff;
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-  }
-  .marca-nota {
     color: var(--terracota);
     font-size: 12px;
+  }
+
+  /* --- Separadores: cintas de color arrastrables --- */
+  .rincon-separadores {
+    position: absolute;
+    bottom: -15px;
+    right: 6vw;
+    display: flex;
+    gap: 7px;
+    z-index: 30;
+    padding: 6px;
+    border-radius: 10px;
+    transition: background 0.15s ease;
+  }
+  .rincon-separadores.resaltado-quitar {
+    background: rgba(0,0,0,0.18);
+  }
+  .rincon-separadores.oculta { display: none; }
+  .cinta-mango,
+  .cinta-colocada,
+  .cinta-arrastrando {
+    clip-path: polygon(0 0, 100% 0, 100% 76%, 50% 100%, 0 76%);
+    cursor: grab;
+    touch-action: none;
+  }
+  .cinta-mango {
+    width: 20px;
+    height: 36px;
+    border-radius: 3px 3px 1px 1px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .cinta-mango:active { transform: scale(1.08); }
+  .cinta-mango.oculta { display: none; }
+  .cinta-mango[data-slot="1"] { background: var(--terracota); }
+  .cinta-mango[data-slot="2"] { background: var(--dorado); }
+  .cinta-colocada {
+    position: absolute;
+    top: -1px;
+    right: -5vw;
+    width: 17px;
+    height: 28px;
+    border-radius: 3px 3px 1px 1px;
+    box-shadow: -2px 3px 7px rgba(0,0,0,0.3);
+    z-index: 8;
+  }
+  .cinta-colocada[data-slot="1"] { background: var(--terracota); }
+  .cinta-colocada[data-slot="2"] { background: var(--dorado); }
+  .cinta-colocada.arrastrando-origen { opacity: 0.22; }
+  .cinta-arrastrando {
+    position: fixed;
+    width: 22px;
+    height: 38px;
+    border-radius: 3px 3px 1px 1px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    pointer-events: none;
+    z-index: 70;
+    transform: translate(-50%, -22%);
+  }
+  .cinta-arrastrando.es-slot-1 { background: var(--terracota); }
+  .cinta-arrastrando.es-slot-2 { background: var(--dorado); }
+  .cinta-arrastrando.soltando-para-quitar {
+    opacity: 0.4;
+    transform: translate(-50%, -22%) scale(0.7);
+  }
+  .verso { position: relative; }
+  .verso.objetivo-cinta {
+    background: rgba(245,185,66,0.3);
+    border-radius: 6px;
+    padding: 2px 6px;
+    margin: -2px -6px 1vh -6px;
   }
   .lista-guardados {
     display: flex;
@@ -507,7 +564,20 @@
     font-weight: 700;
     color: var(--terracota);
     font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
+  .item-guardado .num-separador::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 14px;
+    border-radius: 2px 2px 1px 1px;
+    clip-path: polygon(0 0, 100% 0, 100% 74%, 50% 100%, 0 74%);
+  }
+  .item-guardado .num-separador.slot-1::before { background: var(--terracota); }
+  .item-guardado .num-separador.slot-2::before { background: var(--dorado); }
   .item-guardado .ref-guardado {
     font-family: 'Cinzel', serif;
     font-weight: 600;
@@ -954,6 +1024,10 @@
         <div class="fila-menu" id="fila-compartir-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.8"></circle><circle cx="6" cy="12" r="2.8"></circle><circle cx="18" cy="19" r="2.8"></circle><line x1="8.2" y1="10.6" x2="15.8" y2="6.2"></line><line x1="8.2" y1="13.4" x2="15.8" y2="17.8"></line></svg>Compartir la app</div>
         <div class="fila-menu disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Configuración<span class="etiqueta-pronto">Pronto</span></div>
       </div>
+      <div class="rincon-separadores oculta" id="rincon-separadores">
+        <div class="cinta-mango" id="mango-sep-1" data-slot="1" aria-label="Separador 1. Mantén presionado y arrastra hasta un versículo."></div>
+        <div class="cinta-mango" id="mango-sep-2" data-slot="2" aria-label="Separador 2. Mantén presionado y arrastra hasta un versículo."></div>
+      </div>
     </header>
 
     <main id="main">
@@ -1105,6 +1179,7 @@
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
+    ocultarRinconSeparadores();
 
     const libros = indice.filter(l => l.testamento === testamentoActivo);
     const html = `
@@ -1138,6 +1213,7 @@
     subtituloHeader.textContent = `${libroActual.capitulos} capítulos`;
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
+    ocultarRinconSeparadores();
 
     if (!cacheLibros[id]) {
       main.innerHTML = '<div class="cargando">Cargando ' + libroActual.nombre + '…</div>';
@@ -1204,6 +1280,7 @@
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
+    ocultarRinconSeparadores();
 
     const consultaPrevia = (conservarEstado && busquedaUltima) ? busquedaUltima.consulta : '';
 
@@ -1381,17 +1458,139 @@
     return sep ? sep.slot : null;
   }
 
-  function toggleSeparador(slot, cap, num, elBoton) {
-    let lista = obtenerSeparadores();
-    const yaAqui = lista.some(s => s.slot === slot && s.libro === libroActual.id && s.capitulo === cap && s.verso === num);
-    lista = lista.filter(s => s.slot !== slot);
-    if (!yaAqui) {
-      lista.push({ slot: slot, libro: libroActual.id, nombreLibro: libroActual.nombre, capitulo: cap, verso: num });
-    }
+  function colocarSeparador(slot, cap, num) {
+    let lista = obtenerSeparadores().filter(s => s.slot !== slot);
+    lista.push({ slot: slot, libro: libroActual.id, nombreLibro: libroActual.nombre, capitulo: cap, verso: num });
     guardarSeparadores(lista);
-    if (elBoton) elBoton.classList.toggle('activa', !yaAqui);
+  }
+
+  function quitarSeparador(slot) {
+    guardarSeparadores(obtenerSeparadores().filter(s => s.slot !== slot));
+  }
+
+  // --- Arrastre de las cintas de separador ---
+  const rinconSeparadores = document.getElementById('rincon-separadores');
+  let arrastreCinta = null; // { slot, origenColocado: bool, el, capOrigen, numOrigen }
+
+  function obtenerPuntoEvento(e) {
+    if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    if (e.changedTouches && e.changedTouches.length) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function dentroDe(rect, x, y) {
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+  }
+
+  function iniciarArrastreCinta(e, slot, origenEl, origenColocado, capOrigen, numOrigen) {
+    e.preventDefault();
+    e.stopPropagation();
+    const punto = obtenerPuntoEvento(e);
+    const clon = document.createElement('div');
+    clon.className = `cinta-arrastrando es-slot-${slot}`;
+    clon.style.left = punto.x + 'px';
+    clon.style.top = punto.y + 'px';
+    document.body.appendChild(clon);
+    if (origenColocado) origenEl.classList.add('arrastrando-origen');
+    else origenEl.classList.add('oculta');
+    arrastreCinta = { slot, origenColocado, origenEl, capOrigen, numOrigen, clon };
+    document.addEventListener('touchmove', moverArrastreCinta, { passive: false });
+    document.addEventListener('touchend', terminarArrastreCinta);
+    document.addEventListener('touchcancel', cancelarArrastreCinta);
+    document.addEventListener('mousemove', moverArrastreCinta);
+    document.addEventListener('mouseup', terminarArrastreCinta);
+  }
+
+  function moverArrastreCinta(e) {
+    if (!arrastreCinta) return;
+    e.preventDefault();
+    const punto = obtenerPuntoEvento(e);
+    arrastreCinta.clon.style.left = punto.x + 'px';
+    arrastreCinta.clon.style.top = punto.y + 'px';
+
+    main.querySelectorAll('.verso.objetivo-cinta').forEach(el => el.classList.remove('objetivo-cinta'));
+    rinconSeparadores.classList.remove('resaltado-quitar');
+    arrastreCinta.clon.classList.remove('soltando-para-quitar');
+
+    if (arrastreCinta.origenColocado && dentroDe(rinconSeparadores.getBoundingClientRect(), punto.x, punto.y)) {
+      rinconSeparadores.classList.add('resaltado-quitar');
+      arrastreCinta.clon.classList.add('soltando-para-quitar');
+      return;
+    }
+    const elDebajo = document.elementFromPoint(punto.x, punto.y);
+    const elVerso = elDebajo ? elDebajo.closest('.verso') : null;
+    if (elVerso) elVerso.classList.add('objetivo-cinta');
+  }
+
+  function limpiarArrastreCinta() {
+    if (!arrastreCinta) return;
+    arrastreCinta.clon.remove();
+    arrastreCinta.origenEl.classList.remove('oculta', 'arrastrando-origen');
+    main.querySelectorAll('.verso.objetivo-cinta').forEach(el => el.classList.remove('objetivo-cinta'));
+    rinconSeparadores.classList.remove('resaltado-quitar');
+    document.removeEventListener('touchmove', moverArrastreCinta);
+    document.removeEventListener('touchend', terminarArrastreCinta);
+    document.removeEventListener('touchcancel', cancelarArrastreCinta);
+    document.removeEventListener('mousemove', moverArrastreCinta);
+    document.removeEventListener('mouseup', terminarArrastreCinta);
+    arrastreCinta = null;
+  }
+
+  function cancelarArrastreCinta() {
+    limpiarArrastreCinta();
+  }
+
+  function terminarArrastreCinta(e) {
+    if (!arrastreCinta) return;
+    const { slot, origenColocado, capOrigen, numOrigen } = arrastreCinta;
+    const punto = obtenerPuntoEvento(e);
+    const seSuelta = dentroDe(rinconSeparadores.getBoundingClientRect(), punto.x, punto.y);
+
+    if (origenColocado && seSuelta) {
+      limpiarArrastreCinta();
+      quitarSeparador(slot);
+      reaplicarMarcas();
+      actualizarRinconSeparadores();
+      mostrarToast(`Separador ${slot} quitado`);
+      return;
+    }
+
+    const elDebajo = document.elementFromPoint(punto.x, punto.y);
+    const elVerso = elDebajo ? elDebajo.closest('.verso') : null;
+    limpiarArrastreCinta();
+
+    if (!elVerso) {
+      // Se soltó en un lugar sin versículo ni rincón: no pasa nada, vuelve a su sitio.
+      return;
+    }
+    const cap = parseInt(elVerso.dataset.cap, 10);
+    const num = parseInt(elVerso.dataset.num, 10);
+    if (origenColocado && cap === capOrigen && num === numOrigen) return; // soltado en el mismo lugar
+
+    colocarSeparador(slot, cap, num);
     reaplicarMarcas();
-    mostrarToast(yaAqui ? `Separador ${slot} quitado` : `Separador ${slot} colocado`);
+    actualizarRinconSeparadores();
+    mostrarToast(`Separador ${slot} ${origenColocado ? 'movido a' : 'colocado en'} ${libroActual.nombre} ${cap}:${num}`);
+  }
+
+  [1, 2].forEach(slot => {
+    const mango = document.getElementById(`mango-sep-${slot}`);
+    mango.addEventListener('touchstart', (e) => iniciarArrastreCinta(e, slot, mango, false), { passive: false });
+    mango.addEventListener('mousedown', (e) => iniciarArrastreCinta(e, slot, mango, false));
+  });
+
+  function actualizarRinconSeparadores() {
+    rinconSeparadores.classList.remove('oculta');
+    const lista = obtenerSeparadores();
+    [1, 2].forEach(slot => {
+      const mango = document.getElementById(`mango-sep-${slot}`);
+      const colocado = lista.some(s => s.slot === slot);
+      mango.classList.toggle('oculta', colocado);
+    });
+  }
+
+  function ocultarRinconSeparadores() {
+    rinconSeparadores.classList.add('oculta');
   }
 
   // --- Notas por versículo ---
@@ -1431,14 +1630,27 @@
       const num = parseInt(elVerso.dataset.num, 10);
       const marcaVieja = elVerso.querySelector('.marcas-verso');
       if (marcaVieja) marcaVieja.remove();
-      const slot = separadorEnVerso(libroActual.id, capActual, num);
+      const cintaVieja = elVerso.querySelector('.cinta-colocada');
+      if (cintaVieja) cintaVieja.remove();
+
       const nota = notaDeVerso(libroActual.id, capActual, num);
-      if (slot || nota) {
+      if (nota) {
         const marcas = document.createElement('span');
         marcas.className = 'marcas-verso';
-        marcas.innerHTML = (slot ? `<span class="marca-separador">${slot}</span>` : '') + (nota ? '<span class="marca-nota">✎</span>' : '');
+        marcas.innerHTML = '<span class="marca-nota">✎</span>';
         const spanNum = elVerso.querySelector('.num');
         if (spanNum) spanNum.insertAdjacentElement('afterend', marcas);
+      }
+
+      const slot = separadorEnVerso(libroActual.id, capActual, num);
+      if (slot) {
+        const cinta = document.createElement('div');
+        cinta.className = 'cinta-colocada';
+        cinta.dataset.slot = String(slot);
+        cinta.setAttribute('aria-label', `Separador ${slot} en este versículo. Mantén presionado para moverlo.`);
+        cinta.addEventListener('touchstart', (e) => iniciarArrastreCinta(e, slot, cinta, true, capActual, num), { passive: false });
+        cinta.addEventListener('mousedown', (e) => iniciarArrastreCinta(e, slot, cinta, true, capActual, num));
+        elVerso.appendChild(cinta);
       }
     });
   }
@@ -1538,13 +1750,14 @@
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
+    ocultarRinconSeparadores();
     const lista = obtenerSeparadores();
     const filas = [1, 2].map(slot => {
       const sep = lista.find(s => s.slot === slot);
       if (!sep) {
-        return `<div class="item-guardado vacio"><span class="num-separador">Separador ${slot}</span><span class="ref-guardado">Sin usar todavía</span></div>`;
+        return `<div class="item-guardado vacio"><span class="num-separador slot-${slot}">Separador ${slot}</span><span class="ref-guardado">Sin usar todavía</span></div>`;
       }
-      return `<div class="item-guardado" onclick="irAVersoGuardado('${sep.libro}', ${sep.capitulo}, ${sep.verso})"><span class="num-separador">Separador ${slot}</span><span class="ref-guardado">${sep.nombreLibro} ${sep.capitulo}:${sep.verso}</span></div>`;
+      return `<div class="item-guardado" onclick="irAVersoGuardado('${sep.libro}', ${sep.capitulo}, ${sep.verso})"><span class="num-separador slot-${slot}">Separador ${slot}</span><span class="ref-guardado">${sep.nombreLibro} ${sep.capitulo}:${sep.verso}</span></div>`;
     }).join('');
     main.innerHTML = `<div class="lista-guardados">${filas}</div>`;
     main.scrollTop = 0;
@@ -1558,6 +1771,7 @@
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
+    ocultarRinconSeparadores();
     const notas = obtenerNotas().slice().sort((a, b) => b.fecha - a.fecha);
     if (!notas.length) {
       main.innerHTML = '<div class="lista-guardados"><div class="item-guardado vacio"><span class="ref-guardado">Todavía no tienes notas guardadas.</span></div></div>';
@@ -1683,6 +1897,7 @@
     `;
     main.scrollTop = 0;
     reaplicarMarcas();
+    actualizarRinconSeparadores();
 
     indIzq.classList.toggle('visible', !esPrimero);
     indDer.classList.toggle('visible', !esUltimo);
@@ -1790,12 +2005,11 @@
     const numCap = parseInt(elVerso.dataset.cap, 10);
     const num = parseInt(elVerso.dataset.num, 10);
     const fav = esFavorito(libroActual.id, numCap, num);
-    const slotActivo = separadorEnVerso(libroActual.id, numCap, num);
     const tieneNota = !!notaDeVerso(libroActual.id, numCap, num);
 
     const popup = document.createElement('span');
     popup.className = 'popup-verso';
-    popup.innerHTML = `<span class="estrella-fav ${fav ? 'activa' : ''}" aria-label="Marcar como favorito"><svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span><span class="compartir-verso" aria-label="Compartir versículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="19" r="2.6"></circle><line x1="8.3" y1="10.7" x2="15.7" y2="6.3"></line><line x1="8.3" y1="13.3" x2="15.7" y2="17.7"></line></svg></span><span class="separador-btn ${slotActivo===1?'activa':''}" aria-label="Separador 1">1</span><span class="separador-btn ${slotActivo===2?'activa':''}" aria-label="Separador 2">2</span><span class="nota-btn ${tieneNota?'activa':''}" aria-label="Agregar nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4V4z"></path><path d="M16 4v4h4"></path><line x1="7.5" y1="12" x2="16.5" y2="12"></line><line x1="7.5" y1="15.5" x2="14" y2="15.5"></line></svg></span>`;
+    popup.innerHTML = `<span class="estrella-fav ${fav ? 'activa' : ''}" aria-label="Marcar como favorito"><svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span><span class="compartir-verso" aria-label="Compartir versículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="19" r="2.6"></circle><line x1="8.3" y1="10.7" x2="15.7" y2="6.3"></line><line x1="8.3" y1="13.3" x2="15.7" y2="17.7"></line></svg></span><span class="nota-btn ${tieneNota?'activa':''}" aria-label="Agregar nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4V4z"></path><path d="M16 4v4h4"></path><line x1="7.5" y1="12" x2="16.5" y2="12"></line><line x1="7.5" y1="15.5" x2="14" y2="15.5"></line></svg></span>`;
 
     const btnEstrella = popup.querySelector('.estrella-fav');
     btnEstrella.addEventListener('click', (e) => {
@@ -1806,17 +2020,6 @@
     btnCompartir.addEventListener('click', (e) => {
       e.stopPropagation();
       compartirVerso(numCap, num);
-    });
-    const [btnSep1, btnSep2] = popup.querySelectorAll('.separador-btn');
-    btnSep1.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleSeparador(1, numCap, num, btnSep1);
-      btnSep2.classList.remove('activa');
-    });
-    btnSep2.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleSeparador(2, numCap, num, btnSep2);
-      btnSep1.classList.remove('activa');
     });
     const btnNota = popup.querySelector('.nota-btn');
     btnNota.addEventListener('click', (e) => {
