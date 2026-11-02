@@ -2039,6 +2039,8 @@
   });
 
   main.addEventListener('touchstart', (e) => {
+    if (arrastreCinta) return; // una cinta de separador se está arrastrando: no interferir
+
     toqueInicioX = e.changedTouches[0].screenX;
     toqueInicioY = e.changedTouches[0].screenY;
 
@@ -2053,6 +2055,7 @@
   }, { passive: true });
 
   main.addEventListener('touchmove', (e) => {
+    if (arrastreCinta) return;
     if (!temporizadorPresion) return;
     const dx = Math.abs(e.changedTouches[0].screenX - toqueInicioX);
     const dy = Math.abs(e.changedTouches[0].screenY - toqueInicioY);
@@ -2063,6 +2066,7 @@
   }, { passive: true });
 
   main.addEventListener('touchend', (e) => {
+    if (arrastreCinta) return;
     if (temporizadorPresion) { clearTimeout(temporizadorPresion); temporizadorPresion = null; }
 
     if (capActual === null) return;
@@ -2083,6 +2087,7 @@
   }, { passive: true });
 
   main.addEventListener('touchcancel', () => {
+    if (arrastreCinta) return;
     if (temporizadorPresion) { clearTimeout(temporizadorPresion); temporizadorPresion = null; }
   }, { passive: true });
 
