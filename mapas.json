@@ -135,7 +135,7 @@
     "id": "reino-unido",
     "titulo": "El Reino Unido",
     "referencia": "1 Samuel 10 - 1 Reyes 8",
-    "descripcion": "El breve período en que las doce tribus de Israel estuvieron unidas bajo un solo rey: primero Saúl, luego David y finalmente Salomón. El mapa muestra el territorio de cada una de las doce tribus. Al morir Salomón, el reino se dividirá en dos: Israel al norte y Judá al sur.",
+    "descripcion": "El breve período en que las doce tribus de Israel estuvieron unidas bajo un solo rey: primero Saúl, luego David y finalmente Salomón. El mapa muestra el territorio de cada una de las doce tribus, y al oeste, la tierra de los filisteos, el principal enemigo de Israel en esta época. Al morir Salomón, el reino se dividirá en dos: Israel al norte y Judá al sur.",
     "imagen": "mapas/reino-unido-fondo.jpg",
     "ancho": 1086,
     "alto": 1448,
@@ -143,8 +143,8 @@
       {
         "id": "gabaa",
         "nombre": "Gabaa",
-        "x": 55,
-        "y": 53,
+        "x": 54,
+        "y": 52,
         "info": "Aquí vivía Saúl, el primer rey de Israel, ungido por Samuel.",
         "libro": "1s",
         "capitulo": 10
@@ -166,6 +166,15 @@
         "info": "David conquistó esta fortaleza jebusea e hizo de ella la Ciudad de David. Después, su hijo Salomón edificó aquí el templo de Jehová.",
         "libro": "2s",
         "capitulo": 5
+      },
+      {
+        "id": "belen",
+        "nombre": "Belén",
+        "x": 51,
+        "y": 64,
+        "info": "Aquí el profeta Samuel ungió en secreto al joven David, hijo de Isaí, como el futuro rey de Israel.",
+        "libro": "1s",
+        "capitulo": 16
       },
       {
         "id": "hebron",
