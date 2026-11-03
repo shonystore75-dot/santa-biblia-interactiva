@@ -144,10 +144,19 @@
         "id": "gabaa",
         "nombre": "Gabaa",
         "x": 54,
-        "y": 52,
+        "y": 47.6,
         "info": "Aquí vivía Saúl, el primer rey de Israel, ungido por Samuel.",
         "libro": "1s",
         "capitulo": 10
+      },
+      {
+        "id": "belen",
+        "nombre": "Belén",
+        "x": 57,
+        "y": 64.2,
+        "info": "Aquí el profeta Samuel ungió en secreto al joven David, hijo de Isaí, como el futuro rey de Israel.",
+        "libro": "1s",
+        "capitulo": 16
       },
       {
         "id": "vallealcornoque",
@@ -159,24 +168,6 @@
         "capitulo": 17
       },
       {
-        "id": "jerusalen",
-        "nombre": "Jerusalén",
-        "x": 56,
-        "y": 59,
-        "info": "David conquistó esta fortaleza jebusea e hizo de ella la Ciudad de David. Después, su hijo Salomón edificó aquí el templo de Jehová.",
-        "libro": "2s",
-        "capitulo": 5
-      },
-      {
-        "id": "belen",
-        "nombre": "Belén",
-        "x": 51,
-        "y": 64,
-        "info": "Aquí el profeta Samuel ungió en secreto al joven David, hijo de Isaí, como el futuro rey de Israel.",
-        "libro": "1s",
-        "capitulo": 16
-      },
-      {
         "id": "hebron",
         "nombre": "Hebrón",
         "x": 46,
@@ -184,6 +175,15 @@
         "info": "Aquí los hombres de Judá ungieron a David como rey sobre la casa de Judá.",
         "libro": "2s",
         "capitulo": 2
+      },
+      {
+        "id": "jerusalen",
+        "nombre": "Jerusalén",
+        "x": 58.4,
+        "y": 57.1,
+        "info": "David conquistó esta fortaleza jebusea e hizo de ella la Ciudad de David. Después, su hijo Salomón edificó aquí el templo de Jehová.",
+        "libro": "2s",
+        "capitulo": 5
       }
     ],
     "mostrarRuta": false
