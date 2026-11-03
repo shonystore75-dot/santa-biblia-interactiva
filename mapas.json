@@ -29,8 +29,8 @@
       {
         "id": "canaan",
         "nombre": "Canaán",
-        "x": 23,
-        "y": 59,
+        "x": 19,
+        "y": 64,
         "info": "La tierra que Dios le prometió mostrarle a Abram, donde finalmente se estableció y Dios renovó su pacto con él.",
         "libro": "gn",
         "capitulo": 12
@@ -143,8 +143,8 @@
       {
         "id": "gabaa",
         "nombre": "Gabaa",
-        "x": 52,
-        "y": 50,
+        "x": 55,
+        "y": 53,
         "info": "Aquí vivía Saúl, el primer rey de Israel, ungido por Samuel.",
         "libro": "1s",
         "capitulo": 10
@@ -161,8 +161,8 @@
       {
         "id": "jerusalen",
         "nombre": "Jerusalén",
-        "x": 53,
-        "y": 56,
+        "x": 56,
+        "y": 59,
         "info": "David conquistó esta fortaleza jebusea e hizo de ella la Ciudad de David. Después, su hijo Salomón edificó aquí el templo de Jehová.",
         "libro": "2s",
         "capitulo": 5
@@ -170,8 +170,8 @@
       {
         "id": "hebron",
         "nombre": "Hebrón",
-        "x": 43,
-        "y": 75,
+        "x": 46,
+        "y": 77,
         "info": "Aquí los hombres de Judá ungieron a David como rey sobre la casa de Judá.",
         "libro": "2s",
         "capitulo": 2
