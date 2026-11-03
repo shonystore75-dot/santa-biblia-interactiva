@@ -152,8 +152,8 @@
       {
         "id": "vallealcornoque",
         "nombre": "Valle del Alcornoque",
-        "x": 33,
-        "y": 74,
+        "x": 31,
+        "y": 73,
         "info": "En este valle, el joven David venció al gigante filisteo Goliat con una honda y una piedra.",
         "libro": "1s",
         "capitulo": 17
@@ -170,8 +170,8 @@
       {
         "id": "hebron",
         "nombre": "Hebrón",
-        "x": 47,
-        "y": 72,
+        "x": 43,
+        "y": 75,
         "info": "Aquí los hombres de Judá ungieron a David como rey sobre la casa de Judá.",
         "libro": "2s",
         "capitulo": 2
