@@ -780,9 +780,10 @@
         <p class="cuerpo-mapa">${m.descripcion}</p>
         <div class="panel-mapa" style="--ar:${ar};" onclick="abrirVisor('${m.id}')">
           ${imagenPanel}
+          ${m.mostrarRuta !== false ? `
           <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
             <polyline points="${puntosStr}"></polyline>
-          </svg>
+          </svg>` : ''}
           ${pines}
           <div class="lupa-ampliar">⤢</div>
         </div>
@@ -872,9 +873,10 @@
 
     visorContenido.style.backgroundImage = m.imagen ? `url('${m.imagen}')` : '';
     visorContenido.innerHTML = `
+      ${m.mostrarRuta !== false ? `
       <svg class="ruta-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
         <polyline points="${puntosStr}"></polyline>
-      </svg>
+      </svg>` : ''}
       ${pines}
     `;
 

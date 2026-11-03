@@ -176,6 +176,7 @@
         "libro": "2s",
         "capitulo": 2
       }
-    ]
+    ],
+    "mostrarRuta": false
   }
 ]
