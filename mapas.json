@@ -187,5 +187,71 @@
       }
     ],
     "mostrarRuta": false
+  },
+  {
+    "id": "reino-dividido",
+    "titulo": "El Reino Dividido",
+    "referencia": "1 Reyes 12 - 19",
+    "descripcion": "Tras la muerte de Salomón, el reino se dividió en dos: Israel, con diez tribus al norte bajo Jeroboam, y Judá, con Judá y Benjamín al sur bajo Roboam, con Jerusalén como su capital. Jeroboam levantó centros de adoración rivales en Betel y Dan, y más tarde el rey Omri fundó Samaria como nueva capital de Israel.",
+    "imagen": "mapas/reino-dividido-fondo.jpg",
+    "ancho": 1086,
+    "alto": 1448,
+    "puntos": [
+      {
+        "id": "siquem",
+        "nombre": "Siquem",
+        "x": 50.4,
+        "y": 39.9,
+        "info": "Aquí todo Israel rechazó a Roboam, hijo de Salomón, y proclamó rey a Jeroboam, dividiendo el reino en dos.",
+        "libro": "1r",
+        "capitulo": 12
+      },
+      {
+        "id": "betel",
+        "nombre": "Betel",
+        "x": 52.3,
+        "y": 47,
+        "info": "Jeroboam puso aquí uno de los dos becerros de oro, para que el pueblo de Israel no subiera a adorar a Jerusalén.",
+        "libro": "1r",
+        "capitulo": 12
+      },
+      {
+        "id": "dan",
+        "nombre": "Dan",
+        "x": 43.6,
+        "y": 9.5,
+        "info": "Aquí Jeroboam puso el otro becerro de oro, en el extremo norte del reino de Israel.",
+        "libro": "1r",
+        "capitulo": 12
+      },
+      {
+        "id": "jerusalen",
+        "nombre": "Jerusalén",
+        "x": 44,
+        "y": 59.3,
+        "info": "Roboam siguió reinando aquí sobre Judá: la ciudad que Jehová había elegido para poner su nombre.",
+        "libro": "1r",
+        "capitulo": 14
+      },
+      {
+        "id": "samaria",
+        "nombre": "Samaria",
+        "x": 41.5,
+        "y": 33,
+        "info": "El rey Omri compró este monte y edificó aquí la nueva capital del reino de Israel.",
+        "libro": "1r",
+        "capitulo": 16
+      },
+      {
+        "id": "berseba",
+        "nombre": "Berseba",
+        "x": 29.9,
+        "y": 85.9,
+        "info": "Hasta aquí huyó el profeta Elías para salvar su vida, después de enfrentar a los profetas de Baal en el Monte Carmelo: \"vino a Beer-seba, que es en Judá\".",
+        "libro": "1r",
+        "capitulo": 19
+      }
+    ],
+    "mostrarRuta": false
   }
 ]
