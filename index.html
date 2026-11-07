@@ -805,7 +805,7 @@
       const libroInfo = indice.find(l => l.id === elegido.libro);
       const nombreLibro = (libroInfo ? libroInfo.nombre : elegido.libro).toUpperCase();
 
-      textoEl.textContent = verso[1];
+      textoEl.innerHTML = verso[1];
       refEl.textContent = `${nombreLibro} ${elegido.capitulo}:${elegido.versiculo} — Versículo de hoy`;
     } catch (e) {
       textoEl.textContent = 'Lámpara es a mis pies tu palabra, y lumbrera a mi camino.';
