@@ -577,6 +577,22 @@
     transform: translate(-50%, -22%) scale(0.7);
   }
   .verso { position: relative; }
+  .marca-nota-flotante {
+    position: absolute;
+    top: 34px;
+    right: -5vw;
+    width: 40px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 6;
+    pointer-events: none;
+  }
+  .marca-nota-flotante .marca-nota {
+    width: 18px;
+    text-align: center;
+    font-size: 18px;
+    margin-right: 0;
+  }
   .verso.objetivo-cinta {
     background: rgba(245,185,66,0.3);
     border-radius: 6px;
@@ -1708,10 +1724,9 @@
       const nota = notaDeVerso(libroActual.id, capActual, num);
       if (nota) {
         const marcas = document.createElement('span');
-        marcas.className = 'marcas-verso';
+        marcas.className = 'marcas-verso marca-nota-flotante';
         marcas.innerHTML = '<span class="marca-nota">✎</span>';
-        const spanNum = elVerso.querySelector('.num');
-        if (spanNum) spanNum.insertAdjacentElement('afterend', marcas);
+        elVerso.appendChild(marcas);
       }
 
       const slot = separadorEnVerso(libroActual.id, capActual, num);
