@@ -1697,6 +1697,8 @@
         marcas.innerHTML = '<span class="marca-nota"></span>';
         marcas.setAttribute('aria-label', 'Nota en este versículo. Toca para consultarla.');
         marcas.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+        marcas.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
+        marcas.addEventListener('touchend', (e) => { e.stopPropagation(); }, { passive: true });
         marcas.addEventListener('click', (e) => {
           e.stopPropagation();
           abrirModalNota(capActual, num);
