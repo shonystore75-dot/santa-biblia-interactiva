@@ -1624,6 +1624,12 @@
     const num = parseInt(elVerso.dataset.num, 10);
     if (origenColocado && cap === capOrigen && num === numOrigen) return; // soltado en el mismo lugar
 
+    const otroSlot = slot === 1 ? 2 : 1;
+    if (separadorEnVerso(libroActual.id, cap, num) === otroSlot) {
+      mostrarToast(`Ya hay un separador en ${libroActual.nombre} ${cap}:${num}`);
+      return;
+    }
+
     colocarSeparador(slot, cap, num);
     reaplicarMarcas();
     actualizarRinconSeparadores();
