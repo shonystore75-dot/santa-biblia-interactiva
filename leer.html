@@ -1136,6 +1136,7 @@
   let libroActual = null;
   let capActual = null;
   let cacheLibros = {};
+  let posicionesCapitulo = {}; // recuerda el scroll de cada capítulo ya leído en esta sesión
   let origenExterno = null; // { pagina: 'historias.html' } o { pagina: 'mapas.html', mapa, punto }
   let modoLecturaContinua = false; // true solo cuando se entró por la tarjeta "Continuar leyendo" de Inicio
   let enListaSeparadores = false;
@@ -1971,6 +1972,11 @@
   function abrirCapitulo(numCap, desdeBusqueda) {
     versoPresionado = null;
     vinoDeBusqueda = !!desdeBusqueda;
+
+    if (libroActual && capActual !== null) {
+      posicionesCapitulo[`${libroActual.id}:${capActual}`] = main.scrollTop;
+    }
+
     capActual = numCap;
     tituloHeader.textContent = `${libroActual.nombre} ${numCap}`;
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
@@ -2000,7 +2006,8 @@
       </div>
       <div class="btn-ir-verso-flotante" id="btn-ir-verso-flotante" onclick="mostrarGridVersos()" aria-label="Ir a un versículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="7" x2="19" y2="7"></line><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="17" x2="13" y2="17"></line></svg></div>
     `;
-    main.scrollTop = 0;
+    const posGuardada = posicionesCapitulo[`${libroActual.id}:${numCap}`];
+    main.scrollTop = (typeof posGuardada === 'number') ? posGuardada : 0;
     reaplicarMarcas();
     actualizarRinconSeparadores();
 
