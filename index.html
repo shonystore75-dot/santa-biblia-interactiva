@@ -729,7 +729,7 @@
     <main>
       <div class="versiculo-dia">
         <div class="llama">🔥</div>
-        <p class="versiculo-texto" id="versiculo-texto">Lámpara es a mis pies tu palabra, y lumbrera a mi camino.</p>
+        <div class="versiculo-texto" id="versiculo-texto">Lámpara es a mis pies tu palabra, y lumbrera a mi camino.</div>
         <p class="versiculo-ref" id="versiculo-ref">SALMOS 119:105 — Versículo de hoy</p>
       </div>
 
@@ -805,7 +805,8 @@
       const libroInfo = indice.find(l => l.id === elegido.libro);
       const nombreLibro = (libroInfo ? libroInfo.nombre : elegido.libro).toUpperCase();
 
-      textoEl.innerHTML = verso[1];
+      const matchEncabezado = verso[1].match(/^(<em>.*?<\/em>)\s*/);
+      textoEl.innerHTML = matchEncabezado ? verso[1].slice(matchEncabezado[0].length) : verso[1];
       refEl.textContent = `${nombreLibro} ${elegido.capitulo}:${elegido.versiculo} — Versículo de hoy`;
     } catch (e) {
       textoEl.textContent = 'Lámpara es a mis pies tu palabra, y lumbrera a mi camino.';
