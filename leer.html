@@ -579,7 +579,7 @@
   .verso { position: relative; }
   .marca-nota-flotante {
     position: absolute;
-    top: 34px;
+    top: 32px;
     right: -5vw;
     width: 40px;
     display: flex;
@@ -588,10 +588,18 @@
     pointer-events: none;
   }
   .marca-nota-flotante .marca-nota {
-    width: 18px;
-    text-align: center;
-    font-size: 18px;
-    margin-right: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+    color: #fff;
+    background: var(--terracota);
+    border-radius: 50% 50% 50% 4px;
+    box-shadow: 0 3px 7px rgba(61,31,62,0.35);
+    margin-right: 6px;
   }
   .verso.objetivo-cinta {
     background: rgba(245,185,66,0.3);
@@ -1863,17 +1871,21 @@
     indIzq.classList.remove('visible');
     indDer.classList.remove('visible');
     ocultarRinconSeparadores();
-    const notas = obtenerNotas().slice().sort((a, b) => b.fecha - a.fecha);
+    const ordenLibro = (libroId) => {
+      const i = indice.findIndex(l => l.id === libroId);
+      return i === -1 ? indice.length : i;
+    };
+    const notas = obtenerNotas().slice().sort((a, b) => {
+      return ordenLibro(a.libro) - ordenLibro(b.libro) || a.capitulo - b.capitulo || a.verso - b.verso;
+    });
     if (!notas.length) {
       main.innerHTML = '<div class="lista-guardados"><div class="item-guardado vacio"><span class="ref-guardado">Todavía no tienes notas guardadas.</span></div></div>';
       main.scrollTop = 0;
       return;
     }
-    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
     const filas = notas.map(n => `
       <div class="item-guardado" onclick="irAVersoGuardado('${n.libro}', ${n.capitulo}, ${n.verso})">
         <span class="ref-guardado">${n.nombreLibro} ${n.capitulo}:${n.verso}</span>
-        <span class="texto-nota-preview">${esc((n.texto || '').slice(0, 90))}</span>
       </div>
     `).join('');
     main.innerHTML = `<div class="lista-guardados">${filas}</div>`;
