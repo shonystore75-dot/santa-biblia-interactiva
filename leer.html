@@ -368,10 +368,6 @@
   }
   .num-capitulo .indicador-separador.slot-1 { right: 2px; }
   .num-capitulo .indicador-separador.slot-2 { right: 13px; }
-  .verso .num ~ .indicador-separador {
-    margin-left: 4px;
-    margin-right: 2px;
-  }
 
   /* Vista de lectura */
   #vista-lectura h2 {
@@ -1522,6 +1518,12 @@
     return Array.from(slots).sort();
   }
 
+  function separadoresEnVersoTodos(libroId, cap, num) {
+    const slots = new Set();
+    obtenerSeparadores().forEach(s => { if (s.libro === libroId && s.capitulo === cap && s.verso === num) slots.add(s.slot); });
+    return Array.from(slots).sort();
+  }
+
   function htmlIndicadoresSeparador(slots) {
     if (!slots.length) return '';
     return slots.map(s => `<span class="indicador-separador slot-${s}"></span>`).join('');
@@ -1702,8 +1704,6 @@
       if (marcaVieja) marcaVieja.remove();
       const cintaVieja = elVerso.querySelector('.cinta-colocada');
       if (cintaVieja) cintaVieja.remove();
-      const indicadorViejo = elVerso.querySelector('.indicador-separador');
-      if (indicadorViejo) indicadorViejo.remove();
 
       const nota = notaDeVerso(libroActual.id, capActual, num);
       if (nota) {
@@ -1716,11 +1716,6 @@
 
       const slot = separadorEnVerso(libroActual.id, capActual, num);
       if (slot) {
-        const indicador = document.createElement('span');
-        indicador.className = `indicador-separador slot-${slot}`;
-        const spanNum = elVerso.querySelector('.num');
-        if (spanNum) spanNum.insertAdjacentElement('afterend', indicador);
-
         const cinta = document.createElement('div');
         cinta.className = 'cinta-colocada';
         cinta.dataset.slot = String(slot);
@@ -1748,7 +1743,7 @@
     }
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === capActual);
-    const botones = capitulo.v.map(([num]) => `<div class="num-capitulo" onclick="irAVersoEnCapitulo(${num})">${num}</div>`).join('');
+    const botones = capitulo.v.map(([num]) => `<div class="num-capitulo" onclick="irAVersoEnCapitulo(${num})">${num}${htmlIndicadoresSeparador(separadoresEnVersoTodos(libroActual.id, capActual, num))}</div>`).join('');
     const overlay = document.createElement('div');
     overlay.className = 'overlay-pantalla visible';
     overlay.innerHTML = `
@@ -1778,7 +1773,7 @@
   function mostrarGridVersosParaCapitulo(numCap) {
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === numCap);
-    const botones = capitulo.v.map(([num]) => `<div class="num-capitulo" onclick="abrirCapituloEnVerso(${numCap}, ${num})">${num}</div>`).join('');
+    const botones = capitulo.v.map(([num]) => `<div class="num-capitulo" onclick="abrirCapituloEnVerso(${numCap}, ${num})">${num}${htmlIndicadoresSeparador(separadoresEnVersoTodos(libroActual.id, numCap, num))}</div>`).join('');
     const overlay = document.createElement('div');
     overlay.className = 'overlay-pantalla visible';
     overlay.innerHTML = `
