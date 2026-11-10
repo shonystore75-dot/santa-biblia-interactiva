@@ -331,6 +331,7 @@
     gap: 8px;
   }
   .num-capitulo {
+    position: relative;
     aspect-ratio: 1;
     background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
     border-radius: 4px 12px 4px 12px;
@@ -343,6 +344,29 @@
     box-shadow: 0 3px 8px rgba(61,31,62,0.12);
     cursor: pointer;
   }
+
+  /* Indicadores de separador (banderitas) reutilizados en lista de libros y grilla de capítulos */
+  .indicador-separador {
+    display: inline-block;
+    width: 9px;
+    height: 13px;
+    border-radius: 2px 2px 1px 1px;
+    clip-path: polygon(0 0, 100% 0, 100% 74%, 50% 100%, 0 74%);
+    vertical-align: middle;
+  }
+  .indicador-separador.slot-1 { background: var(--terracota); }
+  .indicador-separador.slot-2 { background: var(--dorado); }
+  .item-libro .nombre .indicador-separador {
+    margin-left: 6px;
+  }
+  .num-capitulo .indicador-separador {
+    position: absolute;
+    top: 3px;
+    width: 7px;
+    height: 10px;
+  }
+  .num-capitulo .indicador-separador.slot-1 { right: 3px; }
+  .num-capitulo .indicador-separador.slot-2 { right: 12px; }
 
   /* Vista de lectura */
   #vista-lectura h2 {
@@ -1213,7 +1237,7 @@
       <div class="lista-libros">
         ${libros.map(l => `
           <div class="item-libro" onclick="abrirLibro('${l.id}')">
-            <span class="nombre">${l.nombre}</span>
+            <span class="nombre">${l.nombre}${htmlIndicadoresSeparador(separadoresEnLibro(l.id))}</span>
             <span class="caps">${l.capitulos} cap.</span>
           </div>
         `).join('')}
@@ -1247,7 +1271,7 @@
     const total = libroActual.capitulos;
     let botones = '';
     for (let i = 1; i <= total; i++) {
-      botones += `<div class="num-capitulo" onclick="mostrarGridVersosParaCapitulo(${i})">${i}</div>`;
+      botones += `<div class="num-capitulo" onclick="mostrarGridVersosParaCapitulo(${i})">${i}${htmlIndicadoresSeparador(separadoresEnCapitulo(id, i))}</div>`;
     }
     main.innerHTML = `<div class="grid-capitulos">${botones}</div>`;
     main.scrollTop = 0;
@@ -1479,6 +1503,23 @@
   function separadorEnVerso(libroId, cap, num) {
     const sep = obtenerSeparadores().find(s => s.libro === libroId && s.capitulo === cap && s.verso === num);
     return sep ? sep.slot : null;
+  }
+
+  function separadoresEnLibro(libroId) {
+    const slots = new Set();
+    obtenerSeparadores().forEach(s => { if (s.libro === libroId) slots.add(s.slot); });
+    return Array.from(slots).sort();
+  }
+
+  function separadoresEnCapitulo(libroId, cap) {
+    const slots = new Set();
+    obtenerSeparadores().forEach(s => { if (s.libro === libroId && s.capitulo === cap) slots.add(s.slot); });
+    return Array.from(slots).sort();
+  }
+
+  function htmlIndicadoresSeparador(slots) {
+    if (!slots.length) return '';
+    return slots.map(s => `<span class="indicador-separador slot-${s}"></span>`).join('');
   }
 
   function colocarSeparador(slot, cap, num) {
