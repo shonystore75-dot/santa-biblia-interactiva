@@ -859,31 +859,6 @@
   #nav-guia { background-image: url('nav-guia.png'); }
   #nav-favoritos { background-image: url('nav-favoritos.png'); }
 
-  .indicador-deslizar {
-    display: none;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    background: rgba(61,31,62,0.4);
-    color: var(--dorado-brillante);
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 5;
-    animation: respirar 2.4s ease-in-out infinite;
-  }
-  .indicador-deslizar.visible { display: flex; }
-  .indicador-deslizar svg { width: 16px; height: 16px; }
-  .indicador-izquierda { left: 2vw; }
-  .indicador-derecha { right: 2vw; }
-
-  @keyframes respirar {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 0.8; }
-  }
-
   .espacio-publicidad {
     flex: 0 0 auto;
     margin: 0 5vw 1vh;
@@ -1102,9 +1077,6 @@
       <div class="cargando">Cargando libros…</div>
     </main>
 
-    <div class="indicador-deslizar indicador-izquierda" id="ind-izq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
-    <div class="indicador-deslizar indicador-derecha" id="ind-der"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-
     <div class="toast-copiado" id="toast-copiado">Versículo copiado</div>
 
     <div class="espacio-publicidad" id="espacio-publicidad">
@@ -1128,8 +1100,6 @@
   const btnAtras = document.getElementById('btn-atras');
   const tituloHeader = document.getElementById('titulo-header');
   const subtituloHeader = document.getElementById('subtitulo-header');
-  const indIzq = document.getElementById('ind-izq');
-  const indDer = document.getElementById('ind-der');
 
   let indice = [];
   let testamentoActivo = 'AT';
@@ -1246,8 +1216,6 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Leer';
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
-    indIzq.classList.remove('visible');
-    indDer.classList.remove('visible');
     ocultarRinconSeparadores();
 
     const libros = indice.filter(l => l.testamento === testamentoActivo);
@@ -1280,8 +1248,6 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = libroActual.nombre;
     subtituloHeader.textContent = `${libroActual.capitulos} capítulos`;
-    indIzq.classList.remove('visible');
-    indDer.classList.remove('visible');
     ocultarRinconSeparadores();
 
     if (!cacheLibros[id]) {
@@ -1347,8 +1313,6 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Buscar';
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
-    indIzq.classList.remove('visible');
-    indDer.classList.remove('visible');
     ocultarRinconSeparadores();
 
     const consultaPrevia = (conservarEstado && busquedaUltima) ? busquedaUltima.consulta : '';
@@ -1850,8 +1814,6 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Mis separadores';
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
-    indIzq.classList.remove('visible');
-    indDer.classList.remove('visible');
     ocultarRinconSeparadores();
     const lista = obtenerSeparadores();
     const filas = [1, 2].map(slot => {
@@ -1871,8 +1833,6 @@
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Mis notas';
     subtituloHeader.textContent = 'Reina Valera 1909 · Edición 2026';
-    indIzq.classList.remove('visible');
-    indDer.classList.remove('visible');
     ocultarRinconSeparadores();
     const ordenLibro = (libroId) => {
       const i = indice.findIndex(l => l.id === libroId);
@@ -2011,9 +1971,6 @@
     reaplicarMarcas();
     actualizarRinconSeparadores();
 
-    indIzq.classList.toggle('visible', !esPrimero);
-    indDer.classList.toggle('visible', !esUltimo);
-
     if (modoLecturaContinua) {
       try {
         localStorage.setItem('ultimaLectura', JSON.stringify({
@@ -2024,16 +1981,6 @@
       } catch (e) {}
     }
   }
-
-  indIzq.addEventListener('click', () => {
-    if (capActual === null || capActual === 1) return;
-    abrirCapitulo(capActual - 1);
-  });
-
-  indDer.addEventListener('click', () => {
-    if (capActual === null || capActual === libroActual.capitulos) return;
-    abrirCapitulo(capActual + 1);
-  });
 
   btnAtras.addEventListener('click', () => {
     if (origenExterno) {
