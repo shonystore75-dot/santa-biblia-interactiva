@@ -345,14 +345,15 @@
     cursor: pointer;
   }
 
-  /* Indicadores de separador (banderitas) reutilizados en lista de libros y grilla de capítulos */
+  /* Indicadores de separador (banderitas) reutilizados en lista de libros, grilla de capítulos y versículos */
   .indicador-separador {
     display: inline-block;
-    width: 9px;
-    height: 13px;
+    width: 13px;
+    height: 18px;
     border-radius: 2px 2px 1px 1px;
     clip-path: polygon(0 0, 100% 0, 100% 74%, 50% 100%, 0 74%);
     vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
   }
   .indicador-separador.slot-1 { background: var(--terracota); }
   .indicador-separador.slot-2 { background: var(--dorado); }
@@ -361,12 +362,16 @@
   }
   .num-capitulo .indicador-separador {
     position: absolute;
-    top: 3px;
-    width: 7px;
-    height: 10px;
+    top: 2px;
+    width: 10px;
+    height: 14px;
   }
-  .num-capitulo .indicador-separador.slot-1 { right: 3px; }
-  .num-capitulo .indicador-separador.slot-2 { right: 12px; }
+  .num-capitulo .indicador-separador.slot-1 { right: 2px; }
+  .num-capitulo .indicador-separador.slot-2 { right: 13px; }
+  .verso .num ~ .indicador-separador {
+    margin-left: 4px;
+    margin-right: 2px;
+  }
 
   /* Vista de lectura */
   #vista-lectura h2 {
@@ -1697,6 +1702,8 @@
       if (marcaVieja) marcaVieja.remove();
       const cintaVieja = elVerso.querySelector('.cinta-colocada');
       if (cintaVieja) cintaVieja.remove();
+      const indicadorViejo = elVerso.querySelector('.indicador-separador');
+      if (indicadorViejo) indicadorViejo.remove();
 
       const nota = notaDeVerso(libroActual.id, capActual, num);
       if (nota) {
@@ -1709,6 +1716,11 @@
 
       const slot = separadorEnVerso(libroActual.id, capActual, num);
       if (slot) {
+        const indicador = document.createElement('span');
+        indicador.className = `indicador-separador slot-${slot}`;
+        const spanNum = elVerso.querySelector('.num');
+        if (spanNum) spanNum.insertAdjacentElement('afterend', indicador);
+
         const cinta = document.createElement('div');
         cinta.className = 'cinta-colocada';
         cinta.dataset.slot = String(slot);
