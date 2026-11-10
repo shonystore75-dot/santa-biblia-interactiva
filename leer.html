@@ -1973,7 +1973,7 @@
     versoPresionado = null;
     vinoDeBusqueda = !!desdeBusqueda;
 
-    if (libroActual && capActual !== null) {
+    if (libroActual && capActual !== null && main.querySelector('#vista-lectura')) {
       posicionesCapitulo[`${libroActual.id}:${capActual}`] = main.scrollTop;
     }
 
