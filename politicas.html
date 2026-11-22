@@ -63,6 +63,15 @@
     overflow: hidden;
   }
 
+  /* Franja morada bajo el contenido: es el fondo de la barra de navegación de
+     Android (íconos claros), igual que el menú inferior de las demás pantallas. */
+  .phone::after {
+    content: '';
+    flex: 0 0 auto;
+    height: env(safe-area-inset-bottom);
+    background: var(--ciruela);
+  }
+
   @media (min-width: 500px) {
     html, body { height: auto; }
     body { padding: 24px 0; }

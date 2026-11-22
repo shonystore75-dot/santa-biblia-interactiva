@@ -69,13 +69,21 @@ public class MainActivity extends BridgeActivity {
         if (hasFocus) ocultarBarraDeEstado();
     }
 
-    /** Oculta solo la barra de estado; al deslizar desde arriba aparece un momento y se vuelve a ir. */
+    /** Oculta solo la barra de estado y deja la de navegación con íconos claros; al deslizar desde arriba aparece un momento y se vuelve a ir. */
     private void ocultarBarraDeEstado() {
         Window ventana = getWindow();
         WindowInsetsControllerCompat controlador = WindowCompat.getInsetsController(ventana, ventana.getDecorView());
         controlador.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         controlador.hide(WindowInsetsCompat.Type.statusBars());
         controlador.show(WindowInsetsCompat.Type.navigationBars());
+        // Íconos claros en la barra de navegación: el fondo de la app ahí es siempre morado oscuro.
+        // Barra transparente: se ve el morado del menú y Xiaomi elige íconos claros (con el color
+        // por defecto de la barra los pintaba oscuros aunque se pidieran claros).
+        ventana.setNavigationBarColor(Color.TRANSPARENT);
+        controlador.setAppearanceLightNavigationBars(false);
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+            ventana.setNavigationBarContrastEnforced(false);
+        }
     }
 
     private void mostrarVideoDeBienvenida() {

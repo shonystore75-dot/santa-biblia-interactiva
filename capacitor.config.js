@@ -11,7 +11,8 @@ const config = {
   plugins: {
     // Las páginas usan viewport-fit=cover (pantalla completa bajo la barra de estado
     // oculta): se avisa de antemano para evitar un salto de diseño al cargar.
-    SystemBars: { initialViewportFitValueHint: 'cover' },
+    // style 'DARK' = íconos claros en las barras del sistema (el fondo es morado oscuro).
+    SystemBars: { initialViewportFitValueHint: 'cover', style: 'DARK' },
   },
 };
 
