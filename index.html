@@ -144,10 +144,16 @@
     display: flex;
     flex-direction: column;
     gap: 2.2vh;
-    padding: 1.8vh 5vw 1.6vh;
+    padding: 1.8vh 5vw calc(2.4vh + 16px);
     margin-top: -18px;
     position: relative;
     z-index: 3;
+  }
+  /* Pista de que hay más contenido abajo: el borde inferior se desvanece mientras queda algo por
+     desplazar (la clase la pone el script de abajo y se quita al llegar al final). */
+  main.mas-abajo {
+    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 46px), transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 46px), transparent 100%);
   }
   main::-webkit-scrollbar { width: 6px; }
   main::-webkit-scrollbar-track { background: rgba(185,80,46,0.08); }
@@ -980,6 +986,23 @@
   iniciarCarruselExplorar();
 
   cargarVersiculoDelDia();
+
+  // Degradado inferior de la pantalla de inicio: solo mientras haya contenido por desplazar.
+  (function () {
+    const principal = document.querySelector('main');
+    function actualizarPista() {
+      const resta = principal.scrollHeight - principal.scrollTop - principal.clientHeight;
+      principal.classList.toggle('mas-abajo', resta > 8);
+    }
+    principal.addEventListener('scroll', actualizarPista, { passive: true });
+    window.addEventListener('resize', actualizarPista);
+    if (window.ResizeObserver) {
+      const obs = new ResizeObserver(actualizarPista);
+      obs.observe(principal);
+      Array.from(principal.children).forEach(h => obs.observe(h));
+    }
+    [0, 400, 1200].forEach(t => setTimeout(actualizarPista, t));
+  })();
 
   // Botón físico de retroceder (Android): como esta es la pantalla de inicio,
   // preguntar antes de salir de la app en vez de salir directo.
