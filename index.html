@@ -93,7 +93,10 @@
     position: relative;
     z-index: 2;
     text-align: center;
-    padding-top: calc(1.5vh + env(safe-area-inset-top));
+    /* Margen bajo la cámara frontal (barra de estado oculta): el bloque empieza 4px por encima del
+       borde inferior de la cámara y el texto tiene ~13px de aire interno, así que no la toca.
+       Sin cámara/muesca el extra vale 0. El botón de menú y su desplegable usan la misma fórmula. */
+    padding-top: calc(1.5vh + max(0px, calc(env(safe-area-inset-top) - 4px - 1.5vh)));
   }
 
   .eyebrow {
@@ -561,7 +564,7 @@
 
   .btn-menu {
     position: fixed;
-    top: calc(2vh + env(safe-area-inset-top));
+    top: calc(2vh + max(0px, calc(env(safe-area-inset-top) - 4px - 1.5vh)));
     right: 1vw;
     z-index: 40;
     width: 41px; height: 41px;
@@ -576,7 +579,7 @@
 
   .menu-principal {
     position: fixed;
-    top: calc(2vh + 47px + env(safe-area-inset-top));
+    top: calc(2vh + 47px + max(0px, calc(env(safe-area-inset-top) - 4px - 1.5vh)));
     right: 1vw;
     background: var(--papiro);
     border-radius: 8px;
