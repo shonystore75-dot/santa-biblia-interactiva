@@ -8,6 +8,11 @@ const config = {
   // bienvenida y la app. Se usa negro puro porque es el color del video
   // del splash en ese último instante, para que el cambio sea invisible.
   backgroundColor: '#000000',
+  plugins: {
+    // Las páginas usan viewport-fit=cover (pantalla completa bajo la barra de estado
+    // oculta): se avisa de antemano para evitar un salto de diseño al cargar.
+    SystemBars: { initialViewportFitValueHint: 'cover' },
+  },
 };
 
 module.exports = config;

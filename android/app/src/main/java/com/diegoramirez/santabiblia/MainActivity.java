@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
@@ -30,8 +35,47 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Importante: se llama a super primero. Capacitor cambia aquí el tema de
+        // arranque por uno sin barra de acción; si la ventana se tocara antes, se
+        // crearía con el tema de arranque y quedaría una barra de acción negra arriba.
         super.onCreate(savedInstanceState);
+
+        // Pantalla completa: la app se dibuja hasta el borde superior (y bajo la
+        // muesca/cámara frontal), y solo se oculta la barra de estado. La barra de
+        // navegación de abajo con los botones de Android se deja visible.
+        Window ventana = getWindow();
+        WindowCompat.setDecorFitsSystemWindows(ventana, false);
+        if (android.os.Build.VERSION.SDK_INT >= 28) {
+            WindowManager.LayoutParams atributos = ventana.getAttributes();
+            atributos.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            ventana.setAttributes(atributos);
+        }
+        ocultarBarraDeEstado();
+        // El plugin SystemBars de Capacitor muestra las barras al iniciar; se vuelve
+        // a ocultar justo después para que gane esta configuración.
+        handler.post(this::ocultarBarraDeEstado);
         mostrarVideoDeBienvenida();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ocultarBarraDeEstado();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) ocultarBarraDeEstado();
+    }
+
+    /** Oculta solo la barra de estado; al deslizar desde arriba aparece un momento y se vuelve a ir. */
+    private void ocultarBarraDeEstado() {
+        Window ventana = getWindow();
+        WindowInsetsControllerCompat controlador = WindowCompat.getInsetsController(ventana, ventana.getDecorView());
+        controlador.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        controlador.hide(WindowInsetsCompat.Type.statusBars());
+        controlador.show(WindowInsetsCompat.Type.navigationBars());
     }
 
     private void mostrarVideoDeBienvenida() {

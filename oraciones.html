@@ -4,7 +4,7 @@
 <script>try{var t=localStorage.getItem('temaApp');if(t)document.documentElement.setAttribute('data-tema',t);}catch(e){}</script>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Oraciones de la Biblia · Santa Biblia 2026</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap');
@@ -77,7 +77,7 @@
   header {
     flex: 0 0 auto;
     background: linear-gradient(135deg, var(--ciruela) 0%, #5A2A4A 100%);
-    padding: 2.2vh 5vw 1.6vh;
+    padding: calc(2.2vh + env(safe-area-inset-top)) 5vw 1.6vh;
     display: flex;
     align-items: center;
     gap: 3vw;
