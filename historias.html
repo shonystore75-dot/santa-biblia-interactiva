@@ -803,16 +803,30 @@
   }
 
   // Fin del video: sale de pantalla completa (y, si no estaba en ella, solo limpia).
+  let videoTerminado = false;
   function terminarReproduccion() {
     if (enPantallaCompleta()) {
+      videoTerminado = true;
       (document.exitFullscreen || document.webkitExitFullscreen).call(document);
     } else {
       detenerReproductor();
     }
   }
 
+  // El WebView puede pausar el video al cambiar de vista: si pasa, se reanuda con playVideo().
+  function reanudarSiPausado() {
+    [0, 250, 700, 1500].forEach(ms => setTimeout(() => {
+      if (!reproductorYT || !reproductorYT.getPlayerState) return;
+      const estado = reproductorYT.getPlayerState();
+      if (estado === YT.PlayerState.PAUSED || estado === YT.PlayerState.CUED || estado === -1) {
+        reproductorYT.playVideo();
+      }
+    }, ms));
+  }
+
   function detenerReproductor() {
     if (reproductorYT) { try { reproductorYT.destroy(); } catch (e) {} reproductorYT = null; }
+    videoTerminado = false;
     if (contenedorActivo) {
       contenedorActivo.querySelectorAll('.yt-destino, iframe').forEach(e => e.remove());
       contenedorActivo.classList.remove('reproduciendo');
@@ -820,9 +834,16 @@
     }
   }
 
+  // Al salir de pantalla completa: si el video terminó, se limpia (vuelve la miniatura con el play);
+  // si salió con Atrás, el video SIGUE reproduciéndose en la pantalla normal, desde el mismo punto.
   function alCambiarPantallaCompleta() {
-    if (!enPantallaCompleta() && contenedorActivo) detenerReproductor();
-    // El tamaño del video depende del espacio libre: se recalcula al volver.
+    if (enPantallaCompleta() || !contenedorActivo) return;
+    if (videoTerminado) {
+      videoTerminado = false;
+      detenerReproductor();
+    } else {
+      reanudarSiPausado();
+    }
   }
   document.addEventListener('fullscreenchange', alCambiarPantallaCompleta);
   document.addEventListener('webkitfullscreenchange', alCambiarPantallaCompleta);
