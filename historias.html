@@ -282,7 +282,7 @@
     border-radius: 6px 22px 6px 22px;
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(61,31,62,0.25);
-    background: #000 center / cover no-repeat;
+    background: var(--ciruela) center / cover no-repeat;
   }
 
   .video-embebido iframe {
@@ -290,7 +290,12 @@
     height: 100%;
     border: 0;
     display: block;
+    /* El iframe pinta un documento negro hasta que YouTube carga: se oculta
+       y se muestra al terminar de cargar, para que se vea la miniatura. */
+    opacity: 0;
+    transition: opacity 0.35s ease;
   }
+  .video-embebido iframe.listo { opacity: 1; }
 
   /* Franja permanente "Leer la historia" (encima de la publicidad) */
   .franja-leer {
@@ -703,7 +708,7 @@
       <div class="video-embebido" style="background-image:url('https://img.youtube.com/vi/${idYoutube}/maxresdefault.jpg')">
         <iframe src="https://www.youtube.com/embed/${idYoutube}?playsinline=1&rel=0&modestbranding=1"
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen loading="lazy">
+          allowfullscreen loading="lazy" onload="this.classList.add('listo')">
         </iframe>
       </div>
     `;
