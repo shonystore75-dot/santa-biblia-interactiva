@@ -79,14 +79,14 @@
 
   header {
     flex: 0 0 auto;
-    height: calc(clamp(180px, 30vh, 260px) + env(safe-area-inset-top));
+    height: calc(clamp(180px, 30vh, 260px) - 34px + env(safe-area-inset-top));
     position: relative;
     overflow: hidden;
     background-image:
       linear-gradient(180deg, rgba(61,31,62,0.45) 0%, rgba(217,98,47,0.3) 55%, rgba(245,185,66,0.15) 100%),
       url('fondo-inicio.jpg');
     background-size: cover;
-    background-position: center 65%;
+    background-position: center top;
   }
 
   .header-contenido {
@@ -152,8 +152,8 @@
   /* Pista de que hay más contenido abajo: el borde inferior se desvanece mientras queda algo por
      desplazar (la clase la pone el script de abajo y se quita al llegar al final). */
   main.mas-abajo {
-    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 46px), transparent 100%);
-    mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 46px), transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 28px), transparent 100%);
   }
   main::-webkit-scrollbar { width: 6px; }
   main::-webkit-scrollbar-track { background: rgba(185,80,46,0.08); }
@@ -168,7 +168,7 @@
   .versiculo-dia {
     background: linear-gradient(135deg, #fff 0%, var(--papiro) 100%);
     border-radius: 6px 22px 6px 22px;
-    padding: 2vh 4vw;
+    padding: 1.5vh 4vw 1vh;
     position: relative;
     box-shadow: 0 10px 30px rgba(61, 31, 62, 0.25);
     border: 1px solid rgba(185, 80, 46, 0.2);
@@ -199,7 +199,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(9px, 2vh, 11px);
     color: var(--terracota);
-    margin-top: 6px;
+    margin-top: 3px;
     font-weight: 600;
     letter-spacing: 0.5px;
   }
@@ -251,7 +251,9 @@
   .escenario-rollos {
     flex: 1 1 auto;
     min-width: 0;
-    height: clamp(220px, 31vh, 280px);
+    /* 40px menos que antes: se quitó papiro vacío sobre la imagen y bajo el subtítulo (el alto de la
+       imagen y de los textos no cambia; ver .rollo .imagen) */
+    height: calc(clamp(220px, 31vh, 280px) - 40px);
     position: relative;
     perspective: 900px;
     overflow: hidden;
@@ -270,7 +272,7 @@
 
   .rollo {
     position: absolute;
-    top: 14px; bottom: 14px;
+    top: 11px; bottom: 11px;
     left: 50%;
     display: block;
     text-decoration: none;
@@ -340,7 +342,9 @@
     gap: 3px; padding: 15px 0; text-align: center;
   }
   .rollo .imagen {
-    flex: 0 1 54%;
+    /* Alto fijo de siempre (54% del alto que tenía el contenido antes de recortar el rollo), para que la
+       imagen no se achique ni se deforme al reducir el rollo. */
+    flex: 0 1 calc((clamp(220px, 31vh, 280px) - 58px) * 0.54);
     min-height: 0;
     border-radius: 4px 12px 4px 4px;
     background-size: cover;
