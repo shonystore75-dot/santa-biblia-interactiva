@@ -352,24 +352,9 @@
     box-shadow: 0 2px 6px rgba(61,31,62,0.35), inset 0 0 0 1px rgba(61,36,25,0.25);
     display: flex; align-items: center; justify-content: center;
   }
-  /* Imagen del rollo (pergamino.jpg es cuadrada, 500x500, y la caja es apaisada ~1,6:1). Con 'cover'
-     se ampliaba al ancho y se cortaban los rodillos. Ahora se ve el rollo entero (filas ~62 a 438
-     de 500) al 133% del alto de la caja, sin deformarla; los costados se rellenan con la misma
-     foto desenfocada y el borde de la imagen nítida se funde con ella. */
-  .icono-leer-img { position: relative; overflow: hidden; }
-  .icono-leer-img::before,
-  .icono-leer-img::after { content: ''; position: absolute; }
-  .icono-leer-img::before {
-    inset: -10px;
-    background: url('pergamino.jpg') center / cover no-repeat;
-    filter: blur(7px);
-  }
-  .icono-leer-img::after {
-    inset: 0;
-    background: url('pergamino.jpg') center / auto 133% no-repeat;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
-  }
+  /* Misma proporción que la caja (1,62:1): llena con 'cover' y centrada, como Historias y Oraciones.
+     pergamino.jpg (cuadrada) se conserva en la carpeta por si hay que volver atrás. */
+  .icono-leer-img { background-image: url('continuar-rollo.jpg'); }
   .icono-historias-img { background-image: url('historias.jpg'); background-position: center 60%; }
   .icono-oraciones-img { background-image: url('oraciones.jpg'); }
 
