@@ -752,8 +752,34 @@
       </div>
     `;
     main.scrollTop = 0;
-    if (bloqueMultimedia) prepararAyudasDetalle();
+    if (bloqueMultimedia) {
+      ajustarVideo();
+      prepararAyudasDetalle();
+    }
   }
+
+  // Video lo más grande posible: ocupa el espacio libre entre el título y la
+  // franja "Leer la historia", completo y en 9:16, sin que asome el texto.
+  const ALTO_FRANJA = 30;   // alto de .franja-leer
+  const AIRE_VIDEO = 6;     // separación entre el video y la franja
+  function ajustarVideo() {
+    const video = main.querySelector('.video-embebido');
+    if (!video) return;
+    const guardado = main.scrollTop;
+    main.scrollTop = 0;
+    const arriba = video.getBoundingClientRect().top - main.getBoundingClientRect().top;
+    const estilo = getComputedStyle(main);
+    const anchoUtil = main.clientWidth - parseFloat(estilo.paddingLeft) - parseFloat(estilo.paddingRight);
+    const reservado = ALTO_FRANJA + AIRE_VIDEO;
+    const alto = main.clientHeight - arriba - reservado;
+    const ancho = Math.max(120, Math.min(anchoUtil, alto * 9 / 16));
+    video.style.maxWidth = ancho + 'px';
+    video.style.marginBottom = reservado + 'px';
+    main.scrollTop = guardado;
+  }
+  window.addEventListener('resize', () => {
+    if (!enLista && document.querySelector('.video-embebido')) ajustarVideo();
+  });
 
   const CLAVE_GUIA = 'guiaHistoriaVista';
 
