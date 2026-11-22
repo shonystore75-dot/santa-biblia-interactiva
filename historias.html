@@ -149,11 +149,12 @@
   }
 
   .tarjeta-historia .miniatura {
-    width: 90px;
+    width: 93px;
     flex-shrink: 0;
-    background-image: url('historias.jpg');
+    background-image: url('historias-rollo.jpg');
     background-size: cover;
-    background-position: center 55%;
+    background-position: center;
+    border-right: 3px solid var(--dorado);
   }
 
   .tarjeta-historia .info {
@@ -192,12 +193,11 @@
   /* Vista de detalle */
   #vista-detalle .imagen-grande {
     width: 100%;
-    height: 20vh;
-    min-height: 130px;
+    aspect-ratio: 800 / 495;
     border-radius: 6px 22px 6px 22px;
-    background-image: url('historias.jpg');
+    background-image: url('historias-rollo.jpg');
     background-size: cover;
-    background-position: center 55%;
+    background-position: center;
     box-shadow: 0 10px 24px rgba(61,31,62,0.25);
     margin-bottom: 2vh;
   }
@@ -597,7 +597,7 @@
       <div class="lista-historias">
         ${historias.map(h => `
           <div class="tarjeta-historia" onclick="mostrarDetalle('${h.id}')">
-            <div class="miniatura" style="background-image:url('${h.imagen || 'historias.jpg'}')"></div>
+            <div class="miniatura" style="background-image:url('${h.imagen || 'historias-rollo.jpg'}')"></div>
             <div class="info">
               <div class="titulo">${h.titulo}</div>
               <div class="referencia">${h.referencia}</div>
@@ -649,7 +649,7 @@
 
     main.innerHTML = `
       <div id="vista-detalle">
-        <div class="imagen-grande" style="background-image:url('${h.imagen || 'historias.jpg'}')"></div>
+        ${bloqueMultimedia ? '' : '<div class="imagen-grande"></div>'}
         <div class="referencia-grande">${h.referencia}</div>
         <h2>${h.titulo}</h2>
         ${bloqueMultimedia}
