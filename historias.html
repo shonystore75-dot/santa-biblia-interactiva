@@ -251,21 +251,45 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
+    gap: 10px;
     width: 100%;
-    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
-    color: var(--terracota);
-    border: 1.5px solid var(--dorado);
+    background: linear-gradient(135deg, var(--dorado-brillante), var(--dorado));
+    color: var(--ciruela);
+    border: 0;
     border-radius: 4px 16px 4px 16px;
     font-family: 'Cinzel', serif;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 14px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(61,31,62,0.12);
+    box-shadow: 0 8px 18px rgba(217,181,74,0.45);
   }
-  .btn-suscribirse svg { width: 18px; height: 18px; flex-shrink: 0; }
-  .btn-suscribirse:active { background: var(--papiro); }
+  .btn-suscribirse svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .btn-suscribirse:active { filter: brightness(0.95); }
+
+  /* Envoltura del botón + espacio para la mano de invitación (solo en las historias) */
+  .suscribir-envoltura {
+    position: relative;
+    margin-top: 1.4vh;
+    padding-bottom: 76px;
+  }
+  .mano-suscribir {
+    position: absolute;
+    left: calc(50% - 14px);
+    bottom: 0;
+    width: 76px;
+    height: 76px;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
+    animation: mano-tocar 1.1s ease-in-out infinite;
+    transition: opacity 0.6s ease;
+  }
+  .mano-suscribir.saliendo { opacity: 0; }
+  @keyframes mano-tocar {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    45% { transform: translate(-3px, -8px) scale(0.94); }
+    60% { transform: translate(-3px, -8px) scale(0.94); }
+  }
 
   .selector-pestanas {
     display: flex;
@@ -682,6 +706,7 @@
         <div class="fila-menu" id="fila-compartir-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.8"></circle><circle cx="6" cy="12" r="2.8"></circle><circle cx="18" cy="19" r="2.8"></circle><line x1="8.2" y1="10.6" x2="15.8" y2="6.2"></line><line x1="8.2" y1="13.4" x2="15.8" y2="17.8"></line></svg>Compartir la app</div>
         <!-- PRUEBA_TEMPORAL_INICIO (quitar antes de publicar) -->
         <div class="fila-menu" id="fila-ver-guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 4 3 9 8 9"></polyline></svg>Ver la guía de nuevo (prueba)</div>
+        <div class="fila-menu" id="fila-reiniciar-mano"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 4 3 9 8 9"></polyline></svg>Reiniciar la mano (prueba)</div>
         <!-- PRUEBA_TEMPORAL_FIN -->
         <div class="fila-menu disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Configuración<span class="etiqueta-pronto">Pronto</span></div>
       </div>
@@ -727,8 +752,53 @@
   }
 
   // Suscripción al canal: se abre en una ventana del navegador (Chrome Custom Tab) sobre la app.
+  const CLAVE_MANO_VECES = 'manoSuscribirVeces';   // cuántas veces se mostró la mano (máx. 3)
+  const CLAVE_MANO_TOCO = 'manoSuscribirToco';     // '1' si el usuario ya tocó el botón
+  const MAX_APARICIONES_MANO = 3;
+  const DURACION_MANO_MS = 5000;
+  let observadorSuscribir = null;
+  let temporizadorMano = null;
+
+  function ocultarManoSuscribir(inmediato) {
+    clearTimeout(temporizadorMano);
+    document.querySelectorAll('.mano-suscribir').forEach(m => {
+      if (inmediato) { m.remove(); return; }
+      m.classList.add('saliendo');
+      setTimeout(() => m.remove(), 700);
+    });
+  }
+
+  // Muestra la mano debajo del botón cuando este entra en pantalla (≥ 60 % visible).
+  function prepararManoSuscribir() {
+    if (observadorSuscribir) { observadorSuscribir.disconnect(); observadorSuscribir = null; }
+    const boton = main.querySelector('.btn-suscribirse');
+    if (!boton || !('IntersectionObserver' in window)) return;
+    let veces = 0, toco = false;
+    try {
+      veces = parseInt(localStorage.getItem(CLAVE_MANO_VECES), 10) || 0;
+      toco = localStorage.getItem(CLAVE_MANO_TOCO) === '1';
+    } catch (e) {}
+    if (toco || veces >= MAX_APARICIONES_MANO) return;
+    observadorSuscribir = new IntersectionObserver((entradas) => {
+      if (!entradas.some(e => e.isIntersecting && e.intersectionRatio >= 0.6)) return;
+      observadorSuscribir.disconnect();
+      observadorSuscribir = null;
+      try { localStorage.setItem(CLAVE_MANO_VECES, String(veces + 1)); } catch (e) {}
+      const mano = document.createElement('img');
+      mano.className = 'mano-suscribir';
+      mano.src = 'mano-deslizar.png';
+      mano.alt = '';
+      boton.parentElement.appendChild(mano);
+      temporizadorMano = setTimeout(() => ocultarManoSuscribir(false), DURACION_MANO_MS);
+    }, { root: main, threshold: [0.6] });
+    observadorSuscribir.observe(boton);
+  }
+
   const URL_CANAL = 'https://www.youtube.com/@LaSantaBibliaValera?sub_confirmation=1';
   function suscribirseAlCanal() {
+    // Si el usuario toca el botón, la mano de invitación no vuelve a salir nunca.
+    try { localStorage.setItem(CLAVE_MANO_TOCO, '1'); } catch (e) {}
+    ocultarManoSuscribir(true);
     const navegador = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser;
     if (navegador) navegador.open({ url: URL_CANAL, presentationStyle: 'popover' });
     else window.open(URL_CANAL, '_blank');
@@ -739,6 +809,8 @@
     zona.querySelectorAll('.guia-primera-vez, .franja-leer').forEach(e => e.remove());
     if (enPantallaCompleta()) { try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} }
     detenerReproductor();
+    if (observadorSuscribir) { observadorSuscribir.disconnect(); observadorSuscribir = null; }
+    ocultarManoSuscribir(true);
     if (observadorMain) { observadorMain.disconnect(); observadorMain = null; }
     main.onscroll = null;
   }
@@ -911,7 +983,7 @@
         ${bloqueMultimedia}
         <p class="cuerpo">${h.texto}</p>
         <a class="btn-leer-pasaje" href="leer.html?libro=${h.libro}&capitulo=${h.capitulo}">Leer el pasaje completo →</a>
-        ${bloqueMultimedia ? '<div style="margin-top:1.4vh"><button type="button" class="btn-suscribirse" onclick="suscribirseAlCanal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>Suscríbete al canal</button></div>' : ''}
+        ${bloqueMultimedia ? '<div class="suscribir-envoltura"><button type="button" class="btn-suscribirse" onclick="suscribirseAlCanal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>Suscríbete al canal</button></div>' : ''}
       </div>
     `;
     main.scrollTop = 0;
@@ -919,6 +991,7 @@
       ajustarVideo();
       observarTamanoMain();
       prepararAyudasDetalle();
+      prepararManoSuscribir();
     }
   }
 
@@ -1130,6 +1203,11 @@
     try { localStorage.removeItem('guiaHistoriaVista'); } catch (e) {}
     mostrarLista();
     mostrarToastGlobal('Guía reactivada: abre una historia con video');
+  });
+  const filaReiniciarMano = document.getElementById('fila-reiniciar-mano');
+  if (filaReiniciarMano) filaReiniciarMano.addEventListener('click', () => {
+    try { localStorage.removeItem(CLAVE_MANO_VECES); localStorage.removeItem(CLAVE_MANO_TOCO); } catch (e) {}
+    mostrarToastGlobal('Mano de suscripción reiniciada');
   });
   // PRUEBA_TEMPORAL_FIN
 

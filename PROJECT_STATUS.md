@@ -270,3 +270,4 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
 
 ## PENDIENTE DE QUITAR ANTES DE PUBLICAR
 - `historias.html`: opción de menú "Ver la guía de nuevo (prueba)" y su manejador. Buscar los comentarios `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (2 bloques: HTML del menú y JS) y borrarlos. También el modo `?guia=1` en `prepararAyudasDetalle()` (opcional).
+- `historias.html`: opción de menú "Reiniciar la mano (prueba)" (borra `manoSuscribirVeces` y `manoSuscribirToco`). Está dentro de los mismos bloques `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (HTML del menú y JS): se quita junto con "Ver la guía de nuevo (prueba)".
