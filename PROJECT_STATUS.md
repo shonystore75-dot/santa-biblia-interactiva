@@ -267,3 +267,6 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
   nuevos encontrados y corregidos en el proceso (ver ese archivo para el
   detalle técnico completo). Los 7 libros quedaron modernizados y verificados
   con lectura completa; cambios subidos a GitHub.
+
+## PENDIENTE DE QUITAR ANTES DE PUBLICAR
+- `historias.html`: opción de menú "Ver la guía de nuevo (prueba)" y su manejador. Buscar los comentarios `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (2 bloques: HTML del menú y JS) y borrarlos. También el modo `?guia=1` en `prepararAyudasDetalle()` (opcional).
