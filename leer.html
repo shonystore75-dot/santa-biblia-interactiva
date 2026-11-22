@@ -396,6 +396,17 @@
     user-select: none;
     -webkit-touch-callout: none;
   }
+  .verso .nota-final {
+    display: block;
+    margin-top: 1.1vh;
+    padding-top: 0.9vh;
+    border-top: 1px solid var(--naranja);
+    font-size: 0.85em;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--tinta);
+    color: color-mix(in srgb, var(--tinta) 62%, var(--papiro));
+  }
   .palabras-jesus {
     color: #9B1024;
   }
@@ -1960,7 +1971,8 @@
         const resto = texto.slice(matchEncabezado[0].length);
         return `<p class="encabezado-salmo">${encabezado}</p><p class="verso" data-num="${num}" data-cap="${numCap}"><span class="num">${num}</span><span class="texto-verso">${resto}</span></p>`;
       }
-      return `<p class="verso" data-num="${num}" data-cap="${numCap}"><span class="num">${num}</span><span class="texto-verso">${texto}</span></p>`;
+      const textoConNota = texto.replace(/<br\s*\/?>\s*<em>([\s\S]*?)<\/em>\s*$/i, '<em class="nota-final">$1</em>');
+      return `<p class="verso" data-num="${num}" data-cap="${numCap}"><span class="num">${num}</span><span class="texto-verso">${textoConNota}</span></p>`;
     }).join('');
 
     const esPrimero = numCap === 1;
