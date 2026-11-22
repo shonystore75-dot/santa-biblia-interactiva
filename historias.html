@@ -117,6 +117,14 @@
     margin-top: 2px;
   }
 
+  .zona-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
   main {
     flex: 1 1 auto;
     min-height: 0;
@@ -268,7 +276,7 @@
 
   .video-embebido {
     width: 100%;
-    max-width: 280px;
+    max-width: min(230px, 29vh);
     aspect-ratio: 9 / 16;
     margin: 0 auto 2.2vh;
     border-radius: 6px 22px 6px 22px;
@@ -282,6 +290,67 @@
     height: 100%;
     border: 0;
     display: block;
+  }
+
+  /* Franja permanente "Leer la historia" (encima de la publicidad) */
+  .franja-leer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 30px;
+    border: 0;
+    border-top: 1px solid rgba(185,80,46,0.35);
+    background: var(--papiro);
+    color: var(--terracota);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.25s;
+  }
+  .franja-leer.oculta { opacity: 0; pointer-events: none; }
+  .franja-leer .flecha { display: inline-block; animation: latido 1.6s ease-in-out infinite; }
+  @keyframes latido {
+    0%, 100% { transform: translateY(0); opacity: 0.55; }
+    50% { transform: translateY(-3px); opacity: 1; }
+  }
+
+  /* Guía de la primera vez */
+  .guia-primera-vez {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: rgba(31, 14, 33, 0.86);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 0 12vw;
+    text-align: center;
+    touch-action: none;
+  }
+  .guia-primera-vez img {
+    width: 110px;
+    height: 110px;
+    animation: mano-sube-baja 2s ease-in-out infinite;
+  }
+  @keyframes mano-sube-baja {
+    0%, 100% { transform: translateY(18px); }
+    50% { transform: translateY(-18px); }
+  }
+  .guia-primera-vez p {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--dorado-brillante);
   }
 
   .cargando {
@@ -550,9 +619,11 @@
       </div>
     </header>
 
-    <main id="main">
-      <div class="cargando">Cargando relatos…</div>
-    </main>
+    <div class="zona-main" id="zona-main">
+      <main id="main">
+        <div class="cargando">Cargando relatos…</div>
+      </main>
+    </div>
 
     <div class="toast-copiado" id="toast-copiado"></div>
 
@@ -587,7 +658,14 @@
     mostrarLista();
   }
 
+  function limpiarAyudasDetalle() {
+    const zona = document.getElementById('zona-main');
+    zona.querySelectorAll('.guia-primera-vez, .franja-leer').forEach(e => e.remove());
+    main.onscroll = null;
+  }
+
   function mostrarLista() {
+    limpiarAyudasDetalle();
     enLista = true;
     btnAtras.style.visibility = 'visible';
     tituloHeader.textContent = 'Historias';
@@ -622,6 +700,7 @@
   }
 
   function mostrarDetalle(id) {
+    limpiarAyudasDetalle();
     const h = historias.find(x => x.id === id);
     enLista = false;
     btnAtras.style.visibility = 'visible';
@@ -658,6 +737,58 @@
       </div>
     `;
     main.scrollTop = 0;
+    if (bloqueMultimedia) prepararAyudasDetalle();
+  }
+
+  const CLAVE_GUIA = 'guiaHistoriaVista';
+
+  function irAlTexto() {
+    const cuerpo = main.querySelector('.cuerpo');
+    if (cuerpo) main.scrollTo({ top: cuerpo.offsetTop - main.offsetTop - 12, behavior: 'smooth' });
+  }
+
+  function prepararAyudasDetalle() {
+    const zona = document.getElementById('zona-main');
+    const cuerpo = main.querySelector('.cuerpo');
+
+    // Franja permanente: se oculta cuando el texto ya está bien a la vista
+    const franja = document.createElement('button');
+    franja.className = 'franja-leer';
+    franja.innerHTML = '<span class="flecha">▲</span> Leer la historia';
+    franja.addEventListener('click', irAlTexto);
+    zona.appendChild(franja);
+    const actualizarFranja = () => {
+      const limite = main.getBoundingClientRect().bottom - 150;
+      franja.classList.toggle('oculta', cuerpo.getBoundingClientRect().top < limite);
+    };
+    main.onscroll = actualizarFranja;
+    actualizarFranja();
+
+    // Guía de la primera vez (?guia=1 la muestra siempre, sin guardar nada)
+    const forzar = new URLSearchParams(location.search).get('guia') === '1';
+    let vista = false;
+    try { vista = localStorage.getItem(CLAVE_GUIA) === '1'; } catch (e) {}
+    if (vista && !forzar) return;
+
+    const capa = document.createElement('div');
+    capa.className = 'guia-primera-vez';
+    capa.innerHTML = '<img src="mano-deslizar.png" alt=""><p>Desliza hacia arriba para leer la historia y abrir el pasaje en la Biblia</p>';
+    zona.appendChild(capa);
+    let y0 = null;
+    const cerrar = (conScroll) => {
+      capa.remove();
+      if (!forzar) { try { localStorage.setItem(CLAVE_GUIA, '1'); } catch (e) {} }
+      if (conScroll) irAlTexto();
+    };
+    capa.addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, { passive: true });
+    capa.addEventListener('touchmove', e => {
+      if (y0 !== null && Math.abs(e.touches[0].clientY - y0) > 12) {
+        const arriba = e.touches[0].clientY < y0;
+        y0 = null;
+        cerrar(arriba);
+      }
+    }, { passive: true });
+    capa.addEventListener('click', () => cerrar(false));
   }
 
   function cambiarPestana(cual) {
