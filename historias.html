@@ -285,17 +285,50 @@
     background: var(--ciruela) center / cover no-repeat;
   }
 
+  .video-embebido { position: relative; cursor: pointer; }
+
+  /* Botón de play propio sobre la miniatura (el reproductor se carga al tocarlo) */
+  .video-embebido .btn-play-video {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 72px; height: 52px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: drop-shadow(0 3px 8px rgba(0,0,0,0.45));
+  }
+  .video-embebido.reproduciendo .btn-play-video { display: none; }
+
+  .video-embebido .yt-destino,
   .video-embebido iframe {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: 0;
     display: block;
-    /* El iframe pinta un documento negro hasta que YouTube carga: se oculta
-       y se muestra al terminar de cargar, para que se vea la miniatura. */
-    opacity: 0;
-    transition: opacity 0.35s ease;
   }
-  .video-embebido iframe.listo { opacity: 1; }
+
+  /* Pantalla completa: el contenedor ocupa toda la pantalla, sin esquinas ni límites de ancho */
+  .video-embebido:fullscreen {
+    max-width: none !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #000 !important;
+  }
+  .video-embebido:-webkit-full-screen {
+    max-width: none !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #000 !important;
+  }
 
   /* Franja permanente "Leer la historia" (encima de la publicidad) */
   .franja-leer {
@@ -676,6 +709,9 @@
   function limpiarAyudasDetalle() {
     const zona = document.getElementById('zona-main');
     zona.querySelectorAll('.guia-primera-vez, .franja-leer').forEach(e => e.remove());
+    if (enPantallaCompleta()) { try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} }
+    detenerReproductor();
+    if (observadorMain) { observadorMain.disconnect(); observadorMain = null; }
     main.onscroll = null;
   }
 
@@ -705,14 +741,91 @@
 
   function bloqueVideoYoutube(idYoutube) {
     return `
-      <div class="video-embebido" style="background-image:url('https://img.youtube.com/vi/${idYoutube}/maxresdefault.jpg')">
-        <iframe src="https://www.youtube.com/embed/${idYoutube}?playsinline=1&rel=0&modestbranding=1"
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen loading="lazy" onload="this.classList.add('listo')">
-        </iframe>
+      <div class="video-embebido" data-yt="${idYoutube}" onclick="reproducirVideo(this)"
+        style="background-image:url('https://img.youtube.com/vi/${idYoutube}/maxresdefault.jpg')">
+        <svg class="btn-play-video" viewBox="0 0 72 52" aria-label="Reproducir">
+          <rect width="72" height="52" rx="14" fill="#E8112D"></rect>
+          <polygon points="29,14 29,38 50,26" fill="#fff"></polygon>
+        </svg>
       </div>
     `;
   }
+
+  // ---- Reproductor de YouTube (IFrame API) en pantalla completa ----
+  let reproductorYT = null;
+  let contenedorActivo = null;
+  let promesaApiYT = null;
+
+  function cargarApiYT() {
+    if (promesaApiYT) return promesaApiYT;
+    promesaApiYT = new Promise((resolver, rechazar) => {
+      if (window.YT && window.YT.Player) { resolver(); return; }
+      const previo = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { if (previo) previo(); resolver(); };
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      tag.onerror = () => { promesaApiYT = null; rechazar(new Error('api')); };
+      document.head.appendChild(tag);
+    });
+    return promesaApiYT;
+  }
+
+  function enPantallaCompleta() {
+    return document.fullscreenElement || document.webkitFullscreenElement;
+  }
+
+  function reproducirVideo(cont) {
+    if (contenedorActivo) return;
+    contenedorActivo = cont;
+    cont.classList.add('reproduciendo');
+    // La pantalla completa se pide aquí, dentro del toque del usuario (Android lo exige).
+    const pedir = cont.requestFullscreen || cont.webkitRequestFullscreen;
+    if (pedir) {
+      try { const r = pedir.call(cont); if (r && r.catch) r.catch(() => {}); } catch (e) {}
+    }
+    cargarApiYT().then(() => {
+      if (contenedorActivo !== cont) return;
+      const destino = document.createElement('div');
+      destino.className = 'yt-destino';
+      cont.appendChild(destino);
+      reproductorYT = new YT.Player(destino, {
+        videoId: cont.dataset.yt,
+        width: '100%',
+        height: '100%',
+        playerVars: { autoplay: 1, playsinline: 1, rel: 0, modestbranding: 1, fs: 0 },
+        events: {
+          onReady: (e) => e.target.playVideo(),
+          onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) terminarReproduccion(); },
+          onError: () => terminarReproduccion()
+        }
+      });
+    }).catch(() => terminarReproduccion());
+  }
+
+  // Fin del video: sale de pantalla completa (y, si no estaba en ella, solo limpia).
+  function terminarReproduccion() {
+    if (enPantallaCompleta()) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      detenerReproductor();
+    }
+  }
+
+  function detenerReproductor() {
+    if (reproductorYT) { try { reproductorYT.destroy(); } catch (e) {} reproductorYT = null; }
+    if (contenedorActivo) {
+      contenedorActivo.querySelectorAll('.yt-destino, iframe').forEach(e => e.remove());
+      contenedorActivo.classList.remove('reproduciendo');
+      contenedorActivo = null;
+    }
+  }
+
+  function alCambiarPantallaCompleta() {
+    if (!enPantallaCompleta() && contenedorActivo) detenerReproductor();
+    // El tamaño del video depende del espacio libre: se recalcula al volver.
+  }
+  document.addEventListener('fullscreenchange', alCambiarPantallaCompleta);
+  document.addEventListener('webkitfullscreenchange', alCambiarPantallaCompleta);
 
   function mostrarDetalle(id) {
     limpiarAyudasDetalle();
@@ -754,6 +867,7 @@
     main.scrollTop = 0;
     if (bloqueMultimedia) {
       ajustarVideo();
+      observarTamanoMain();
       prepararAyudasDetalle();
     }
   }
@@ -764,7 +878,7 @@
   const AIRE_VIDEO = 6;     // separación entre el video y la franja
   function ajustarVideo() {
     const video = main.querySelector('.video-embebido');
-    if (!video) return;
+    if (!video || enPantallaCompleta()) return;
     const guardado = main.scrollTop;
     main.scrollTop = 0;
     const arriba = video.getBoundingClientRect().top - main.getBoundingClientRect().top;
@@ -777,9 +891,20 @@
     video.style.marginBottom = reservado + 'px';
     main.scrollTop = guardado;
   }
-  window.addEventListener('resize', () => {
-    if (!enLista && document.querySelector('.video-embebido')) ajustarVideo();
-  });
+  // Se recalcula cada vez que cambia el alto disponible (p. ej. al volver de pantalla completa,
+  // cuando Android devuelve la barra de navegación un instante después).
+  let observadorMain = null;
+  let ultimoAltoMain = 0;
+  function observarTamanoMain() {
+    if (observadorMain) observadorMain.disconnect();
+    ultimoAltoMain = main.clientHeight;
+    observadorMain = new ResizeObserver(() => {
+      if (enPantallaCompleta() || main.clientHeight === ultimoAltoMain) return;
+      ultimoAltoMain = main.clientHeight;
+      if (!enLista && main.querySelector('.video-embebido')) ajustarVideo();
+    });
+    observadorMain.observe(main);
+  }
 
   const CLAVE_GUIA = 'guiaHistoriaVista';
 

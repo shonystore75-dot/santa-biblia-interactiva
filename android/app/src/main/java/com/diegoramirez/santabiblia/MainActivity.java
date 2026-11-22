@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.View;
+import android.webkit.WebChromeClient;
+import androidx.activity.OnBackPressedCallback;
+import com.getcapacitor.Bridge;
+import com.getcapacitor.BridgeWebChromeClient;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.core.view.WindowCompat;
@@ -33,6 +38,11 @@ public class MainActivity extends BridgeActivity {
     private boolean yaSeQuito = false;
     private FrameLayout capaVideo;
 
+    // Pantalla completa de elementos web (el reproductor de YouTube de las historias).
+    private FrameLayout contenedorPantallaCompleta;
+    private WebChromeClient.CustomViewCallback callbackPantallaCompleta;
+    private OnBackPressedCallback atrasPantallaCompleta;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Importante: se llama a super primero. Capacitor cambia aquí el tema de
@@ -55,6 +65,73 @@ public class MainActivity extends BridgeActivity {
         // a ocultar justo después para que gane esta configuración.
         handler.post(this::ocultarBarraDeEstado);
         mostrarVideoDeBienvenida();
+        configurarPantallaCompletaWeb();
+    }
+
+    /**
+     * El cliente por defecto de Capacitor rechaza al instante cualquier pantalla completa
+     * (llama a onCustomViewHidden). Este la acepta: pone la vista a pantalla completa sobre la
+     * app, oculta las dos barras del sistema, y el botón Atrás la cierra antes que nada.
+     */
+    private void configurarPantallaCompletaWeb() {
+        Bridge puente = getBridge();
+        if (puente == null || puente.getWebView() == null) return;
+        puente.getWebView().setWebChromeClient(new BridgeWebChromeClient(puente) {
+            @Override
+            public void onShowCustomView(View vista, WebChromeClient.CustomViewCallback callback) {
+                mostrarPantallaCompleta(vista, callback);
+            }
+
+            @Override
+            public void onHideCustomView() {
+                ocultarPantallaCompleta();
+            }
+        });
+        atrasPantallaCompleta = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                if (callbackPantallaCompleta != null) callbackPantallaCompleta.onCustomViewHidden();
+                ocultarPantallaCompleta();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, atrasPantallaCompleta);
+    }
+
+    private void mostrarPantallaCompleta(View vista, WebChromeClient.CustomViewCallback callback) {
+        if (contenedorPantallaCompleta != null) {
+            callback.onCustomViewHidden();
+            return;
+        }
+        ViewGroup raiz = findViewById(android.R.id.content);
+        contenedorPantallaCompleta = new FrameLayout(this);
+        contenedorPantallaCompleta.setBackgroundColor(Color.BLACK);
+        contenedorPantallaCompleta.addView(
+            vista,
+            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        );
+        raiz.addView(
+            contenedorPantallaCompleta,
+            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        );
+        callbackPantallaCompleta = callback;
+        if (atrasPantallaCompleta != null) atrasPantallaCompleta.setEnabled(true);
+
+        Window ventana = getWindow();
+        WindowInsetsControllerCompat controlador = WindowCompat.getInsetsController(ventana, ventana.getDecorView());
+        controlador.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        controlador.hide(WindowInsetsCompat.Type.systemBars());
+    }
+
+    private void ocultarPantallaCompleta() {
+        if (contenedorPantallaCompleta == null) return;
+        ViewGroup padre = (ViewGroup) contenedorPantallaCompleta.getParent();
+        if (padre != null) padre.removeView(contenedorPantallaCompleta);
+        contenedorPantallaCompleta.removeAllViews();
+        contenedorPantallaCompleta = null;
+        callbackPantallaCompleta = null;
+        if (atrasPantallaCompleta != null) atrasPantallaCompleta.setEnabled(false);
+        // Vuelve el comportamiento normal de la app: barra de estado oculta, barra de navegación visible.
+        ocultarBarraDeEstado();
     }
 
     @Override
