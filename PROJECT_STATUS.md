@@ -268,6 +268,12 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
   detalle técnico completo). Los 7 libros quedaron modernizados y verificados
   con lectura completa; cambios subidos a GitHub.
 
+## PALETAS DE COLOR (2026-11-22)
+- 9 paletas en `temas.css` (variables CSS), generado por `python scripts/generar-temas.py` (ahí están los colores base, los derivados y la tabla de contraste). NO editar `temas.css` a mano.
+- `temas.js` (cargado en el `<head>` de cada pantalla) valida la paleta guardada (`localStorage.temaApp`); por defecto `purpura`; las antiguas (clásica/esmeralda/zafiro) pasan a Púrpura.
+- Marfil clásico usa la textura `marmol_marfil_2026-11-22_2110.webp` (variable `--textura`; `none` en las demás). Iconos de la barra inferior: máscaras `nav-*-mascara.png` pintadas con `--icono-nav`.
+- Android: `MainActivity` expone `AndroidTema.barraNavegacionClara(boolean)`; Marfil pone iconos oscuros en la barra de navegación del sistema.
+
 ## PENDIENTE DE QUITAR ANTES DE PUBLICAR
 - `historias.html`: opción de menú "Ver la guía de nuevo (prueba)" y su manejador. Buscar los comentarios `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (2 bloques: HTML del menú y JS) y borrarlos. También el modo `?guia=1` en `prepararAyudasDetalle()` (opcional).
 - `historias.html`: opción de menú "Reiniciar la mano (prueba)" (borra `manoSuscribirVeces` y `manoSuscribirToco`). Está dentro de los mismos bloques `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (HTML del menú y JS): se quita junto con "Ver la guía de nuevo (prueba)".

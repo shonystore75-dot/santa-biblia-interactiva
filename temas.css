@@ -1,0 +1,322 @@
+/* GENERADO por scripts/generar-temas.py: no editar a mano. 9 paletas; la de por defecto es Purpura espiritual. */
+:root {
+  --fondo: #F6F2F8;
+  --tarjeta: #FFFFFF;
+  --texto: #49325F;
+  --nav: #49325F;
+  --acento: #D7AD58;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #C8C2CF;
+  --acento-nav: #D7AD58;
+  --icono-nav: #D7AD58;
+  --principal: #49325F;
+  --sobre-principal: #FFFFFF;
+  --cita: #49325F;
+  --oscuro: #49325F;
+  --sobre-oscuro: #D7AD58;
+  --sobre-acento: #49325F;
+  --acento-btn: #D7AD58;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(215,173,88,0.5);
+  --principal-rgb: 73,50,95;
+  --texto-rgb: 73,50,95;
+  --acento-rgb: 215,173,88;
+  --hero-rgb: 73,50,95;
+  --titulo-rollo: #49325F;
+  --tarjeta-rgb: 255,255,255;
+  --sombra-rgb: 73,50,95;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="azul"] {
+  --fondo: #F3F5F8;
+  --tarjeta: #FFFFFF;
+  --texto: #24354B;
+  --nav: #18365B;
+  --acento: #D6A84E;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #BAC3CE;
+  --acento-nav: #D6A84E;
+  --icono-nav: #D6A84E;
+  --principal: #18365B;
+  --sobre-principal: #FFFFFF;
+  --cita: #18365B;
+  --oscuro: #18365B;
+  --sobre-oscuro: #D6A84E;
+  --sobre-acento: #24354B;
+  --acento-btn: #D6A84E;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(214,168,78,0.5);
+  --principal-rgb: 24,54,91;
+  --texto-rgb: 36,53,75;
+  --acento-rgb: 214,168,78;
+  --hero-rgb: 24,54,91;
+  --titulo-rollo: #18365B;
+  --tarjeta-rgb: 255,255,255;
+  --sombra-rgb: 36,53,75;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="borgona"] {
+  --fondo: #FAF3EB;
+  --tarjeta: #FFFDF7;
+  --texto: #56202B;
+  --nav: #641D2B;
+  --acento: #D5A348;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #D0BBBF;
+  --acento-nav: #D5A348;
+  --icono-nav: #D5A348;
+  --principal: #641D2B;
+  --sobre-principal: #FFFFFF;
+  --cita: #641D2B;
+  --oscuro: #641D2B;
+  --sobre-oscuro: #D5A348;
+  --sobre-acento: #56202B;
+  --acento-btn: #D5A348;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(213,163,72,0.5);
+  --principal-rgb: 100,29,43;
+  --texto-rgb: 86,32,43;
+  --acento-rgb: 213,163,72;
+  --hero-rgb: 100,29,43;
+  --titulo-rollo: #641D2B;
+  --tarjeta-rgb: 255,253,247;
+  --sombra-rgb: 86,32,43;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="olivo"] {
+  --fondo: #F4F3E7;
+  --tarjeta: #FFFDF5;
+  --texto: #2E4129;
+  --nav: #344C2B;
+  --acento: #C9A34E;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #C2C9BF;
+  --acento-nav: #D1B169;
+  --icono-nav: #D1B169;
+  --principal: #344C2B;
+  --sobre-principal: #FFFFFF;
+  --cita: #344C2B;
+  --oscuro: #344C2B;
+  --sobre-oscuro: #D1B169;
+  --sobre-acento: #2E4129;
+  --acento-btn: #C9A34E;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(201,163,78,0.5);
+  --principal-rgb: 52,76,43;
+  --texto-rgb: 46,65,41;
+  --acento-rgb: 201,163,78;
+  --hero-rgb: 52,76,43;
+  --titulo-rollo: #344C2B;
+  --tarjeta-rgb: 255,253,245;
+  --sombra-rgb: 46,65,41;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="tierra"] {
+  --fondo: #F8F0E5;
+  --tarjeta: #FFF9EF;
+  --texto: #543526;
+  --nav: #78452D;
+  --acento: #D9A54D;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #D6C7C0;
+  --acento-nav: #E5C286;
+  --icono-nav: #E5C286;
+  --principal: #78452D;
+  --sobre-principal: #FFFFFF;
+  --cita: #78452D;
+  --oscuro: #78452D;
+  --sobre-oscuro: #E5C286;
+  --sobre-acento: #543526;
+  --acento-btn: #D9A54D;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(217,165,77,0.5);
+  --principal-rgb: 120,69,45;
+  --texto-rgb: 84,53,38;
+  --acento-rgb: 217,165,77;
+  --hero-rgb: 120,69,45;
+  --titulo-rollo: #78452D;
+  --tarjeta-rgb: 255,249,239;
+  --sombra-rgb: 84,53,38;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="purpura"] {
+  --fondo: #F6F2F8;
+  --tarjeta: #FFFFFF;
+  --texto: #49325F;
+  --nav: #49325F;
+  --acento: #D7AD58;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #C8C2CF;
+  --acento-nav: #D7AD58;
+  --icono-nav: #D7AD58;
+  --principal: #49325F;
+  --sobre-principal: #FFFFFF;
+  --cita: #49325F;
+  --oscuro: #49325F;
+  --sobre-oscuro: #D7AD58;
+  --sobre-acento: #49325F;
+  --acento-btn: #D7AD58;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(215,173,88,0.5);
+  --principal-rgb: 73,50,95;
+  --texto-rgb: 73,50,95;
+  --acento-rgb: 215,173,88;
+  --hero-rgb: 73,50,95;
+  --titulo-rollo: #49325F;
+  --tarjeta-rgb: 255,255,255;
+  --sombra-rgb: 73,50,95;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="turquesa"] {
+  --fondo: #EFF7F5;
+  --tarjeta: #FFFFFF;
+  --texto: #184A51;
+  --nav: #12616A;
+  --acento: #D6AC55;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #BED4D6;
+  --acento-nav: #E6CD99;
+  --icono-nav: #E6CD99;
+  --principal: #12616A;
+  --sobre-principal: #FFFFFF;
+  --cita: #12616A;
+  --oscuro: #12616A;
+  --sobre-oscuro: #E6CD99;
+  --sobre-acento: #184A51;
+  --acento-btn: #D6AC55;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(214,172,85,0.5);
+  --principal-rgb: 18,97,106;
+  --texto-rgb: 24,74,81;
+  --acento-rgb: 214,172,85;
+  --hero-rgb: 18,97,106;
+  --titulo-rollo: #12616A;
+  --tarjeta-rgb: 255,255,255;
+  --sombra-rgb: 24,74,81;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+:root[data-tema="nocturna"] {
+  --fondo: #18212D;
+  --tarjeta: #293545;
+  --texto: #F5F0E5;
+  --nav: #202A38;
+  --acento: #D5AC60;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #BCBFC3;
+  --acento-nav: #D5AC60;
+  --icono-nav: #D5AC60;
+  --principal: #D5AC60;
+  --sobre-principal: #18212D;
+  --cita: #D5AC60;
+  --oscuro: #202A38;
+  --sobre-oscuro: #D5AC60;
+  --sobre-acento: #18212D;
+  --acento-btn: #D5AC60;
+  --btn-nav-bg: rgba(255,255,255,0.10);
+  --btn-nav-borde: rgba(213,172,96,0.5);
+  --principal-rgb: 213,172,96;
+  --texto-rgb: 245,240,229;
+  --acento-rgb: 213,172,96;
+  --hero-rgb: 32,42,56;
+  --titulo-rollo: #3B2A1C;
+  --tarjeta-rgb: 41,53,69;
+  --sombra-rgb: 0,0,0;
+  --palabras-jesus: #FF9A8F;
+  --textura: none;
+}
+:root[data-tema="marfil"] {
+  --fondo: #FCF8EF;
+  --tarjeta: #FFFFFF;
+  --texto: #59392D;
+  --nav: #F2E7D1;
+  --acento: #A96835;
+  --sobre-nav: #59392D;
+  --sobre-nav-suave: #684A3D;
+  --acento-nav: #91592E;
+  --icono-nav: #91592E;
+  --principal: #59392D;
+  --sobre-principal: #FFFFFF;
+  --cita: #9F6232;
+  --oscuro: #59392D;
+  --sobre-oscuro: #F2E7D1;
+  --sobre-acento: #FFFFFF;
+  --acento-btn: #9F6232;
+  --btn-nav-bg: rgba(89,57,45,0.08);
+  --btn-nav-borde: rgba(169,104,53,0.55);
+  --principal-rgb: 89,57,45;
+  --texto-rgb: 89,57,45;
+  --acento-rgb: 169,104,53;
+  --hero-rgb: 89,57,45;
+  --titulo-rollo: #59392D;
+  --tarjeta-rgb: 255,255,255;
+  --sombra-rgb: 89,57,45;
+  --palabras-jesus: #9B1024;
+  --textura: url('marmol_marfil_2026-11-22_2110.webp');
+}
+:root[data-tema="ambar"] {
+  --fondo: #FFF3E5;
+  --tarjeta: #FFFCF6;
+  --texto: #71391F;
+  --nav: #93421D;
+  --acento: #D7A044;
+  --sobre-nav: #FFFFFF;
+  --sobre-nav-suave: #E4CFC5;
+  --acento-nav: #EBCFA0;
+  --icono-nav: #EBCFA0;
+  --principal: #93421D;
+  --sobre-principal: #FFFFFF;
+  --cita: #93421D;
+  --oscuro: #93421D;
+  --sobre-oscuro: #EBCFA0;
+  --sobre-acento: #60301A;
+  --acento-btn: #D7A044;
+  --btn-nav-bg: rgba(255,255,255,0.12);
+  --btn-nav-borde: rgba(215,160,68,0.5);
+  --principal-rgb: 147,66,29;
+  --texto-rgb: 113,57,31;
+  --acento-rgb: 215,160,68;
+  --hero-rgb: 147,66,29;
+  --titulo-rollo: #93421D;
+  --tarjeta-rgb: 255,252,246;
+  --sombra-rgb: 113,57,31;
+  --palabras-jesus: #9B1024;
+  --textura: none;
+}
+
+/* Derivados comunes (se recalculan con cada paleta) */
+:root {
+  --nav-grad: linear-gradient(135deg, var(--nav) 0%, color-mix(in srgb, var(--nav) 92%, #000) 100%);
+  --principal-2: color-mix(in srgb, var(--principal) 84%, #fff);
+  --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta));
+  --borde: rgba(var(--principal-rgb), 0.28);
+  --fondo-exterior: var(--nav);
+  --sobre-hero: #FBF3E4;
+  --tamano-textura: 600px;
+}
+/* Textura (solo Marfil: en las demas paletas --textura vale none) */
+.phone { background-color: var(--fondo); background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat; }
+header:not(.hero), nav { background-image: var(--textura), var(--nav-grad); background-size: var(--tamano-textura), auto; background-color: var(--nav); }
+
+/* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
+nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
+
+/* Iconos de la barra inferior: silueta (mascara) pintada con el color de icono de cada paleta */
+.icono-nav { background: var(--icono-nav) !important; mix-blend-mode: normal !important; filter: none !important;
+  -webkit-mask-size: cover; mask-size: cover; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; }
+.item.activo .icono-nav { filter: drop-shadow(0 0 4px rgba(var(--acento-rgb), 0.55)) !important; }
+#nav-inicio { -webkit-mask-image: url('nav-inicio-mascara.png'); mask-image: url('nav-inicio-mascara.png'); background-image: none !important; }
+#nav-leer { -webkit-mask-image: url('nav-leer-mascara.png'); mask-image: url('nav-leer-mascara.png'); background-image: none !important; }
+#nav-guia { -webkit-mask-image: url('nav-guia-mascara.png'); mask-image: url('nav-guia-mascara.png'); background-image: none !important; }
+#nav-favoritos { -webkit-mask-image: url('nav-favoritos-mascara.png'); mask-image: url('nav-favoritos-mascara.png'); background-image: none !important; }
+
+/* Selector de paleta del menu */
+.opcion-tema .nombre-tema { flex: 1; min-width: 0; }
+.muestras { display: flex; flex-shrink: 0; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(128,128,128,0.45); }
+.muestras i { display: block; width: 14px; height: 18px; }

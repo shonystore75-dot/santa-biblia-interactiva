@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script>try{var t=localStorage.getItem('temaApp');if(t)document.documentElement.setAttribute('data-tema',t);}catch(e){}</script>
+<script src="temas.js"></script>
+<link rel="stylesheet" href="temas.css">
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9,36 +10,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap');
 
-  :root {
-    --ciruela: #3D1F3E;
-    --naranja: #D9622F;
-    --dorado: #F5B942;
-    --dorado-brillante: #FFDD8A;
-    --papiro: #FBF0D9;
-    --tinta: #3D2419;
-    --terracota: #B9502E;
-  }
 
-  :root[data-tema="esmeralda"] {
-    --ciruela: #1F3D33;
-    --naranja: #2E8B67;
-    --dorado: #D9B54A;
-    --dorado-brillante: #F0DB95;
-    --papiro: #EDEEDC;
-    --tinta: #223126;
-    --terracota: #2F6B4F;
-    --fondo-exterior: #16211C;
-  }
-  :root[data-tema="zafiro"] {
-    --ciruela: #1E2A4A;
-    --naranja: #3B5FA0;
-    --dorado: #E6C34D;
-    --dorado-brillante: #F6E6B0;
-    --papiro: #EDF1F7;
-    --tinta: #1A2238;
-    --terracota: #2C4A86;
-    --fondo-exterior: #141B33;
-  }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -46,7 +18,7 @@
   body {
     background: var(--fondo-exterior);
     font-family: 'Source Serif 4', serif;
-    color: var(--tinta);
+    color: var(--texto);
     display: flex;
     justify-content: center;
   }
@@ -56,7 +28,7 @@
     max-width: 480px;
     height: 100vh;
     height: 100dvh;
-    background: var(--papiro);
+    background: var(--fondo);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -69,7 +41,7 @@
     content: '';
     flex: 0 0 auto;
     height: env(safe-area-inset-bottom);
-    background: var(--ciruela);
+    background: var(--nav);
   }
 
   @media (min-width: 500px) {
@@ -78,27 +50,27 @@
     .phone {
       height: 760px;
       border-radius: 30px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 3px var(--tinta);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 3px var(--texto);
     }
   }
 
   header {
     flex: 0 0 auto;
-    background: linear-gradient(135deg, var(--ciruela) 0%, #5A2A4A 100%);
+    background: var(--nav-grad);
     padding: calc(2.2vh + env(safe-area-inset-top)) 5vw 1.6vh;
     display: flex;
     align-items: center;
     gap: 3vw;
-    border-bottom: 2px solid var(--dorado);
+    border-bottom: 2px solid var(--acento);
     position: relative;
   }
 
   .btn-atras {
     width: 38px; height: 38px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,221,138,0.4);
-    color: var(--dorado-brillante);
+    background: var(--btn-nav-bg);
+    border: 1px solid var(--btn-nav-borde);
+    color: var(--acento-nav);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     cursor: pointer;
@@ -112,7 +84,7 @@
   #titulo-header {
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    color: #fff;
+    color: var(--sobre-nav);
     font-size: clamp(15px, 3vh, 19px);
     flex: 1;
   }
@@ -120,7 +92,7 @@
   #subtitulo-header {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
-    color: var(--dorado-brillante);
+    color: var(--acento-nav);
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-top: 2px;
@@ -133,12 +105,12 @@
     padding: 2.5vh 6vw 4vh;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
-    scrollbar-color: rgba(185,80,46,0.65) rgba(185,80,46,0.08);
+    scrollbar-color: rgba(var(--principal-rgb),0.65) rgba(var(--principal-rgb),0.08);
   }
   main::-webkit-scrollbar { width: 6px; }
-  main::-webkit-scrollbar-track { background: rgba(185,80,46,0.08); }
-  main::-webkit-scrollbar-thumb { background: rgba(185,80,46,0.65); border-radius: 4px; }
-  main::-webkit-scrollbar-thumb:hover { background: rgba(185,80,46,0.85); }
+  main::-webkit-scrollbar-track { background: rgba(var(--principal-rgb),0.08); }
+  main::-webkit-scrollbar-thumb { background: rgba(var(--principal-rgb),0.65); border-radius: 4px; }
+  main::-webkit-scrollbar-thumb:hover { background: rgba(var(--principal-rgb),0.85); }
 
   .bloque-insignia {
     display: flex;
@@ -150,21 +122,21 @@
   .bloque-insignia .circulo {
     width: 64px; height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--terracota), var(--naranja));
+    background: linear-gradient(135deg, var(--principal), var(--principal-2));
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 1.2vh;
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   }
-  .bloque-insignia .circulo svg { width: 30px; height: 30px; color: #fff; }
+  .bloque-insignia .circulo svg { width: 30px; height: 30px; color: var(--sobre-principal); }
   .bloque-insignia .nombre-app {
     font-family: 'Cinzel', serif;
     font-weight: 700;
     font-size: 17px;
-    color: var(--ciruela);
+    color: var(--texto);
   }
   .bloque-insignia .lema {
     font-size: 11.5px;
-    color: var(--terracota);
+    color: var(--cita);
     margin-top: 0.4vh;
   }
 
@@ -173,7 +145,7 @@
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--terracota);
+    color: var(--cita);
     margin: 2.6vh 0 1vh;
   }
   .seccion-titulo:first-of-type { margin-top: 0; }
@@ -183,13 +155,13 @@
     justify-content: space-between;
     align-items: baseline;
     padding: 1vh 0;
-    border-bottom: 1px solid rgba(61,31,62,0.1);
+    border-bottom: 1px solid rgba(var(--texto-rgb),0.1);
     font-size: 13px;
     gap: 3vw;
   }
   .fila-info:last-child { border-bottom: none; }
-  .fila-info .etiqueta { color: var(--tinta); opacity: 0.8; flex-shrink: 0; }
-  .fila-info .valor { color: var(--ciruela); font-weight: 600; text-align: right; }
+  .fila-info .etiqueta { color: var(--texto); opacity: 0.8; flex-shrink: 0; }
+  .fila-info .valor { color: var(--texto); font-weight: 600; text-align: right; }
 
   .btn-suscribirse {
     display: flex;
@@ -197,48 +169,48 @@
     justify-content: center;
     gap: 9px;
     width: 100%;
-    background: linear-gradient(160deg, #fff 0%, var(--papiro) 100%);
-    color: var(--terracota);
-    border: 1.5px solid var(--dorado);
+    background: var(--tarjeta);
+    color: var(--cita);
+    border: 1.5px solid var(--acento);
     border-radius: 4px 16px 4px 16px;
     font-family: 'Cinzel', serif;
     font-weight: 600;
     font-size: 13px;
     padding: 12px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(61,31,62,0.12);
+    box-shadow: 0 4px 12px rgba(var(--sombra-rgb),0.12);
   }
   .btn-suscribirse svg { width: 18px; height: 18px; flex-shrink: 0; }
-  .btn-suscribirse:active { background: var(--papiro); }
+  .btn-suscribirse:active { background: var(--fondo); }
 
   .fila-enlace {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1.3vh 0.5vw;
-    border-bottom: 1px solid rgba(61,31,62,0.1);
+    border-bottom: 1px solid rgba(var(--texto-rgb),0.1);
     text-decoration: none;
-    color: var(--tinta);
+    color: var(--texto);
     cursor: pointer;
   }
   .fila-enlace:last-child { border-bottom: none; }
-  .fila-enlace .texto-enlace { font-size: 13.5px; font-weight: 600; color: var(--ciruela); }
-  .fila-enlace .flecha { color: var(--terracota); flex-shrink: 0; }
+  .fila-enlace .texto-enlace { font-size: 13.5px; font-weight: 600; color: var(--texto); }
+  .fila-enlace .flecha { color: var(--cita); flex-shrink: 0; }
   .fila-enlace .flecha svg { width: 16px; height: 16px; }
 
   .texto-creditos {
     font-size: 12px;
     line-height: 1.65;
-    color: var(--tinta);
+    color: var(--texto);
     opacity: 0.85;
   }
 
   .btn-menu {
     width: 43px; height: 43px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,221,138,0.4);
-    color: var(--dorado-brillante);
+    background: var(--btn-nav-bg);
+    border: 1px solid var(--btn-nav-borde);
+    color: var(--acento-nav);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     cursor: pointer;
@@ -250,7 +222,7 @@
     top: 100%;
     right: 2.5vw;
     margin-top: 6px;
-    background: var(--papiro);
+    background: var(--tarjeta);
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     padding: 6px;
@@ -271,12 +243,12 @@
     border-radius: 6px;
     font-family: 'Source Serif 4', serif;
     font-size: 14.5px;
-    color: var(--terracota);
+    color: var(--cita);
     cursor: pointer;
   }
-  .fila-menu:active { background: rgba(61,31,62,0.08); }
-  .fila-menu svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--terracota); }
-  .fila-menu .flecha-sub { margin-left: auto; transition: transform 0.15s; color: var(--terracota); }
+  .fila-menu:active { background: rgba(var(--texto-rgb),0.08); }
+  .fila-menu svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--cita); }
+  .fila-menu .flecha-sub { margin-left: auto; transition: transform 0.15s; color: var(--cita); }
   .fila-menu.abierto .flecha-sub { transform: rotate(90deg); }
   .fila-menu.disabled { opacity: 0.45; cursor: default; }
   .fila-menu.disabled:active { background: none; }
@@ -286,8 +258,8 @@
     font-size: 8.5px;
     letter-spacing: 0.4px;
     text-transform: uppercase;
-    background: rgba(61,31,62,0.08);
-    color: var(--terracota);
+    background: rgba(var(--texto-rgb),0.08);
+    color: var(--cita);
     padding: 2px 6px;
     border-radius: 8px;
   }
@@ -297,23 +269,23 @@
   .btn-escala-fila {
     width: 26px; height: 26px;
     border-radius: 6px;
-    background: rgba(61,31,62,0.08);
+    background: rgba(var(--texto-rgb),0.08);
     border: none;
-    color: var(--ciruela);
+    color: var(--texto);
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     font-weight: 700;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
   }
-  .btn-escala-fila:active { background: rgba(61,31,62,0.2); }
+  .btn-escala-fila:active { background: rgba(var(--texto-rgb),0.2); }
   .submenu-paleta {
     display: none;
     flex-direction: column;
     gap: 2px;
     padding-left: 10px;
     margin: 2px 0 4px;
-    border-left: 2px solid rgba(185,80,46,0.18);
+    border-left: 2px solid rgba(var(--principal-rgb),0.18);
   }
   .submenu-paleta.visible { display: flex; }
   .opcion-tema {
@@ -324,27 +296,18 @@
     border-radius: 6px;
     font-family: 'Source Serif 4', serif;
     font-size: 14.5px;
-    color: var(--terracota);
+    color: var(--cita);
     cursor: pointer;
   }
-  .opcion-tema:active { background: rgba(61,31,62,0.08); }
-  .opcion-tema.activo { background: rgba(245,185,66,0.3); font-weight: 600; }
-  .swatch {
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
-  }
-  .swatch-clasico { background: linear-gradient(135deg, #3D1F3E 50%, #F5B942 50%); }
-  .swatch-esmeralda { background: linear-gradient(135deg, #1F3D33 50%, #D9B54A 50%); }
-  .swatch-zafiro { background: linear-gradient(135deg, #1E2A4A 50%, #E6C34D 50%); }
+  .opcion-tema:active { background: rgba(var(--texto-rgb),0.08); }
+  .opcion-tema.activo { background: rgba(var(--acento-rgb),0.3); font-weight: 600; }
   .toast-copiado {
     position: fixed;
     left: 50%;
     bottom: 90px;
     transform: translateX(-50%) translateY(10px);
-    background: var(--ciruela);
-    color: var(--papiro);
+    background: var(--oscuro);
+    color: var(--sobre-oscuro);
     font-size: 13px;
     padding: 9px 18px;
     border-radius: 20px;
@@ -387,9 +350,15 @@
         </div>
         <div class="fila-menu" id="fila-paleta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.6-.5 1.6-1.4 0-.4-.15-.75-.4-1a1.2 1.2 0 0 1 .85-2h1.3A3.65 3.65 0 0 0 19 12.95 9 9 0 0 0 12 3z"></path><circle cx="7.5" cy="11" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="10.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="15" cy="8" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="12.5" r="1.3" fill="currentColor" stroke="none"></circle></svg>Paleta de colores<span class="flecha-sub">›</span></div>
         <div class="submenu-paleta" id="submenu-paleta">
-          <div class="opcion-tema" data-tema="" onclick="elegirTema('')"><span class="swatch swatch-clasico"></span>Papiro clásico</div>
-          <div class="opcion-tema" data-tema="esmeralda" onclick="elegirTema('esmeralda')"><span class="swatch swatch-esmeralda"></span>Esmeralda nocturna</div>
-          <div class="opcion-tema" data-tema="zafiro" onclick="elegirTema('zafiro')"><span class="swatch swatch-zafiro"></span>Zafiro real</div>
+        <div class="opcion-tema" data-tema="azul" onclick="elegirTema('azul')"><span class="nombre-tema">Azul clásico</span><span class="muestras"><i style="background:#F3F5F8"></i><i style="background:#FFFFFF"></i><i style="background:#18365B"></i><i style="background:#D6A84E"></i></span></div>
+        <div class="opcion-tema" data-tema="borgona" onclick="elegirTema('borgona')"><span class="nombre-tema">Borgoña real</span><span class="muestras"><i style="background:#FAF3EB"></i><i style="background:#FFFDF7"></i><i style="background:#641D2B"></i><i style="background:#D5A348"></i></span></div>
+        <div class="opcion-tema" data-tema="olivo" onclick="elegirTema('olivo')"><span class="nombre-tema">Verde olivo</span><span class="muestras"><i style="background:#F4F3E7"></i><i style="background:#FFFDF5"></i><i style="background:#344C2B"></i><i style="background:#C9A34E"></i></span></div>
+        <div class="opcion-tema" data-tema="tierra" onclick="elegirTema('tierra')"><span class="nombre-tema">Tierra bíblica</span><span class="muestras"><i style="background:#F8F0E5"></i><i style="background:#FFF9EF"></i><i style="background:#78452D"></i><i style="background:#D9A54D"></i></span></div>
+        <div class="opcion-tema" data-tema="purpura" onclick="elegirTema('purpura')"><span class="nombre-tema">Púrpura espiritual</span><span class="muestras"><i style="background:#F6F2F8"></i><i style="background:#FFFFFF"></i><i style="background:#49325F"></i><i style="background:#D7AD58"></i></span></div>
+        <div class="opcion-tema" data-tema="turquesa" onclick="elegirTema('turquesa')"><span class="nombre-tema">Turquesa renovación</span><span class="muestras"><i style="background:#EFF7F5"></i><i style="background:#FFFFFF"></i><i style="background:#12616A"></i><i style="background:#D6AC55"></i></span></div>
+        <div class="opcion-tema" data-tema="nocturna" onclick="elegirTema('nocturna')"><span class="nombre-tema">Nocturna</span><span class="muestras"><i style="background:#18212D"></i><i style="background:#293545"></i><i style="background:#202A38"></i><i style="background:#D5AC60"></i></span></div>
+        <div class="opcion-tema" data-tema="marfil" onclick="elegirTema('marfil')"><span class="nombre-tema">Marfil clásico</span><span class="muestras"><i style="background:#FCF8EF"></i><i style="background:#FFFFFF"></i><i style="background:#F2E7D1"></i><i style="background:#A96835"></i></span></div>
+        <div class="opcion-tema" data-tema="ambar" onclick="elegirTema('ambar')"><span class="nombre-tema">Ámbar inspirador</span><span class="muestras"><i style="background:#FFF3E5"></i><i style="background:#FFFCF6"></i><i style="background:#93421D"></i><i style="background:#D7A044"></i></span></div>
         </div>
         <div class="fila-menu" id="fila-acerca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"></circle></svg>Acerca de</div>
         <div class="fila-menu" id="fila-compartir-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.8"></circle><circle cx="6" cy="12" r="2.8"></circle><circle cx="18" cy="19" r="2.8"></circle><line x1="8.2" y1="10.6" x2="15.8" y2="6.2"></line><line x1="8.2" y1="13.4" x2="15.8" y2="17.8"></line></svg>Compartir la app</div>
@@ -458,15 +427,7 @@
   }
 
   function elegirTema(nombre) {
-    try {
-      if (nombre) {
-        document.documentElement.setAttribute('data-tema', nombre);
-        localStorage.setItem('temaApp', nombre);
-      } else {
-        document.documentElement.removeAttribute('data-tema');
-        localStorage.removeItem('temaApp');
-      }
-    } catch (e) {}
+    aplicarTema(nombre);
     const menu = document.getElementById('menu-principal');
     if (menu) menu.classList.remove('visible');
     const sub = document.getElementById('submenu-paleta');
@@ -476,9 +437,9 @@
     marcarTemaActivo();
   }
   function marcarTemaActivo() {
-    const actual = document.documentElement.getAttribute('data-tema') || '';
+    const actual = temaActual();
     document.querySelectorAll('.opcion-tema').forEach(el => {
-      el.classList.toggle('activo', (el.dataset.tema || '') === actual);
+      el.classList.toggle('activo', el.dataset.tema === actual);
     });
   }
   function irABuscar() {

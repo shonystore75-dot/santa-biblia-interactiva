@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.Bridge;
@@ -43,6 +44,9 @@ public class MainActivity extends BridgeActivity {
     private WebChromeClient.CustomViewCallback callbackPantallaCompleta;
     private OnBackPressedCallback atrasPantallaCompleta;
 
+    // Paleta Marfil clásico (barra inferior clara): los iconos de la barra de navegación del sistema deben ser oscuros.
+    private volatile boolean navegacionClara = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Importante: se llama a super primero. Capacitor cambia aquí el tema de
@@ -66,6 +70,32 @@ public class MainActivity extends BridgeActivity {
         handler.post(this::ocultarBarraDeEstado);
         mostrarVideoDeBienvenida();
         configurarPantallaCompletaWeb();
+        configurarPuenteTema();
+    }
+
+    /** Puente JS -> nativo: la web (temas.js) avisa de la paleta activa para elegir iconos claros u oscuros en la barra de navegación. */
+    private class PuenteTema {
+        @JavascriptInterface
+        public void barraNavegacionClara(final boolean clara) {
+            runOnUiThread(() -> {
+                navegacionClara = clara;
+                ocultarBarraDeEstado();
+            });
+        }
+    }
+
+    private void configurarPuenteTema() {
+        Bridge puente = getBridge();
+        if (puente == null || puente.getWebView() == null) return;
+        puente.getWebView().addJavascriptInterface(new PuenteTema(), "AndroidTema");
+        // Si la primera página empezó a cargar antes de registrar el puente, se le pide que vuelva a avisar.
+        handler.postDelayed(this::pedirTemaALaWeb, 1200);
+    }
+
+    private void pedirTemaALaWeb() {
+        Bridge puente = getBridge();
+        if (puente == null || puente.getWebView() == null) return;
+        puente.getWebView().evaluateJavascript("window.aplicarTema&&window.temaActual&&window.aplicarTema(window.temaActual())", null);
     }
 
     /**
@@ -138,6 +168,7 @@ public class MainActivity extends BridgeActivity {
     public void onResume() {
         super.onResume();
         ocultarBarraDeEstado();
+        pedirTemaALaWeb();
     }
 
     @Override
@@ -153,11 +184,11 @@ public class MainActivity extends BridgeActivity {
         controlador.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         controlador.hide(WindowInsetsCompat.Type.statusBars());
         controlador.show(WindowInsetsCompat.Type.navigationBars());
-        // Íconos claros en la barra de navegación: el fondo de la app ahí es siempre morado oscuro.
-        // Barra transparente: se ve el morado del menú y Xiaomi elige íconos claros (con el color
-        // por defecto de la barra los pintaba oscuros aunque se pidieran claros).
+        // Íconos de la barra de navegación: claros salvo en Marfil clásico (menú inferior claro), donde son oscuros.
+        // Barra transparente: se ve el color del menú de la app y Xiaomi respeta la elección de íconos
+        // (con el color por defecto de la barra los pintaba oscuros aunque se pidieran claros).
         ventana.setNavigationBarColor(Color.TRANSPARENT);
-        controlador.setAppearanceLightNavigationBars(false);
+        controlador.setAppearanceLightNavigationBars(navegacionClara);
         if (android.os.Build.VERSION.SDK_INT >= 29) {
             ventana.setNavigationBarContrastEnforced(false);
         }
@@ -208,6 +239,7 @@ public class MainActivity extends BridgeActivity {
             }
             capaVideo = null;
         }
+        pedirTemaALaWeb();
     }
 
     @Override
