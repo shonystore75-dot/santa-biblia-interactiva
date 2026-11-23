@@ -8,15 +8,21 @@
   --acento: #D6AC55;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #BED4D6;
-  --acento-nav: #E6CD99;
-  --icono-nav: #D6AC55;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #12616A;
   --sobre-principal: #FFFFFF;
   --cita: #12616A;
   --oscuro: #12616A;
-  --sobre-oscuro: #E6CD99;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #184A51;
   --acento-btn: #D6AC55;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(214,172,85,0.5);
   --principal-rgb: 18,97,106;
@@ -45,15 +51,21 @@
   --acento: #D6A84E;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #BAC3CE;
-  --acento-nav: #D6A84E;
-  --icono-nav: #D6A84E;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #18365B;
   --sobre-principal: #FFFFFF;
   --cita: #18365B;
   --oscuro: #18365B;
-  --sobre-oscuro: #D6A84E;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #24354B;
   --acento-btn: #D6A84E;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(214,168,78,0.5);
   --principal-rgb: 24,54,91;
@@ -82,15 +94,21 @@
   --acento: #D5A348;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #D0BBBF;
-  --acento-nav: #D5A348;
-  --icono-nav: #D5A348;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #641D2B;
   --sobre-principal: #FFFFFF;
   --cita: #641D2B;
   --oscuro: #641D2B;
-  --sobre-oscuro: #D5A348;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #56202B;
   --acento-btn: #D5A348;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(213,163,72,0.5);
   --principal-rgb: 100,29,43;
@@ -119,15 +137,21 @@
   --acento: #C9A34E;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #C2C9BF;
-  --acento-nav: #D1B169;
-  --icono-nav: #C9A34E;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #344C2B;
   --sobre-principal: #FFFFFF;
   --cita: #344C2B;
   --oscuro: #344C2B;
-  --sobre-oscuro: #D1B169;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #2E4129;
   --acento-btn: #C9A34E;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(201,163,78,0.5);
   --principal-rgb: 52,76,43;
@@ -156,15 +180,21 @@
   --acento: #D9A54D;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #D6C7C0;
-  --acento-nav: #E5C286;
-  --icono-nav: #D9A54D;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #78452D;
   --sobre-principal: #FFFFFF;
   --cita: #78452D;
   --oscuro: #78452D;
-  --sobre-oscuro: #E5C286;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #543526;
   --acento-btn: #D9A54D;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(217,165,77,0.5);
   --principal-rgb: 120,69,45;
@@ -193,15 +223,21 @@
   --acento: #D7AD58;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #C8C2CF;
-  --acento-nav: #D7AD58;
-  --icono-nav: #D7AD58;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #49325F;
   --sobre-principal: #FFFFFF;
   --cita: #49325F;
   --oscuro: #49325F;
-  --sobre-oscuro: #D7AD58;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #49325F;
   --acento-btn: #D7AD58;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(215,173,88,0.5);
   --principal-rgb: 73,50,95;
@@ -230,15 +266,21 @@
   --acento: #D6AC55;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #BED4D6;
-  --acento-nav: #E6CD99;
-  --icono-nav: #D6AC55;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #12616A;
   --sobre-principal: #FFFFFF;
   --cita: #12616A;
   --oscuro: #12616A;
-  --sobre-oscuro: #E6CD99;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #184A51;
   --acento-btn: #D6AC55;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(214,172,85,0.5);
   --principal-rgb: 18,97,106;
@@ -267,15 +309,21 @@
   --acento: #D5AC60;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #BCBFC3;
-  --acento-nav: #D5AC60;
-  --icono-nav: #D5AC60;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #D5AC60;
   --sobre-principal: #18212D;
   --cita: #D5AC60;
   --oscuro: #202A38;
-  --sobre-oscuro: #D5AC60;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #18212D;
   --acento-btn: #D5AC60;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 6px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.10);
   --btn-nav-borde: rgba(213,172,96,0.5);
   --principal-rgb: 213,172,96;
@@ -305,7 +353,7 @@
   --sobre-nav: #59392D;
   --sobre-nav-suave: #684A3D;
   --acento-nav: #91592E;
-  --icono-nav: #91592E;
+  --icono-nav: #B07A33;
   --principal: #59392D;
   --sobre-principal: #FFFFFF;
   --cita: #9F6232;
@@ -313,6 +361,12 @@
   --sobre-oscuro: #F2E7D1;
   --sobre-acento: #FFFFFF;
   --acento-btn: #9F6232;
+  --oro-linea: linear-gradient(90deg, #5E3A0C, #B9770E 30%, #F0C14B 50%, #C48414 70%, #5E3A0C);
+  --oro-borde: #C9921A;
+  --oro-icono: #B07A33;
+  --oro-brillo: rgba(255,255,255,0.85);
+  --oro-radio: 2px;
+  --oro-sombra: rgba(122,74,31,0.45);
   --btn-nav-bg: rgba(89,57,45,0.08);
   --btn-nav-borde: rgba(169,104,53,0.55);
   --principal-rgb: 89,57,45;
@@ -341,15 +395,21 @@
   --acento: #D7A044;
   --sobre-nav: #FFFFFF;
   --sobre-nav-suave: #E4CFC5;
-  --acento-nav: #EBCFA0;
-  --icono-nav: #D8A248;
+  --acento-nav: #FFD54A;
+  --icono-nav: #FFD04A;
   --principal: #93421D;
   --sobre-principal: #FFFFFF;
   --cita: #93421D;
   --oscuro: #93421D;
-  --sobre-oscuro: #EBCFA0;
+  --sobre-oscuro: #FFD54A;
   --sobre-acento: #60301A;
   --acento-btn: #D7A044;
+  --oro-linea: linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10);
+  --oro-borde: #F2B71C;
+  --oro-icono: #FFD04A;
+  --oro-brillo: rgba(255,214,90,0.9);
+  --oro-radio: 4px;
+  --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(215,160,68,0.5);
   --principal-rgb: 147,66,29;
@@ -374,13 +434,13 @@
 :root {
   /* Encabezado y barra inferior: un tono algo mas claro arriba y el color exacto abajo */
   --nav-grad: linear-gradient(180deg, color-mix(in srgb, var(--nav) 90%, #fff) 0%, var(--nav) 100%);
-  --linea-barra: rgba(var(--acento-rgb), 0.7);
+  /* lineas finas doradas: degradado metalico horizontal */
   /* Botones: el color exacto, con un degradado MUY leve hacia mas oscuro (nunca mas claro) */
   --principal-2: color-mix(in srgb, var(--principal) 92%, #000);
   --brillo-boton: inset 0 1px 0 rgba(255,255,255,0.25);
   /* Tarjetas: borde dorado fino y sombra pequena con el color de la paleta */
   --borde: rgba(var(--principal-rgb), 0.28);
-  --borde-tarjeta: rgba(var(--acento-rgb), 0.45);
+  --borde-tarjeta: var(--oro-borde);
   --sombra-tarjeta: 0 1px 3px rgba(var(--sombra-rgb), 0.16), 0 8px 14px -8px rgba(var(--sombra-rgb), 0.22);
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
@@ -393,8 +453,8 @@
 /* ===== Textura de marmol: llega al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
    (las reglas de cada pagina usan 'background' abreviado; aqui se sube la especificidad para que no la pisen) */
 :root .phone { isolation: isolate; background-color: var(--fondo); }
-:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: 1px solid var(--linea-barra); position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
-:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: 1px solid var(--linea-barra); position: relative; isolation: var(--aislar-barra); }
+:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
+:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
   content: ''; display: var(--marmol-display); position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat;
@@ -404,11 +464,10 @@
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
 
-/* Iconos de la barra inferior: imagen recoloreada con el dorado exacto de la paleta, con un brillo leve */
-:root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 2px rgba(var(--acento-rgb), 0.45)); background-size: cover; background-position: center; background-repeat: no-repeat; }
-:root .item.activo .icono-nav { filter: drop-shadow(0 0 4px rgba(var(--acento-rgb), 0.75)); }
-:root[data-tema="marfil"] .icono-nav { filter: drop-shadow(0 0 1px rgba(145,89,46,0.35)); }
-:root[data-tema="marfil"] .item.activo .icono-nav { filter: drop-shadow(0 0 2px rgba(145,89,46,0.55)); }
+/* Iconos de la barra inferior: imagen recoloreada (dorado metalico vivo; bronce en Marfil) con resplandor y una sombra oscura leve */
+:root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); background-size: cover; background-position: center; background-repeat: no-repeat; }
+:root .item.activo .icono-nav { filter: drop-shadow(0 0 calc(var(--oro-radio) + 2px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root nav .item.activo { text-shadow: 0 0 8px var(--oro-brillo); }
 
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }

@@ -33,7 +33,19 @@ P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
 'nocturna':('#18212D','#293545','#F5F0E5','#202A38','#D5AC60'),
 'marfil':('#FCF8EF','#FFFFFF','#59392D','#F2E7D1','#A96835'),
 'ambar':('#FFF3E5','#FFFCF6','#71391F','#93421D','#D7A044')}
-ICONO_MARFIL='#91592E'   # barra clara: iconos marrones
+# ---- DORADO METALICO VIVO (ajustar aqui; el resto sale de estas constantes) ----
+ORO_LINEA='linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10)'   # lineas finas (encabezado/barra/separadores)
+ORO_BORDE='#F2B71C'                  # bordes de tarjetas y detalles
+ORO_ICONO='#FFD04A'                  # color de referencia de los iconos de la barra (el dibujo lleva ademas luces y sombras)
+ORO_TEXTO='#FFD54A'                  # dorado de la etiqueta activa y subtitulos (se aclara si hace falta para 4,5:1)
+ORO_BRILLO='rgba(255,214,90,0.9)'    # resplandor de los iconos
+ORO_RADIO_BRILLO='4px'
+# Marfil (barra clara): el dorado vivo se pierde sobre claro; iconos de bronce metalico y lineas con extremos mas oscuros
+BRONCE_OSCURO='#7A4A1F'; BRONCE_CLARO='#B07A33'
+MARFIL_LINEA='linear-gradient(90deg, #5E3A0C, #B9770E 30%, #F0C14B 50%, #C48414 70%, #5E3A0C)'
+MARFIL_BORDE='#C9921A'
+# Nocturna (fondo oscuro): resplandor un poco mas fuerte
+NOCTURNA_RADIO_BRILLO='6px'
 TARJETA_MARFIL_ALFA=0.80 # Marfil: tarjetas de blanco translucido para que se asomen las vetas
 MINIMO_ICONO=3.0         # contraste minimo de un icono de interfaz (WCAG 1.4.11, no texto)
 
@@ -49,7 +61,8 @@ def derivar(n):
         d['sobre_nav']=x
         d['sobre_nav_suave']=mix(x,nv,0.1)
         d['acento_nav']=hasta(a,'#000000',[nv],4.6)          # texto dorado oscuro sobre barra clara
-        d['icono_nav']=ICONO_MARFIL
+        d['icono_nav']=BRONCE_CLARO; d['icono_tipo']='bronce'
+        d['oro_linea']=MARFIL_LINEA; d['oro_borde']=MARFIL_BORDE; d['oro_brillo']='rgba(255,255,255,0.85)'; d['oro_radio']='2px'; d['oro_sombra']='rgba(122,74,31,0.45)'
         d['principal']=x; d['sobre_principal']='#FFFFFF'
         d['cita']=hasta(a,'#000000',[d['tarjeta_efectiva'],f],4.6)
         d['oscuro']=x; d['sobre_oscuro']=nv
@@ -59,8 +72,9 @@ def derivar(n):
     elif n=='nocturna':
         d['sobre_nav']='#FFFFFF'
         d['sobre_nav_suave']=hasta(mix('#FFFFFF',nv,0.3),'#FFFFFF',[nv],4.6)
-        d['acento_nav']=hasta(a,'#FFFFFF',[nv],4.6)
-        d['icono_nav']=a
+        d['acento_nav']=hasta(ORO_TEXTO,'#FFFFFF',[nv],4.6)
+        d['icono_nav']=ORO_ICONO; d['icono_tipo']='vivo'
+        d['oro_radio']=NOCTURNA_RADIO_BRILLO
         d['principal']=a; d['sobre_principal']=f
         d['cita']=hasta(a,'#FFFFFF',[t,f],4.6)
         d['oscuro']=nv; d['sobre_oscuro']=d['acento_nav']
@@ -70,9 +84,10 @@ def derivar(n):
     else:
         d['sobre_nav']='#FFFFFF'
         d['sobre_nav_suave']=hasta(mix('#FFFFFF',nv,0.3),'#FFFFFF',[nv],4.6)
-        d['acento_nav']=hasta(a,'#FFFFFF',[nv],4.6)           # texto dorado sobre la barra (4.5:1)
-        if cr(a,nv)>=MINIMO_ICONO: d['icono_nav']=a            # icono: dorado EXACTO pedido (3:1)
-        else: d['icono_nav']=hasta(a,'#FFFFFF',[nv],MINIMO_ICONO); d['icono_ajustado']=True
+        d['acento_nav']=hasta(ORO_TEXTO,'#FFFFFF',[nv],4.6)   # texto dorado sobre la barra (4.5:1)
+        d['icono_tipo']='vivo'
+        if cr(ORO_ICONO,nv)>=MINIMO_ICONO: d['icono_nav']=ORO_ICONO       # icono: dorado vivo (3:1 minimo)
+        else: d['icono_nav']=hasta(ORO_ICONO,'#FFFFFF',[nv],MINIMO_ICONO); d['icono_ajustado']=True
         d['principal']=nv
         d['sobre_principal']='#FFFFFF'
         d['cita']=d['principal']
@@ -81,6 +96,7 @@ def derivar(n):
         d['hero']=nv
         d['btn_nav_bg']='rgba(255,255,255,0.12)'; d['btn_nav_borde']='rgba(%s,0.5)'%triple(a)
     d.setdefault('acento_btn',a)
+    d.setdefault('oro_linea',ORO_LINEA); d.setdefault('oro_borde',ORO_BORDE); d.setdefault('oro_brillo',ORO_BRILLO); d.setdefault('oro_radio',ORO_RADIO_BRILLO); d.setdefault('oro_sombra','rgba(0,0,0,0.35)')
     if n!='marfil':
         d['sobre_acento']=hasta(x if L(x)<0.5 else f,'#000000' if L(x)<0.5 else '#FFFFFF',[d['acento_btn']],4.6)
     return d
@@ -93,7 +109,7 @@ def css():
         v=[('fondo',d['fondo']),('tarjeta',d['tarjeta_css']),('tarjeta-solida',d['tarjeta']),('texto',d['texto']),('nav',d['nav']),('acento',d['acento']),
            ('sobre-nav',d['sobre_nav']),('sobre-nav-suave',d['sobre_nav_suave']),('acento-nav',d['acento_nav']),('icono-nav',d['icono_nav']),
            ('principal',d['principal']),('sobre-principal',d['sobre_principal']),('cita',d['cita']),
-           ('oscuro',d['oscuro']),('sobre-oscuro',d['sobre_oscuro']),('sobre-acento',d['sobre_acento']),('acento-btn',d['acento_btn']),
+           ('oscuro',d['oscuro']),('sobre-oscuro',d['sobre_oscuro']),('sobre-acento',d['sobre_acento']),('acento-btn',d['acento_btn']),('oro-linea',d['oro_linea']),('oro-borde',d['oro_borde']),('oro-icono',d['icono_nav']),('oro-brillo',d['oro_brillo']),('oro-radio',d['oro_radio']),('oro-sombra',d['oro_sombra']),
            ('btn-nav-bg',d['btn_nav_bg']),('btn-nav-borde',d['btn_nav_borde']),
            ('principal-rgb',triple(d['principal'])),('texto-rgb',triple(d['texto'])),('acento-rgb',triple(d['acento'])),('hero-rgb',triple(d['hero'])),
            ('titulo-rollo','#3B2A1C' if n=='nocturna' else (d['texto'] if marfil else d['nav'])),
@@ -113,13 +129,13 @@ def css():
 :root {
   /* Encabezado y barra inferior: un tono algo mas claro arriba y el color exacto abajo */
   --nav-grad: linear-gradient(180deg, color-mix(in srgb, var(--nav) 90%, #fff) 0%, var(--nav) 100%);
-  --linea-barra: rgba(var(--acento-rgb), 0.7);
+  /* lineas finas doradas: degradado metalico horizontal */
   /* Botones: el color exacto, con un degradado MUY leve hacia mas oscuro (nunca mas claro) */
   --principal-2: color-mix(in srgb, var(--principal) 92%, #000);
   --brillo-boton: inset 0 1px 0 rgba(255,255,255,0.25);
   /* Tarjetas: borde dorado fino y sombra pequena con el color de la paleta */
   --borde: rgba(var(--principal-rgb), 0.28);
-  --borde-tarjeta: rgba(var(--acento-rgb), 0.45);
+  --borde-tarjeta: var(--oro-borde);
   --sombra-tarjeta: 0 1px 3px rgba(var(--sombra-rgb), 0.16), 0 8px 14px -8px rgba(var(--sombra-rgb), 0.22);
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
@@ -132,8 +148,8 @@ def css():
 /* ===== Textura de marmol: llega al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
    (las reglas de cada pagina usan 'background' abreviado; aqui se sube la especificidad para que no la pisen) */
 :root .phone { isolation: isolate; background-color: var(--fondo); }
-:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: 1px solid var(--linea-barra); position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
-:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: 1px solid var(--linea-barra); position: relative; isolation: var(--aislar-barra); }
+:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
+:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
   content: ''; display: var(--marmol-display); position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat;
@@ -143,11 +159,10 @@ def css():
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
 
-/* Iconos de la barra inferior: imagen recoloreada con el dorado exacto de la paleta, con un brillo leve */
-:root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 2px rgba(var(--acento-rgb), 0.45)); background-size: cover; background-position: center; background-repeat: no-repeat; }
-:root .item.activo .icono-nav { filter: drop-shadow(0 0 4px rgba(var(--acento-rgb), 0.75)); }
-:root[data-tema="marfil"] .icono-nav { filter: drop-shadow(0 0 1px rgba(145,89,46,0.35)); }
-:root[data-tema="marfil"] .item.activo .icono-nav { filter: drop-shadow(0 0 2px rgba(145,89,46,0.55)); }
+/* Iconos de la barra inferior: imagen recoloreada (dorado metalico vivo; bronce en Marfil) con resplandor y una sombra oscura leve */
+:root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); background-size: cover; background-position: center; background-repeat: no-repeat; }
+:root .item.activo .icono-nav { filter: drop-shadow(0 0 calc(var(--oro-radio) + 2px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root nav .item.activo { text-shadow: 0 0 8px var(--oro-brillo); }
 
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }
