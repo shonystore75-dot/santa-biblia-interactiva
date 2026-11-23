@@ -33,19 +33,19 @@ P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
 'nocturna':('#18212D','#293545','#F5F0E5','#202A38','#D5AC60'),
 'marfil':('#FCF8EF','#FFFFFF','#59392D','#F2E7D1','#A96835'),
 'ambar':('#FFF3E5','#FFFCF6','#71391F','#93421D','#D7A044')}
-# ---- DORADO METALICO VIVO (ajustar aqui; el resto sale de estas constantes) ----
-ORO_LINEA='linear-gradient(90deg, #9A6A10, #FFD54A 30%, #FFF3B0 50%, #F2B71C 70%, #9A6A10)'   # lineas finas (encabezado/barra/separadores)
-ORO_BORDE='#F2B71C'                  # bordes de tarjetas y detalles
-ORO_ICONO='#FFD04A'                  # color de referencia de los iconos de la barra (el dibujo lleva ademas luces y sombras)
-ORO_TEXTO='#FFD54A'                  # dorado de la etiqueta activa y subtitulos (se aclara si hace falta para 4,5:1)
-ORO_BRILLO='rgba(255,214,90,0.9)'    # resplandor de los iconos
-ORO_RADIO_BRILLO='4px'
+# ---- DORADO METALICO DE TERMINO MEDIO (opcion B) (ajustar aqui; el resto sale de estas constantes) ----
+ORO_LINEA='linear-gradient(90deg, #8A6420, #F0D27A 30%, #FFF1B8 50%, #E2B94F 70%, #8A6420)'   # lineas finas (encabezado/barra/separadores)
+ORO_BORDE='#E2B94F'                  # bordes de tarjetas y detalles
+ORO_ICONO='#F0CF72'                  # color de referencia de los iconos de la barra (el dibujo lleva ademas luces y sombras)
+ORO_TEXTO='#F0D27A'                  # dorado de la etiqueta activa y subtitulos (se aclara si hace falta para 4,5:1)
+ORO_BRILLO='rgba(255,226,140,0.75)'    # resplandor de los iconos
+ORO_RADIO_BRILLO='3px'
 # Marfil (barra clara): el dorado vivo se pierde sobre claro; iconos de bronce metalico y lineas con extremos mas oscuros
 BRONCE_OSCURO='#7A4A1F'; BRONCE_CLARO='#B07A33'
 MARFIL_LINEA='linear-gradient(90deg, #5E3A0C, #B9770E 30%, #F0C14B 50%, #C48414 70%, #5E3A0C)'
 MARFIL_BORDE='#C9921A'
 # Nocturna (fondo oscuro): resplandor un poco mas fuerte
-NOCTURNA_RADIO_BRILLO='6px'
+NOCTURNA_RADIO_BRILLO='5px'
 TARJETA_MARFIL_ALFA=0.80 # Marfil: tarjetas de blanco translucido para que se asomen las vetas
 MINIMO_ICONO=3.0         # contraste minimo de un icono de interfaz (WCAG 1.4.11, no texto)
 
@@ -161,7 +161,7 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 
 /* Iconos de la barra inferior: imagen recoloreada (dorado metalico vivo; bronce en Marfil) con resplandor y una sombra oscura leve */
 :root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); background-size: cover; background-position: center; background-repeat: no-repeat; }
-:root .item.activo .icono-nav { filter: drop-shadow(0 0 calc(var(--oro-radio) + 2px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root .item.activo .icono-nav { filter: drop-shadow(0 0 calc(var(--oro-radio) + 1px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
 :root nav .item.activo { text-shadow: 0 0 8px var(--oro-brillo); }
 
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */

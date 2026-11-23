@@ -6,7 +6,7 @@ from PIL import Image
 RAIZ=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..')
 spec=importlib.util.spec_from_file_location('g',os.path.join(RAIZ,'scripts','generar-temas.py')); g=importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
 
-RAMPA_VIVO=[(0.0,'#8A5A0A'),(0.35,'#F2B71C'),(0.62,'#FFD04A'),(1.0,'#FFF3B0')]   # dorado metalico: sombra, cuerpo, luz
+RAMPA_VIVO=[(0.0,'#7A5A18'),(0.35,'#E2B94F'),(0.62,'#F0CF72'),(1.0,'#FFF1B8')]   # dorado metalico: sombra, cuerpo, luz
 RAMPA_BRONCE=[(0.0,'#5E3612'),(0.5,'#7A4A1F'),(0.85,'#9C6628'),(1.0,'#B07A33')]       # bronce: nunca mas claro que #B07A33 (3:1 sobre la barra de Marfil)
 
 def color_rampa(rampa,t):
