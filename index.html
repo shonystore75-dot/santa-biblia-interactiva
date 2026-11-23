@@ -863,8 +863,10 @@
       rollos.forEach((r, i) => {
         const d = diferencia(i), a = Math.abs(d), s = d < 0 ? -1 : 1, m = Math.min(a, 1);
         const x = s * (paso * m + Math.max(a - 1, 0) * W * 0.3);
-        // Solo se ve el rollo central: al deslizar, el que sale y el que entra se funden y los vecinos quedan ocultos
-        const op = Math.max(0, 1 - a * 1.8);
+        // Opacidad lineal con la distancia al centro: en reposo solo se ve el rollo central (los demás valen 0).
+        // Desde el primer píxel del movimiento, el que entra sube de 0 a 1 mientras el que sale baja de 1 a 0
+        // (sin umbral), girando y escalando a la vez con 'm'. A dos posiciones o más, siempre 0.
+        const op = Math.max(0, 1 - a);
         r.style.transform = `translate3d(${x}px,0,${-90 * m}px) rotateY(${-s * 40 * m}deg) scale(${1 - 0.12 * m})`;
         r.style.opacity = op;
         r.style.zIndex = 100 - Math.round(a * 10);
