@@ -441,6 +441,8 @@
   /* Tarjetas: borde dorado fino y sombra pequena con el color de la paleta */
   --borde: rgba(var(--principal-rgb), 0.28);
   --borde-tarjeta: var(--oro-borde);
+  --oro-linea-px: 3px;
+  --oro-borde-px: 1.5px;
   --sombra-tarjeta: 0 1px 3px rgba(var(--sombra-rgb), 0.16), 0 8px 14px -8px rgba(var(--sombra-rgb), 0.22);
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
@@ -453,8 +455,8 @@
 /* ===== Textura de marmol: llega al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
    (las reglas de cada pagina usan 'background' abreviado; aqui se sube la especificidad para que no la pisen) */
 :root .phone { isolation: isolate; background-color: var(--fondo); }
-:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
-:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
+:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
+:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
   content: ''; display: var(--marmol-display); position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat;

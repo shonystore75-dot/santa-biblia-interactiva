@@ -40,6 +40,8 @@ ORO_ICONO='#F0CF72'                  # color de referencia de los iconos de la b
 ORO_TEXTO='#F0D27A'                  # dorado de la etiqueta activa y subtitulos (se aclara si hace falta para 4,5:1)
 ORO_BRILLO='rgba(255,226,140,0.75)'    # resplandor de los iconos
 ORO_RADIO_BRILLO='3px'
+ORO_LINEA_PX='3px'                   # espesor de las lineas doradas del encabezado y de la barra inferior
+ORO_BORDE_PX='1.5px'                 # espesor del borde dorado de las tarjetas
 # Marfil (barra clara): el dorado vivo se pierde sobre claro; iconos de bronce metalico y lineas con extremos mas oscuros
 BRONCE_OSCURO='#7A4A1F'; BRONCE_CLARO='#B07A33'
 MARFIL_LINEA='linear-gradient(90deg, #5E3A0C, #B9770E 30%, #F0C14B 50%, #C48414 70%, #5E3A0C)'
@@ -136,6 +138,8 @@ def css():
   /* Tarjetas: borde dorado fino y sombra pequena con el color de la paleta */
   --borde: rgba(var(--principal-rgb), 0.28);
   --borde-tarjeta: var(--oro-borde);
+  --oro-linea-px: @@LINEA_PX@@;
+  --oro-borde-px: @@BORDE_PX@@;
   --sombra-tarjeta: 0 1px 3px rgba(var(--sombra-rgb), 0.16), 0 8px 14px -8px rgba(var(--sombra-rgb), 0.22);
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
@@ -148,8 +152,8 @@ def css():
 /* ===== Textura de marmol: llega al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
    (las reglas de cada pagina usan 'background' abreviado; aqui se sube la especificidad para que no la pisen) */
 :root .phone { isolation: isolate; background-color: var(--fondo); }
-:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
-:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: 2px solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
+:root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
+:root nav { background: var(--nav-grad); background-color: var(--nav); border-top: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
   content: ''; display: var(--marmol-display); position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat;
@@ -173,7 +177,7 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 .muestras { display: flex; width: 100%; height: 17px; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(128,128,128,0.5); }
 .muestras i { display: block; flex: 1; }
 """)
-    return ''.join(o)
+    return ''.join(o).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
 def g_suave(d,te): return mix(d['texto'],te,0.18)
 
