@@ -49,29 +49,24 @@ MARFIL_BORDE='#C9921A'
 # Nocturna (fondo oscuro): resplandor un poco mas fuerte
 NOCTURNA_RADIO_BRILLO='5px'
 # ---- Azul clasico (piloto de texturas por capas): cuero en encabezado/barra, papel en el fondo, algodon en tarjetas ----
-INTENSIDAD_CUERO=2        # contraste del grano de cuero: 1 = archivo original; 2 y 3 = versiones x2/x3 (scripts/generar-cuero.py)
-TEX_CUERO='texturas/01_cuero_azul_marino.webp' if INTENSIDAD_CUERO==1 else 'texturas/01_cuero_azul_marino_x%d.webp'%INTENSIDAD_CUERO   # opaca, media #0C2641
+INTENSIDAD_CUERO=1.0      # opacidad del cuero fotografico sobre #102F50 liso (1 = 100 %; 0,7 = grano mas suave)
+TEX_CUERO='texturas/cuero_azul_realista.webp'      # 1000x1000, color medio #102F50 (scripts/generar-cuero-realista.py); NO repite en mosaico: una sola imagen
+TAM_CUERO='500px auto'                              # ancho aprox. 460-520 px (el telefono no pasa de 480 px de ancho)
+POS_CUERO_ENCABEZADO='left top'; POS_CUERO_BARRA='right bottom'   # zonas distintas de la imagen para que no sean identicas
 TEX_PAPEL='texturas/02_papel_marfil_grisaceo.webp'  # overlay, alfa fijo 12/255
 TEX_ALGODON='texturas/03_papel_blanco_marfil.webp'  # overlay, alfa fijo 7/255
-CUERO_MEDIA='#0C2641'
 INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la del archivo). Elegido en la comparacion x1/x3/x5
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
-CUERO_TINTE_ALFA=0.12     # fraccion de tinte azul sobre el cuero: 0 = cuero crudo (#0C2641), mas = mas liso y mas cercano a #102F50
-CUERO_BRILLO=0.04        # degradado vertical blanco leve sobre el cuero (arriba)
-TAM_CUERO='256px'; TAM_PAPEL='256px'; TAM_ALGODON='256px'
+CUERO_BRILLO=0.03        # degradado vertical blanco leve sobre el cuero (arriba)
+TAM_PAPEL='256px'; TAM_ALGODON='256px'
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
 import math
 def capas(url,k):   # k veces la opacidad del archivo: N capas apiladas + opacidad k/N (en el fondo); en tarjetas solo N=round(k)
     return ', '.join(["url('%s')"%url]*k)
 TARJETA_MARFIL_ALFA=0.80 # Marfil: tarjetas de blanco translucido para que se asomen las vetas
-VELO_HERO=0.65           # intensidad del velo del hero de Inicio en el borde superior (elegida en la comparacion 0,45 / 0,65 / 0,85)
+VELO_HERO=0.85           # intensidad del velo del hero de Inicio en el borde superior (0,85 por pedido de Diego (antes 0,65))
 MINIMO_ICONO=3.0         # contraste minimo de un icono de interfaz (WCAG 1.4.11, no texto)
-
-def tinte_cuero(nav):
-    """color del tinte azul que, mezclado con CUERO_TINTE_ALFA sobre el cuero (media CUERO_MEDIA), da en promedio el azul exacto de la paleta"""
-    m=rgb(CUERO_MEDIA); t=rgb(nav); a=CUERO_TINTE_ALFA
-    return hx([max(0,min(255,(t[i]-(1-a)*m[i])/a)) for i in range(3)])
 
 def derivar(n):
     f,t,x,nv,a=P[n]
@@ -149,12 +144,13 @@ def css():
             tx=dict(fondo="url('marmol_marfil_fuerte.webp')",tf='600px',of='0.5',barra="url('marmol_marfil_fuerte.webp')",tb='600px',ob='0.5',tinte='none',tarjeta='none',tt='auto')
         elif azul:
             nf=math.ceil(INTENSIDAD_PAPEL)
-            tx=dict(fondo=capas(TEX_PAPEL,nf),tf=TAM_PAPEL,of='%.4g'%(INTENSIDAD_PAPEL/nf),barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='1',
-                    tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0)), rgba(%s,%.2f)'%(CUERO_BRILLO,triple(tinte_cuero(d['nav'])),CUERO_TINTE_ALFA),
+            tx=dict(fondo=capas(TEX_PAPEL,nf),tf=TAM_PAPEL,of='%.4g'%(INTENSIDAD_PAPEL/nf),barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='%g'%INTENSIDAD_CUERO,
+                    tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
                     tarjeta=capas(TEX_ALGODON,max(1,round(INTENSIDAD_ALGODON))),tt=TAM_ALGODON)
         else:
             tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
-        v+=[('textura-fondo',tx['fondo']),('tamano-fondo',tx['tf']),('intensidad-fondo',tx['of']),('fondo-display','block' if tx['fondo']!='none' else 'none'),
+        rep,posh,posn=('no-repeat',POS_CUERO_ENCABEZADO,POS_CUERO_BARRA) if azul else ('repeat','0 0','0 0')
+        v+=[('repeticion-barra',rep),('posicion-encabezado',posh),('posicion-nav',posn),('textura-fondo',tx['fondo']),('tamano-fondo',tx['tf']),('intensidad-fondo',tx['of']),('fondo-display','block' if tx['fondo']!='none' else 'none'),
             ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
             ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
             ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-papel',str(INTENSIDAD_PAPEL) if azul else '0'),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
@@ -196,7 +192,9 @@ def css():
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-repeat: repeat;
 }
 :root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); opacity: var(--intensidad-fondo); }
-:root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); opacity: var(--intensidad-barra); }
+:root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); background-repeat: var(--repeticion-barra); opacity: var(--intensidad-barra); }
+:root header:not(.hero)::before { background-position: var(--posicion-encabezado); }
+:root nav::before { background-position: var(--posicion-nav); }
 /* tinte + degradado vertical leve ENCIMA de la textura de la barra (solo Azul clasico) */
 :root header:not(.hero)::after, :root nav::after { content: ''; display: var(--tinte-display); position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--barra-tinte); }
 

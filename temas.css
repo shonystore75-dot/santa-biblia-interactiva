@@ -35,6 +35,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -90,15 +93,18 @@
   --palabras-jesus: #9B1024;
   --z-barra: 40;
   --aislar-barra: isolate;
+  --repeticion-barra: no-repeat;
+  --posicion-encabezado: left top;
+  --posicion-nav: right bottom;
   --textura-fondo: url('texturas/02_papel_marfil_grisaceo.webp'), url('texturas/02_papel_marfil_grisaceo.webp'), url('texturas/02_papel_marfil_grisaceo.webp');
   --tamano-fondo: 256px;
   --intensidad-fondo: 1;
   --fondo-display: block;
-  --textura-barra: url('texturas/01_cuero_azul_marino_x2.webp');
-  --tamano-barra: 256px;
+  --textura-barra: url('texturas/cuero_azul_realista.webp');
+  --tamano-barra: 500px auto;
   --intensidad-barra: 1;
   --barra-display: block;
-  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), rgba(45,113,190,0.12);
+  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
   --tinte-display: block;
   --textura-tarjeta: url('texturas/03_papel_blanco_marfil.webp'), url('texturas/03_papel_blanco_marfil.webp');
   --tamano-tarjeta: 256px;
@@ -148,6 +154,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -203,6 +212,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -258,6 +270,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -313,6 +328,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -368,6 +386,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -423,6 +444,9 @@
   --palabras-jesus: #FF9A8F;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -478,6 +502,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: 40;
   --aislar-barra: isolate;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: url('marmol_marfil_fuerte.webp');
   --tamano-fondo: 600px;
   --intensidad-fondo: 0.5;
@@ -533,6 +560,9 @@
   --palabras-jesus: #9B1024;
   --z-barra: auto;
   --aislar-barra: auto;
+  --repeticion-barra: repeat;
+  --posicion-encabezado: 0 0;
+  --posicion-nav: 0 0;
   --textura-fondo: none;
   --tamano-fondo: auto;
   --intensidad-fondo: 0;
@@ -571,7 +601,7 @@
   --fondo-exterior: var(--nav);
   --sobre-hero: #FBF3E4;
   /* Velo del encabezado de Inicio: 'nubecita' del color de la paleta, mas fuerte arriba y desvanecida hacia abajo. Intensidad en el borde superior (0-1) */
-  --velo-hero-intensidad: 0.65;
+  --velo-hero-intensidad: 0.85;
 }
 
 /* ===== Texturas (Marfil: marmol; Azul clasico: papel/cuero/algodon): llegan al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
@@ -583,7 +613,9 @@
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-repeat: repeat;
 }
 :root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); opacity: var(--intensidad-fondo); }
-:root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); opacity: var(--intensidad-barra); }
+:root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); background-repeat: var(--repeticion-barra); opacity: var(--intensidad-barra); }
+:root header:not(.hero)::before { background-position: var(--posicion-encabezado); }
+:root nav::before { background-position: var(--posicion-nav); }
 /* tinte + degradado vertical leve ENCIMA de la textura de la barra (solo Azul clasico) */
 :root header:not(.hero)::after, :root nav::after { content: ''; display: var(--tinte-display); position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--barra-tinte); }
 
