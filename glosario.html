@@ -12,7 +12,7 @@
 
 
 
-  :root { --escala-texto: 1; }
+  :root { --escala-texto: 1; --base-verso: clamp(14px, 2.6vh, 16px); /* misma base que .verso en leer.html */ }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
 
@@ -135,12 +135,12 @@
     background: var(--tarjeta-solida);
     color: var(--texto);
     font-family: 'Source Serif 4', serif;
-    font-size: calc(14px * var(--escala-texto));
+    font-size: calc(var(--base-verso) * 0.9 * var(--escala-texto));
   }
   #input-glosario:focus { outline: none; border-color: var(--principal); }
   .contador-glosario {
     font-family: 'JetBrains Mono', monospace;
-    font-size: calc(10.5px * var(--escala-texto));
+    font-size: calc(var(--base-verso) * 0.7 * var(--escala-texto));
     color: var(--cita);
     margin-top: 6px;
   }
@@ -148,7 +148,7 @@
   .letra-grupo {
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 13px;
+    font-size: calc(var(--base-verso) * 0.85 * var(--escala-texto));
     color: var(--cita);
     letter-spacing: 1.5px;
     margin: 16px 0 7px;
@@ -167,16 +167,16 @@
     border-left: 3px solid var(--oro-borde);
   }
   .tarjeta-termino .termino {
-    font-family: 'Cinzel', serif;
+    font-family: 'Source Serif 4', serif;
     font-weight: 600;
-    font-size: calc(13.5px * var(--escala-texto));
+    font-size: calc(var(--base-verso) * var(--escala-texto));
     color: var(--texto);
     margin-bottom: 3px;
   }
   .tarjeta-termino .definicion {
-    font-size: calc(12.5px * var(--escala-texto));
+    font-size: calc(var(--base-verso) * var(--escala-texto));
     color: var(--texto-suave);
-    line-height: 1.5;
+    line-height: 1.7;
   }
 
   .espacio-publicidad {
