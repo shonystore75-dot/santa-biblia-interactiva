@@ -59,6 +59,15 @@ INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la d
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
 CUERO_BRILLO=0.03        # degradado vertical blanco leve sobre el cuero (arriba)
 TAM_PAPEL='256px'; TAM_ALGODON='256px'
+# ---- Turquesa renovacion: texturas reales (scripts/generar-texturas-turquesa.py). Ninguna es mosaico perfecto: nada se repite ----
+TQ_CUERO='texturas/cuero_turquesa_realista.webp'     # 1000x1000, media #12616A: encabezado (left top) y barra (right bottom), una sola imagen de 500 px
+TQ_PAPEL='texturas/papel_marfil_verdoso.webp'        # 1000x1000, media #EFF7F5 (= fondo): una sola imagen que cubre el telefono
+TQ_BOTON='texturas/cuero_turquesa_oscuro.webp'       # 512x512, media #184A51: botones redondos del encabezado y boton flotante de Leer
+TQ_INTENSIDAD_CUERO=1.0
+TQ_INTENSIDAD_PAPEL=1.0       # opacidad del papel sobre el fondo (el archivo ya tiene la media del fondo: no lo oscurece)
+TQ_VELO_TARJETA=0.65          # tarjetas: velo blanco encima del papel; 1-velo = intensidad del papel en la tarjeta
+TQ_TAM_PAPEL='cover'; TQ_TAM_TARJETA='600px auto'; TQ_TAM_BOTON='200px auto'
+TQ_COLOR_BOTON='#184A51'
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
 import math
@@ -127,7 +136,7 @@ def css():
     o=['/* GENERADO por scripts/generar-temas.py: no editar a mano. 9 paletas; la de por defecto es Turquesa renovacion. */\n']
     def bloque(sel,n):
         d=derivar(n)
-        marfil = n=='marfil'; azul = n=='azul'
+        marfil = n=='marfil'; azul = n=='azul'; turq = n=='turquesa'
         v=[('fondo',d['fondo']),('tarjeta',d['tarjeta_css']),('tarjeta-solida',d['tarjeta']),('texto',d['texto']),('nav',d['nav']),('acento',d['acento']),
            ('sobre-nav',d['sobre_nav']),('sobre-nav-suave',d['sobre_nav_suave']),('acento-nav',d['acento_nav']),('icono-nav',d['icono_nav']),
            ('principal',d['principal']),('sobre-principal',d['sobre_principal']),('cita',d['cita']),
@@ -137,8 +146,8 @@ def css():
            ('titulo-rollo','#3B2A1C' if n=='nocturna' else (d['texto'] if (marfil or azul) else d['nav'])),
            ('tarjeta-rgb',triple(d['tarjeta'])),('sombra-rgb','0,0,0' if n in ('nocturna','azul') else triple(d['texto'])),
            ('palabras-jesus','#FF9A8F' if n=='nocturna' else '#9B1024'),
-           ('z-barra','40' if (marfil or azul) else 'auto'),
-           ('aislar-barra','isolate' if (marfil or azul) else 'auto')]
+           ('z-barra','40' if (marfil or azul or turq) else 'auto'),
+           ('aislar-barra','isolate' if (marfil or azul or turq) else 'auto')]
         # texturas: fondo de pantalla (.phone), encabezado/barra inferior y tarjetas. 'none' = sin textura (todas salvo Marfil y Azul)
         if marfil:
             tx=dict(fondo="url('marmol_marfil_fuerte.webp')",tf='600px',of='0.5',barra="url('marmol_marfil_fuerte.webp')",tb='600px',ob='0.5',tinte='none',tarjeta='none',tt='auto')
@@ -147,13 +156,18 @@ def css():
             tx=dict(fondo=capas(TEX_PAPEL,nf),tf=TAM_PAPEL,of='%.4g'%(INTENSIDAD_PAPEL/nf),barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='%g'%INTENSIDAD_CUERO,
                     tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
                     tarjeta=capas(TEX_ALGODON,max(1,round(INTENSIDAD_ALGODON))),tt=TAM_ALGODON)
+        elif turq:
+            tx=dict(fondo="url('%s')"%TQ_PAPEL,tf=TQ_TAM_PAPEL,of='%g'%TQ_INTENSIDAD_PAPEL,barra="url('%s')"%TQ_CUERO,tb=TAM_CUERO,ob='%g'%TQ_INTENSIDAD_CUERO,
+                    tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
+                    tarjeta="linear-gradient(rgba(255,255,255,%g), rgba(255,255,255,%g)), url('%s')"%(TQ_VELO_TARJETA,TQ_VELO_TARJETA,TQ_PAPEL),tt=TQ_TAM_TARJETA)
         else:
             tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
-        rep,posh,posn=('no-repeat',POS_CUERO_ENCABEZADO,POS_CUERO_BARRA) if azul else ('repeat','0 0','0 0')
+        rep,posh,posn=('no-repeat',POS_CUERO_ENCABEZADO,POS_CUERO_BARRA) if (azul or turq) else ('repeat','0 0','0 0')
         v+=[('repeticion-barra',rep),('posicion-encabezado',posh),('posicion-nav',posn),('textura-fondo',tx['fondo']),('tamano-fondo',tx['tf']),('intensidad-fondo',tx['of']),('fondo-display','block' if tx['fondo']!='none' else 'none'),
             ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
             ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
             ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-papel',str(INTENSIDAD_PAPEL) if azul else '0'),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
+        if turq: v+=[('repeticion-fondo','no-repeat'),('posicion-fondo','center top'),('nav-grad','none')]
         if azul:
             v+=[('nav-grad','none'),('sombra-tarjeta',SOMBRA_AZUL_TARJETA),('sombra-boton',SOMBRA_AZUL_BOTON)]
         o.append(sel+' {\n'+''.join('  --%s: %s;\n'%(k,x) for k,x in v)+'}\n')
@@ -191,7 +205,7 @@ def css():
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-repeat: repeat;
 }
-:root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); opacity: var(--intensidad-fondo); }
+:root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); background-repeat: var(--repeticion-fondo, repeat); background-position: var(--posicion-fondo, 0 0); opacity: var(--intensidad-fondo); }
 :root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); background-repeat: var(--repeticion-barra); opacity: var(--intensidad-barra); }
 :root header:not(.hero)::before { background-position: var(--posicion-encabezado); }
 :root nav::before { background-position: var(--posicion-nav); }
@@ -226,7 +240,17 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
   box-shadow: var(--sombra-boton), var(--brillo-boton);
 }
 """)
-    return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
+    o.append("""
+/* ===== Turquesa renovacion: papel tenue en las tarjetas (una sola imagen, sin mosaico) y cuero oscuro en los botones redondos ===== */
+:root[data-tema="turquesa"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
+:root[data-tema="turquesa"] #vista-detalle .texto-oracion {
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: no-repeat; background-position: center top;
+}
+:root[data-tema="turquesa"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
+  background-color: @@COLOR_BOTON@@; background-image: url('@@TEX_BOTON@@'); background-size: @@TAM_BOTON@@; background-position: center; background-repeat: no-repeat;
+}
+""")
+    return ''.join(o).replace('@@COLOR_BOTON@@',TQ_COLOR_BOTON).replace('@@TEX_BOTON@@',TQ_BOTON).replace('@@TAM_BOTON@@',TQ_TAM_BOTON).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
 def g_suave(d,te): return mix(d['texto'],te,0.18)
 

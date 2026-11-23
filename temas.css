@@ -33,25 +33,28 @@
   --tarjeta-rgb: 255,255,255;
   --sombra-rgb: 24,74,81;
   --palabras-jesus: #9B1024;
-  --z-barra: auto;
-  --aislar-barra: auto;
-  --repeticion-barra: repeat;
-  --posicion-encabezado: 0 0;
-  --posicion-nav: 0 0;
-  --textura-fondo: none;
-  --tamano-fondo: auto;
-  --intensidad-fondo: 0;
-  --fondo-display: none;
-  --textura-barra: none;
-  --tamano-barra: auto;
-  --intensidad-barra: 0;
-  --barra-display: none;
-  --barra-tinte: none;
-  --tinte-display: none;
-  --textura-tarjeta: none;
-  --tamano-tarjeta: auto;
+  --z-barra: 40;
+  --aislar-barra: isolate;
+  --repeticion-barra: no-repeat;
+  --posicion-encabezado: left top;
+  --posicion-nav: right bottom;
+  --textura-fondo: url('texturas/papel_marfil_verdoso.webp');
+  --tamano-fondo: cover;
+  --intensidad-fondo: 1;
+  --fondo-display: block;
+  --textura-barra: url('texturas/cuero_turquesa_realista.webp');
+  --tamano-barra: 500px auto;
+  --intensidad-barra: 1;
+  --barra-display: block;
+  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+  --tinte-display: block;
+  --textura-tarjeta: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('texturas/papel_marfil_verdoso.webp');
+  --tamano-tarjeta: 600px auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: no-repeat;
+  --posicion-fondo: center top;
+  --nav-grad: none;
 }
 :root #nav-inicio { background-image: url('nav-inicio-turquesa.png'); }
 :root #nav-leer { background-image: url('nav-leer-turquesa.png'); }
@@ -384,25 +387,28 @@
   --tarjeta-rgb: 255,255,255;
   --sombra-rgb: 24,74,81;
   --palabras-jesus: #9B1024;
-  --z-barra: auto;
-  --aislar-barra: auto;
-  --repeticion-barra: repeat;
-  --posicion-encabezado: 0 0;
-  --posicion-nav: 0 0;
-  --textura-fondo: none;
-  --tamano-fondo: auto;
-  --intensidad-fondo: 0;
-  --fondo-display: none;
-  --textura-barra: none;
-  --tamano-barra: auto;
-  --intensidad-barra: 0;
-  --barra-display: none;
-  --barra-tinte: none;
-  --tinte-display: none;
-  --textura-tarjeta: none;
-  --tamano-tarjeta: auto;
+  --z-barra: 40;
+  --aislar-barra: isolate;
+  --repeticion-barra: no-repeat;
+  --posicion-encabezado: left top;
+  --posicion-nav: right bottom;
+  --textura-fondo: url('texturas/papel_marfil_verdoso.webp');
+  --tamano-fondo: cover;
+  --intensidad-fondo: 1;
+  --fondo-display: block;
+  --textura-barra: url('texturas/cuero_turquesa_realista.webp');
+  --tamano-barra: 500px auto;
+  --intensidad-barra: 1;
+  --barra-display: block;
+  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+  --tinte-display: block;
+  --textura-tarjeta: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('texturas/papel_marfil_verdoso.webp');
+  --tamano-tarjeta: 600px auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: no-repeat;
+  --posicion-fondo: center top;
+  --nav-grad: none;
 }
 :root[data-tema="turquesa"] #nav-inicio { background-image: url('nav-inicio-turquesa.png'); }
 :root[data-tema="turquesa"] #nav-leer { background-image: url('nav-leer-turquesa.png'); }
@@ -612,7 +618,7 @@
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-repeat: repeat;
 }
-:root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); opacity: var(--intensidad-fondo); }
+:root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); background-repeat: var(--repeticion-fondo, repeat); background-position: var(--posicion-fondo, 0 0); opacity: var(--intensidad-fondo); }
 :root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); background-repeat: var(--repeticion-barra); opacity: var(--intensidad-barra); }
 :root header:not(.hero)::before { background-position: var(--posicion-encabezado); }
 :root nav::before { background-position: var(--posicion-nav); }
@@ -644,4 +650,13 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 :root[data-tema="azul"] #vista-detalle .texto-oracion { background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat; }
 :root[data-tema="azul"] :is(.pestana.activa, .tab.activo, .btn-leer-pasaje, .btn-copiar-lista, .tarjeta-oracion .simbolo, .btn-ir-verso-flotante, .pin-mapa) {
   box-shadow: var(--sombra-boton), var(--brillo-boton);
+}
+
+/* ===== Turquesa renovacion: papel tenue en las tarjetas (una sola imagen, sin mosaico) y cuero oscuro en los botones redondos ===== */
+:root[data-tema="turquesa"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
+:root[data-tema="turquesa"] #vista-detalle .texto-oracion {
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: no-repeat; background-position: center top;
+}
+:root[data-tema="turquesa"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
+  background-color: #184A51; background-image: url('texturas/cuero_turquesa_oscuro.webp'); background-size: 200px auto; background-position: center; background-repeat: no-repeat;
 }
