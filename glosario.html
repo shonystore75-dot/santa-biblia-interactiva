@@ -12,6 +12,7 @@
 
 
 
+  :root { --escala-texto: 1; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
 
@@ -134,12 +135,12 @@
     background: var(--tarjeta-solida);
     color: var(--texto);
     font-family: 'Source Serif 4', serif;
-    font-size: 14px;
+    font-size: calc(14px * var(--escala-texto));
   }
   #input-glosario:focus { outline: none; border-color: var(--principal); }
   .contador-glosario {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
+    font-size: calc(10.5px * var(--escala-texto));
     color: var(--cita);
     margin-top: 6px;
   }
@@ -168,12 +169,12 @@
   .tarjeta-termino .termino {
     font-family: 'Cinzel', serif;
     font-weight: 600;
-    font-size: 13.5px;
+    font-size: calc(13.5px * var(--escala-texto));
     color: var(--texto);
     margin-bottom: 3px;
   }
   .tarjeta-termino .definicion {
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--escala-texto));
     color: var(--texto-suave);
     line-height: 1.5;
   }
@@ -266,6 +267,29 @@
   #nav-leer { background-image: url('nav-leer.png'); }
   #nav-guia { background-image: url('nav-guia.png'); }
   #nav-favoritos { background-image: url('nav-favoritos.png'); }
+
+  /* Botones A−/A+ (mismo estilo que en Leer) */
+  .control-tamano {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .btn-tamano {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--btn-nav-bg);
+    border: 1px solid var(--btn-nav-borde);
+    color: var(--acento-nav);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  #tam-menos { font-size: 11px; }
+  #tam-mas { font-size: 13px; }
+  .btn-tamano:active { background: rgba(var(--texto-rgb),0.2); }
 
   .btn-menu {
     width: 43px; height: 43px;
@@ -395,6 +419,10 @@
         <div id="titulo-header">Glosario</div>
         <div id="subtitulo-header">Términos bíblicos explicados</div>
       </div>
+      <div class="control-tamano">
+        <button class="btn-tamano" id="tam-menos" aria-label="Reducir tamaño de letra" type="button">A−</button>
+        <button class="btn-tamano" id="tam-mas" aria-label="Aumentar tamaño de letra" type="button">A+</button>
+      </div>
       <div class="btn-menu" id="btn-menu" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg></div>
       <div class="menu-principal" id="menu-principal">
         <div class="fila-menu" id="fila-buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Buscar</div>
@@ -451,6 +479,30 @@
   </div>
 
 <script>
+  // Tamaño de letra: misma clave y mismos límites que Leer (leer.html)
+  const ESCALA_MIN = 0.8;
+  const ESCALA_MAX = 1.6;
+  const ESCALA_PASO = 0.1;
+  let escalaTexto = 1;
+  function aplicarEscala() {
+    document.documentElement.style.setProperty('--escala-texto', escalaTexto);
+  }
+  function cargarEscala() {
+    try {
+      const guardada = parseFloat(localStorage.getItem('escalaTexto'));
+      if (!isNaN(guardada)) escalaTexto = guardada;
+    } catch (e) {}
+    aplicarEscala();
+  }
+  function cambiarEscala(delta) {
+    escalaTexto = Math.round(Math.min(ESCALA_MAX, Math.max(ESCALA_MIN, escalaTexto + delta)) * 10) / 10;
+    aplicarEscala();
+    try { localStorage.setItem('escalaTexto', escalaTexto); } catch (e) {}
+  }
+  document.getElementById('tam-menos').addEventListener('click', () => cambiarEscala(-ESCALA_PASO));
+  document.getElementById('tam-mas').addEventListener('click', () => cambiarEscala(ESCALA_PASO));
+  cargarEscala();
+
   const main = document.getElementById('main');
   const btnAtras = document.getElementById('btn-atras');
 
