@@ -49,13 +49,15 @@ MARFIL_BORDE='#C9921A'
 # Nocturna (fondo oscuro): resplandor un poco mas fuerte
 NOCTURNA_RADIO_BRILLO='5px'
 # ---- Azul clasico (piloto de texturas por capas): cuero en encabezado/barra, papel en el fondo, algodon en tarjetas ----
-TEX_CUERO='texturas/01_cuero_azul_marino.webp'      # opaca, media #0C2641
+INTENSIDAD_CUERO=2        # contraste del grano de cuero: 1 = archivo original; 2 y 3 = versiones x2/x3 (scripts/generar-cuero.py)
+TEX_CUERO='texturas/01_cuero_azul_marino.webp' if INTENSIDAD_CUERO==1 else 'texturas/01_cuero_azul_marino_x%d.webp'%INTENSIDAD_CUERO   # opaca, media #0C2641
 TEX_PAPEL='texturas/02_papel_marfil_grisaceo.webp'  # overlay, alfa fijo 12/255
 TEX_ALGODON='texturas/03_papel_blanco_marfil.webp'  # overlay, alfa fijo 7/255
 CUERO_MEDIA='#0C2641'
 INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la del archivo). Elegido en la comparacion x1/x3/x5
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
-CUERO_TINTE_ALFA=0.40     # fraccion de tinte azul sobre el cuero: 0 = cuero crudo (#0C2641), mas = mas liso y mas cercano a #102F50
+CUERO_TINTE_ALFA=0.12     # fraccion de tinte azul sobre el cuero: 0 = cuero crudo (#0C2641), mas = mas liso y mas cercano a #102F50
+CUERO_BRILLO=0.04        # degradado vertical blanco leve sobre el cuero (arriba)
 TAM_CUERO='256px'; TAM_PAPEL='256px'; TAM_ALGODON='256px'
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
@@ -63,6 +65,7 @@ import math
 def capas(url,k):   # k veces la opacidad del archivo: N capas apiladas + opacidad k/N (en el fondo); en tarjetas solo N=round(k)
     return ', '.join(["url('%s')"%url]*k)
 TARJETA_MARFIL_ALFA=0.80 # Marfil: tarjetas de blanco translucido para que se asomen las vetas
+VELO_HERO=0.65           # intensidad del velo del hero de Inicio en el borde superior (elegida en la comparacion 0,45 / 0,65 / 0,85)
 MINIMO_ICONO=3.0         # contraste minimo de un icono de interfaz (WCAG 1.4.11, no texto)
 
 def tinte_cuero(nav):
@@ -147,7 +150,7 @@ def css():
         elif azul:
             nf=math.ceil(INTENSIDAD_PAPEL)
             tx=dict(fondo=capas(TEX_PAPEL,nf),tf=TAM_PAPEL,of='%.4g'%(INTENSIDAD_PAPEL/nf),barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='1',
-                    tinte='linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0)), rgba(%s,%.2f)'%(triple(tinte_cuero(d['nav'])),CUERO_TINTE_ALFA),
+                    tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0)), rgba(%s,%.2f)'%(CUERO_BRILLO,triple(tinte_cuero(d['nav'])),CUERO_TINTE_ALFA),
                     tarjeta=capas(TEX_ALGODON,max(1,round(INTENSIDAD_ALGODON))),tt=TAM_ALGODON)
         else:
             tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
@@ -180,6 +183,8 @@ def css():
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
   --sobre-hero: #FBF3E4;
+  /* Velo del encabezado de Inicio: 'nubecita' del color de la paleta, mas fuerte arriba y desvanecida hacia abajo. Intensidad en el borde superior (0-1) */
+  --velo-hero-intensidad: @@VELO@@;
 }
 
 /* ===== Texturas (Marfil: marmol; Azul clasico: papel/cuero/algodon): llegan al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
@@ -223,7 +228,7 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
   box-shadow: var(--sombra-boton), var(--brillo-boton);
 }
 """)
-    return ''.join(o).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
+    return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
 def g_suave(d,te): return mix(d['texto'],te,0.18)
 

@@ -94,11 +94,11 @@
   --tamano-fondo: 256px;
   --intensidad-fondo: 1;
   --fondo-display: block;
-  --textura-barra: url('texturas/01_cuero_azul_marino.webp');
+  --textura-barra: url('texturas/01_cuero_azul_marino_x2.webp');
   --tamano-barra: 256px;
   --intensidad-barra: 1;
   --barra-display: block;
-  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0)), rgba(22,60,102,0.40);
+  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)), rgba(45,113,190,0.12);
   --tinte-display: block;
   --textura-tarjeta: url('texturas/03_papel_blanco_marfil.webp'), url('texturas/03_papel_blanco_marfil.webp');
   --tamano-tarjeta: 256px;
@@ -570,6 +570,8 @@
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
   --sobre-hero: #FBF3E4;
+  /* Velo del encabezado de Inicio: 'nubecita' del color de la paleta, mas fuerte arriba y desvanecida hacia abajo. Intensidad en el borde superior (0-1) */
+  --velo-hero-intensidad: 0.65;
 }
 
 /* ===== Texturas (Marfil: marmol; Azul clasico: papel/cuero/algodon): llegan al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
