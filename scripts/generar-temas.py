@@ -24,7 +24,7 @@ def triple(h): return ','.join(str(v) for v in rgb(h))
 PALETA_POR_DEFECTO='turquesa'
 NOMBRES={'azul':'Azul clásico','borgona':'Borgoña real','olivo':'Verde olivo','tierra':'Tierra bíblica','purpura':'Púrpura espiritual','turquesa':'Turquesa renovación','nocturna':'Nocturna','marfil':'Marfil clásico','ambar':'Ámbar inspirador'}
 P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
-'azul':('#F3F5F8','#FFFFFF','#24354B','#18365B','#D6A84E'),
+'azul':('#F7F5F0','#FFFCF6','#172B47','#102F50','#D6A84E'),
 'borgona':('#FAF3EB','#FFFDF7','#56202B','#641D2B','#D5A348'),
 'olivo':('#F4F3E7','#FFFDF5','#2E4129','#344C2B','#C9A34E'),
 'tierra':('#F8F0E5','#FFF9EF','#543526','#78452D','#D9A54D'),
@@ -48,8 +48,27 @@ MARFIL_LINEA='linear-gradient(90deg, #5E3A0C, #B9770E 30%, #F0C14B 50%, #C48414 
 MARFIL_BORDE='#C9921A'
 # Nocturna (fondo oscuro): resplandor un poco mas fuerte
 NOCTURNA_RADIO_BRILLO='5px'
+# ---- Azul clasico (piloto de texturas por capas): cuero en encabezado/barra, papel en el fondo, algodon en tarjetas ----
+TEX_CUERO='texturas/01_cuero_azul_marino.webp'      # opaca, media #0C2641
+TEX_PAPEL='texturas/02_papel_marfil_grisaceo.webp'  # overlay, alfa fijo 12/255
+TEX_ALGODON='texturas/03_papel_blanco_marfil.webp'  # overlay, alfa fijo 7/255
+CUERO_MEDIA='#0C2641'
+INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la del archivo). Elegido en la comparacion x1/x3/x5
+INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
+CUERO_TINTE_ALFA=0.40     # fraccion de tinte azul sobre el cuero: 0 = cuero crudo (#0C2641), mas = mas liso y mas cercano a #102F50
+TAM_CUERO='256px'; TAM_PAPEL='256px'; TAM_ALGODON='256px'
+SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
+SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
+import math
+def capas(url,k):   # k veces la opacidad del archivo: N capas apiladas + opacidad k/N (en el fondo); en tarjetas solo N=round(k)
+    return ', '.join(["url('%s')"%url]*k)
 TARJETA_MARFIL_ALFA=0.80 # Marfil: tarjetas de blanco translucido para que se asomen las vetas
 MINIMO_ICONO=3.0         # contraste minimo de un icono de interfaz (WCAG 1.4.11, no texto)
+
+def tinte_cuero(nav):
+    """color del tinte azul que, mezclado con CUERO_TINTE_ALFA sobre el cuero (media CUERO_MEDIA), da en promedio el azul exacto de la paleta"""
+    m=rgb(CUERO_MEDIA); t=rgb(nav); a=CUERO_TINTE_ALFA
+    return hx([max(0,min(255,(t[i]-(1-a)*m[i])/a)) for i in range(3)])
 
 def derivar(n):
     f,t,x,nv,a=P[n]
@@ -97,6 +116,9 @@ def derivar(n):
         d['sobre_acento']=x
         d['hero']=nv
         d['btn_nav_bg']='rgba(255,255,255,0.12)'; d['btn_nav_borde']='rgba(%s,0.5)'%triple(a)
+    if n=='azul':
+        d['cita']=x                      # referencias y titulos: #172B47
+        d['sombra_rgb']='0,0,0'
     d.setdefault('acento_btn',a)
     d.setdefault('oro_linea',ORO_LINEA); d.setdefault('oro_borde',ORO_BORDE); d.setdefault('oro_brillo',ORO_BRILLO); d.setdefault('oro_radio',ORO_RADIO_BRILLO); d.setdefault('oro_sombra','rgba(0,0,0,0.35)')
     if n!='marfil':
@@ -107,20 +129,34 @@ def css():
     o=['/* GENERADO por scripts/generar-temas.py: no editar a mano. 9 paletas; la de por defecto es Turquesa renovacion. */\n']
     def bloque(sel,n):
         d=derivar(n)
-        marfil = n=='marfil'
+        marfil = n=='marfil'; azul = n=='azul'
         v=[('fondo',d['fondo']),('tarjeta',d['tarjeta_css']),('tarjeta-solida',d['tarjeta']),('texto',d['texto']),('nav',d['nav']),('acento',d['acento']),
            ('sobre-nav',d['sobre_nav']),('sobre-nav-suave',d['sobre_nav_suave']),('acento-nav',d['acento_nav']),('icono-nav',d['icono_nav']),
            ('principal',d['principal']),('sobre-principal',d['sobre_principal']),('cita',d['cita']),
            ('oscuro',d['oscuro']),('sobre-oscuro',d['sobre_oscuro']),('sobre-acento',d['sobre_acento']),('acento-btn',d['acento_btn']),('oro-linea',d['oro_linea']),('oro-borde',d['oro_borde']),('oro-icono',d['icono_nav']),('oro-brillo',d['oro_brillo']),('oro-radio',d['oro_radio']),('oro-sombra',d['oro_sombra']),
            ('btn-nav-bg',d['btn_nav_bg']),('btn-nav-borde',d['btn_nav_borde']),
            ('principal-rgb',triple(d['principal'])),('texto-rgb',triple(d['texto'])),('acento-rgb',triple(d['acento'])),('hero-rgb',triple(d['hero'])),
-           ('titulo-rollo','#3B2A1C' if n=='nocturna' else (d['texto'] if marfil else d['nav'])),
-           ('tarjeta-rgb',triple(d['tarjeta'])),('sombra-rgb','0,0,0' if n=='nocturna' else triple(d['texto'])),
+           ('titulo-rollo','#3B2A1C' if n=='nocturna' else (d['texto'] if (marfil or azul) else d['nav'])),
+           ('tarjeta-rgb',triple(d['tarjeta'])),('sombra-rgb','0,0,0' if n in ('nocturna','azul') else triple(d['texto'])),
            ('palabras-jesus','#FF9A8F' if n=='nocturna' else '#9B1024'),
-           ('textura',"url('marmol_marfil_fuerte.webp')" if marfil else 'none'),
-           ('marmol-display','block' if marfil else 'none'),
-           ('z-barra','40' if marfil else 'auto'),
-           ('aislar-barra','isolate' if marfil else 'auto')]
+           ('z-barra','40' if (marfil or azul) else 'auto'),
+           ('aislar-barra','isolate' if (marfil or azul) else 'auto')]
+        # texturas: fondo de pantalla (.phone), encabezado/barra inferior y tarjetas. 'none' = sin textura (todas salvo Marfil y Azul)
+        if marfil:
+            tx=dict(fondo="url('marmol_marfil_fuerte.webp')",tf='600px',of='0.5',barra="url('marmol_marfil_fuerte.webp')",tb='600px',ob='0.5',tinte='none',tarjeta='none',tt='auto')
+        elif azul:
+            nf=math.ceil(INTENSIDAD_PAPEL)
+            tx=dict(fondo=capas(TEX_PAPEL,nf),tf=TAM_PAPEL,of='%.4g'%(INTENSIDAD_PAPEL/nf),barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='1',
+                    tinte='linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0)), rgba(%s,%.2f)'%(triple(tinte_cuero(d['nav'])),CUERO_TINTE_ALFA),
+                    tarjeta=capas(TEX_ALGODON,max(1,round(INTENSIDAD_ALGODON))),tt=TAM_ALGODON)
+        else:
+            tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
+        v+=[('textura-fondo',tx['fondo']),('tamano-fondo',tx['tf']),('intensidad-fondo',tx['of']),('fondo-display','block' if tx['fondo']!='none' else 'none'),
+            ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
+            ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
+            ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-papel',str(INTENSIDAD_PAPEL) if azul else '0'),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
+        if azul:
+            v+=[('nav-grad','none'),('sombra-tarjeta',SOMBRA_AZUL_TARJETA),('sombra-boton',SOMBRA_AZUL_BOTON)]
         o.append(sel+' {\n'+''.join('  --%s: %s;\n'%(k,x) for k,x in v)+'}\n')
         # iconos de la barra inferior (imagenes recoloreadas con el dorado de la paleta)
         o.append(''.join("%s #nav-%s { background-image: url('nav-%s-%s.png'); }\n"%(sel,i,i,n) for i in ('inicio','leer','guia','favoritos')))
@@ -144,21 +180,20 @@ def css():
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
   --sobre-hero: #FBF3E4;
-  /* Marmol (solo Marfil): UNA variable para la intensidad (0 = no se ve, 1 = maximo) y otra para el tamano */
-  --intensidad-marmol: 0.5;
-  --tamano-textura: 600px;
 }
 
-/* ===== Textura de marmol: llega al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
+/* ===== Texturas (Marfil: marmol; Azul clasico: papel/cuero/algodon): llegan al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
    (las reglas de cada pagina usan 'background' abreviado; aqui se sube la especificidad para que no la pisen) */
 :root .phone { isolation: isolate; background-color: var(--fondo); }
 :root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
 :root nav { background: var(--nav-grad); background-color: var(--nav); border-top: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
-  content: ''; display: var(--marmol-display); position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat;
-  opacity: var(--intensidad-marmol);
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-repeat: repeat;
 }
+:root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); opacity: var(--intensidad-fondo); }
+:root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); opacity: var(--intensidad-barra); }
+/* tinte + degradado vertical leve ENCIMA de la textura de la barra (solo Azul clasico) */
+:root header:not(.hero)::after, :root nav::after { content: ''; display: var(--tinte-display); position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--barra-tinte); }
 
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
@@ -176,6 +211,17 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 .opcion-tema .nombre-tema { display: block; width: 100%; }
 .muestras { display: flex; width: 100%; height: 17px; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(128,128,128,0.5); }
 .muestras i { display: block; flex: 1; }
+""")
+    o.append("""
+/* ===== Azul clasico: textura de algodon en las tarjetas y sombras suaves negras en tarjetas y botones =====
+   (solo esta paleta; las tarjetas con campo de texto, menus y popups siguen solidos) */
+:root[data-tema="azul"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado) {
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat;
+}
+:root[data-tema="azul"] #vista-detalle .texto-oracion { background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat; }
+:root[data-tema="azul"] :is(.pestana.activa, .tab.activo, .btn-leer-pasaje, .btn-copiar-lista, .tarjeta-oracion .simbolo, .btn-ir-verso-flotante, .pin-mapa) {
+  box-shadow: var(--sombra-boton), var(--brillo-boton);
+}
 """)
     return ''.join(o).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 

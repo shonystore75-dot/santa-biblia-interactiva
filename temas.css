@@ -33,32 +33,44 @@
   --tarjeta-rgb: 255,255,255;
   --sombra-rgb: 24,74,81;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root #nav-inicio { background-image: url('nav-inicio-turquesa.png'); }
 :root #nav-leer { background-image: url('nav-leer-turquesa.png'); }
 :root #nav-guia { background-image: url('nav-guia-turquesa.png'); }
 :root #nav-favoritos { background-image: url('nav-favoritos-turquesa.png'); }
 :root[data-tema="azul"] {
-  --fondo: #F3F5F8;
-  --tarjeta: #FFFFFF;
-  --tarjeta-solida: #FFFFFF;
-  --texto: #24354B;
-  --nav: #18365B;
+  --fondo: #F7F5F0;
+  --tarjeta: #FFFCF6;
+  --tarjeta-solida: #FFFCF6;
+  --texto: #172B47;
+  --nav: #102F50;
   --acento: #D6A84E;
   --sobre-nav: #FFFFFF;
-  --sobre-nav-suave: #BAC3CE;
+  --sobre-nav-suave: #B7C1CA;
   --acento-nav: #F0D27A;
   --icono-nav: #F0CF72;
-  --principal: #18365B;
+  --principal: #102F50;
   --sobre-principal: #FFFFFF;
-  --cita: #18365B;
-  --oscuro: #18365B;
+  --cita: #172B47;
+  --oscuro: #102F50;
   --sobre-oscuro: #F0D27A;
-  --sobre-acento: #24354B;
+  --sobre-acento: #172B47;
   --acento-btn: #D6A84E;
   --oro-linea: linear-gradient(90deg, #8A6420, #F0D27A 30%, #FFF1B8 50%, #E2B94F 70%, #8A6420);
   --oro-borde: #E2B94F;
@@ -68,18 +80,33 @@
   --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
   --btn-nav-borde: rgba(214,168,78,0.5);
-  --principal-rgb: 24,54,91;
-  --texto-rgb: 36,53,75;
+  --principal-rgb: 16,47,80;
+  --texto-rgb: 23,43,71;
   --acento-rgb: 214,168,78;
-  --hero-rgb: 24,54,91;
-  --titulo-rollo: #18365B;
-  --tarjeta-rgb: 255,255,255;
-  --sombra-rgb: 36,53,75;
+  --hero-rgb: 16,47,80;
+  --titulo-rollo: #172B47;
+  --tarjeta-rgb: 255,252,246;
+  --sombra-rgb: 0,0,0;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
-  --z-barra: auto;
-  --aislar-barra: auto;
+  --z-barra: 40;
+  --aislar-barra: isolate;
+  --textura-fondo: url('texturas/02_papel_marfil_grisaceo.webp'), url('texturas/02_papel_marfil_grisaceo.webp'), url('texturas/02_papel_marfil_grisaceo.webp');
+  --tamano-fondo: 256px;
+  --intensidad-fondo: 1;
+  --fondo-display: block;
+  --textura-barra: url('texturas/01_cuero_azul_marino.webp');
+  --tamano-barra: 256px;
+  --intensidad-barra: 1;
+  --barra-display: block;
+  --barra-tinte: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0)), rgba(22,60,102,0.40);
+  --tinte-display: block;
+  --textura-tarjeta: url('texturas/03_papel_blanco_marfil.webp'), url('texturas/03_papel_blanco_marfil.webp');
+  --tamano-tarjeta: 256px;
+  --intensidad-papel: 3;
+  --intensidad-algodon: 2.5;
+  --nav-grad: none;
+  --sombra-tarjeta: 0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15);
+  --sombra-boton: 0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16);
 }
 :root[data-tema="azul"] #nav-inicio { background-image: url('nav-inicio-azul.png'); }
 :root[data-tema="azul"] #nav-leer { background-image: url('nav-leer-azul.png'); }
@@ -119,10 +146,22 @@
   --tarjeta-rgb: 255,253,247;
   --sombra-rgb: 86,32,43;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="borgona"] #nav-inicio { background-image: url('nav-inicio-borgona.png'); }
 :root[data-tema="borgona"] #nav-leer { background-image: url('nav-leer-borgona.png'); }
@@ -162,10 +201,22 @@
   --tarjeta-rgb: 255,253,245;
   --sombra-rgb: 46,65,41;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="olivo"] #nav-inicio { background-image: url('nav-inicio-olivo.png'); }
 :root[data-tema="olivo"] #nav-leer { background-image: url('nav-leer-olivo.png'); }
@@ -205,10 +256,22 @@
   --tarjeta-rgb: 255,249,239;
   --sombra-rgb: 84,53,38;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="tierra"] #nav-inicio { background-image: url('nav-inicio-tierra.png'); }
 :root[data-tema="tierra"] #nav-leer { background-image: url('nav-leer-tierra.png'); }
@@ -248,10 +311,22 @@
   --tarjeta-rgb: 255,255,255;
   --sombra-rgb: 73,50,95;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="purpura"] #nav-inicio { background-image: url('nav-inicio-purpura.png'); }
 :root[data-tema="purpura"] #nav-leer { background-image: url('nav-leer-purpura.png'); }
@@ -291,10 +366,22 @@
   --tarjeta-rgb: 255,255,255;
   --sombra-rgb: 24,74,81;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="turquesa"] #nav-inicio { background-image: url('nav-inicio-turquesa.png'); }
 :root[data-tema="turquesa"] #nav-leer { background-image: url('nav-leer-turquesa.png'); }
@@ -334,10 +421,22 @@
   --tarjeta-rgb: 41,53,69;
   --sombra-rgb: 0,0,0;
   --palabras-jesus: #FF9A8F;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="nocturna"] #nav-inicio { background-image: url('nav-inicio-nocturna.png'); }
 :root[data-tema="nocturna"] #nav-leer { background-image: url('nav-leer-nocturna.png'); }
@@ -377,10 +476,22 @@
   --tarjeta-rgb: 255,255,255;
   --sombra-rgb: 89,57,45;
   --palabras-jesus: #9B1024;
-  --textura: url('marmol_marfil_fuerte.webp');
-  --marmol-display: block;
   --z-barra: 40;
   --aislar-barra: isolate;
+  --textura-fondo: url('marmol_marfil_fuerte.webp');
+  --tamano-fondo: 600px;
+  --intensidad-fondo: 0.5;
+  --fondo-display: block;
+  --textura-barra: url('marmol_marfil_fuerte.webp');
+  --tamano-barra: 600px;
+  --intensidad-barra: 0.5;
+  --barra-display: block;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="marfil"] #nav-inicio { background-image: url('nav-inicio-marfil.png'); }
 :root[data-tema="marfil"] #nav-leer { background-image: url('nav-leer-marfil.png'); }
@@ -420,10 +531,22 @@
   --tarjeta-rgb: 255,252,246;
   --sombra-rgb: 113,57,31;
   --palabras-jesus: #9B1024;
-  --textura: none;
-  --marmol-display: none;
   --z-barra: auto;
   --aislar-barra: auto;
+  --textura-fondo: none;
+  --tamano-fondo: auto;
+  --intensidad-fondo: 0;
+  --fondo-display: none;
+  --textura-barra: none;
+  --tamano-barra: auto;
+  --intensidad-barra: 0;
+  --barra-display: none;
+  --barra-tinte: none;
+  --tinte-display: none;
+  --textura-tarjeta: none;
+  --tamano-tarjeta: auto;
+  --intensidad-papel: 0;
+  --intensidad-algodon: 0;
 }
 :root[data-tema="ambar"] #nav-inicio { background-image: url('nav-inicio-ambar.png'); }
 :root[data-tema="ambar"] #nav-leer { background-image: url('nav-leer-ambar.png'); }
@@ -447,21 +570,20 @@
   --texto-suave: color-mix(in srgb, var(--texto) 82%, var(--tarjeta-solida));
   --fondo-exterior: var(--nav);
   --sobre-hero: #FBF3E4;
-  /* Marmol (solo Marfil): UNA variable para la intensidad (0 = no se ve, 1 = maximo) y otra para el tamano */
-  --intensidad-marmol: 0.5;
-  --tamano-textura: 600px;
 }
 
-/* ===== Textura de marmol: llega al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
+/* ===== Texturas (Marfil: marmol; Azul clasico: papel/cuero/algodon): llegan al fondo, al encabezado y a la barra inferior de TODAS las pantallas =====
    (las reglas de cada pagina usan 'background' abreviado; aqui se sube la especificidad para que no la pisen) */
 :root .phone { isolation: isolate; background-color: var(--fondo); }
 :root header:not(.hero) { background: var(--nav-grad); background-color: var(--nav); border-bottom: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; z-index: var(--z-barra); isolation: var(--aislar-barra); }
 :root nav { background: var(--nav-grad); background-color: var(--nav); border-top: var(--oro-linea-px) solid transparent; border-image: var(--oro-linea) 1; position: relative; isolation: var(--aislar-barra); }
 :root .phone::before, :root header:not(.hero)::before, :root nav::before {
-  content: ''; display: var(--marmol-display); position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-image: var(--textura); background-size: var(--tamano-textura); background-repeat: repeat;
-  opacity: var(--intensidad-marmol);
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-repeat: repeat;
 }
+:root .phone::before { display: var(--fondo-display); background-image: var(--textura-fondo); background-size: var(--tamano-fondo); opacity: var(--intensidad-fondo); }
+:root header:not(.hero)::before, :root nav::before { display: var(--barra-display); background-image: var(--textura-barra); background-size: var(--tamano-barra); opacity: var(--intensidad-barra); }
+/* tinte + degradado vertical leve ENCIMA de la textura de la barra (solo Azul clasico) */
+:root header:not(.hero)::after, :root nav::after { content: ''; display: var(--tinte-display); position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--barra-tinte); }
 
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
@@ -479,3 +601,13 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 .opcion-tema .nombre-tema { display: block; width: 100%; }
 .muestras { display: flex; width: 100%; height: 17px; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(128,128,128,0.5); }
 .muestras i { display: block; flex: 1; }
+
+/* ===== Azul clasico: textura de algodon en las tarjetas y sombras suaves negras en tarjetas y botones =====
+   (solo esta paleta; las tarjetas con campo de texto, menus y popups siguen solidos) */
+:root[data-tema="azul"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado) {
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat;
+}
+:root[data-tema="azul"] #vista-detalle .texto-oracion { background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat; }
+:root[data-tema="azul"] :is(.pestana.activa, .tab.activo, .btn-leer-pasaje, .btn-copiar-lista, .tarjeta-oracion .simbolo, .btn-ir-verso-flotante, .pin-mapa) {
+  box-shadow: var(--sombra-boton), var(--brillo-boton);
+}
