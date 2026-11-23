@@ -825,8 +825,9 @@
 
   // ---------- Carrusel de rollos ----------
   // Ajustes de la animación de las flechas (el arrastre con el dedo no los usa)
-  const DUR_FLECHA_MS = 1000;   // duración del giro con las flechas
-  const AMORT_RESORTE = 0.9;    // 1 = sin pasarse del final; menos = rebote leve (0.9 ≈ 0,3 %)
+  const DUR_FLECHA_MS = 800;    // tiempo hasta tocar el punto final con las flechas
+  const REBOTE_FLECHA = 0.05;   // sobrepaso al final (fracción de una posición; 0 = sin rebote)
+  const ASENTAR_MS = 200;       // tiempo del vaivén hasta quedar en reposo (total ≈ 1000 ms)
   let posCarrusel = 0, objetivoCarrusel = 0, velCarrusel = 0, arrastrandoCarrusel = false;
 
   function iniciarCarruselExplorar() {
@@ -881,21 +882,26 @@
 
     // Animación de resorte (arrastre) y animación por tiempo (flechas)
     let raf = 0, ultimo = 0, giro = null;
-    // Curva de las flechas: arranque suave (cúbica) y llegada suave; con AMORT_RESORTE < 1 se pasa un poco del final
-    function curvaFlecha(u) {
-      const c1 = (1 - AMORT_RESORTE) * 3, c3 = c1 + 1;
-      if (u < 0.5) return 4 * u * u * u;
-      const w = 2 * u - 1;
-      return 0.5 + 0.5 * (1 + c3 * Math.pow(w - 1, 3) + c1 * Math.pow(w - 1, 2));
+    // Curva de las flechas, en dos tramos: (1) arranque suave hasta tocar el punto final en DUR_FLECHA_MS,
+    // llegando con algo de velocidad; (2) un solo vaivén de REBOTE_FLECHA (fracción de una posición) que se asienta en ASENTAR_MS.
+    function curvaFlecha(ms) {
+      const P = REBOTE_FLECHA;
+      if (ms < DUR_FLECHA_MS) {
+        const u = ms / DUR_FLECHA_MS, v = 6.75 * P * DUR_FLECHA_MS / ASENTAR_MS; // v: velocidad de llegada (continuidad con el tramo 2)
+        return (v - 2) * u * u * u + (3 - v) * u * u;
+      }
+      const q = Math.min(1, (ms - DUR_FLECHA_MS) / ASENTAR_MS);
+      return 1 + 6.75 * P * q * (1 - q) * (1 - q);
     }
     function animar(t) {
       const dt = Math.min(2.2, (t - ultimo) / 16.67 || 1); ultimo = t;
       if (giro && !arrastrandoCarrusel) {
         if (giro.t0 === null) giro.t0 = t;
-        const u = Math.min(1, (t - giro.t0) / DUR_FLECHA_MS);
-        posCarrusel = u >= 1 ? giro.hasta : giro.desde + (giro.hasta - giro.desde) * curvaFlecha(u);
+        const ms = Math.min(DUR_FLECHA_MS + ASENTAR_MS, t - giro.t0);
+        const fin = ms >= DUR_FLECHA_MS + ASENTAR_MS;
+        posCarrusel = fin ? giro.hasta : giro.desde + (giro.hasta - giro.desde) * curvaFlecha(ms);
         dibujar();
-        if (u >= 1) { giro = null; velCarrusel = 0; raf = 0; return; }
+        if (fin) { giro = null; velCarrusel = 0; raf = 0; return; }
         raf = requestAnimationFrame(animar);
         return;
       }
