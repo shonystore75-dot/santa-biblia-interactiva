@@ -128,7 +128,7 @@
     padding: 11px 14px;
     border-radius: 4px 14px 4px 14px;
     border: 1.5px solid rgba(var(--principal-rgb),0.25);
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     color: var(--texto);
     font-family: 'Source Serif 4', serif;
     font-size: 14px;
@@ -138,6 +138,7 @@
     width: 42px; flex-shrink: 0;
     border-radius: 4px 14px 4px 14px;
     background: linear-gradient(135deg, var(--principal), var(--principal-2));
+    box-shadow: var(--brillo-boton);
     color: var(--sobre-principal);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
@@ -163,7 +164,7 @@
     gap: 8px;
   }
   .grupo-busqueda {
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     border-radius: 4px 14px 4px 14px;
     border-left: 3px solid var(--acento);
     box-shadow: 0 3px 10px rgba(var(--sombra-rgb),0.1);
@@ -266,7 +267,7 @@
     background: linear-gradient(135deg, var(--principal), var(--principal-2));
     color: var(--sobre-principal);
     border-color: transparent;
-    box-shadow: 0 4px 10px rgba(var(--sombra-rgb),0.35);
+    box-shadow: 0 4px 10px rgba(var(--sombra-rgb),0.35), var(--brillo-boton);
   }
 
   /* Lista de libros */
@@ -277,13 +278,14 @@
   }
   .item-libro {
     background: var(--tarjeta);
+    border: 1px solid var(--borde-tarjeta);
     border-radius: 4px 14px 4px 14px;
     padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-left: 3px solid var(--acento);
-    box-shadow: 0 3px 10px rgba(var(--sombra-rgb),0.1);
+    box-shadow: var(--sombra-tarjeta);
     cursor: pointer;
   }
   .item-libro .nombre {
@@ -308,6 +310,7 @@
     position: relative;
     aspect-ratio: 1;
     background: var(--tarjeta);
+    border: 1px solid var(--borde-tarjeta);
     border-radius: 4px 12px 4px 12px;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Cinzel', serif;
@@ -315,7 +318,7 @@
     font-size: calc(15px * var(--escala-texto));
     color: var(--cita);
     border-bottom: 2px solid var(--acento);
-    box-shadow: 0 3px 8px rgba(var(--sombra-rgb),0.12);
+    box-shadow: var(--sombra-tarjeta);
     cursor: pointer;
   }
 
@@ -584,13 +587,14 @@
   }
   .item-guardado {
     background: var(--tarjeta);
+    border: 1px solid var(--borde-tarjeta);
     border-radius: 4px 14px 4px 14px;
     padding: 12px 16px;
     display: flex;
     flex-direction: column;
     gap: 3px;
     border-left: 3px solid var(--acento);
-    box-shadow: 0 3px 10px rgba(var(--sombra-rgb),0.1);
+    box-shadow: var(--sombra-tarjeta);
     cursor: pointer;
   }
   .item-guardado.vacio {
@@ -642,7 +646,7 @@
   }
   .overlay-pantalla.visible { display: flex; }
   .caja-overlay {
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     border-radius: 6px 20px 6px 20px;
     padding: 2.2vh 4vw;
     width: 100%;
@@ -695,7 +699,7 @@
     font-family: 'Source Serif 4', serif;
     font-size: calc(14px * var(--escala-texto));
     color: var(--texto);
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     resize: vertical;
     margin-bottom: 1.6vh;
   }
@@ -711,16 +715,17 @@
     cursor: pointer;
   }
   .btn-overlay.cancelar {
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     color: var(--cita);
     border: 1.5px solid rgba(var(--principal-rgb),0.25);
   }
   .btn-overlay.guardar {
     background: linear-gradient(135deg, var(--principal), var(--principal-2));
+    box-shadow: var(--brillo-boton);
     color: var(--sobre-principal);
   }
   .btn-overlay.eliminar {
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     color: var(--cita);
     border: 1.5px solid rgba(var(--principal-rgb),0.25);
   }
@@ -766,6 +771,7 @@
     padding: 10px;
     border-radius: 4px 14px 4px 14px;
     background: linear-gradient(135deg, var(--principal), var(--principal-2));
+    box-shadow: var(--brillo-boton);
     color: var(--sobre-principal);
     font-family: 'Cinzel', serif;
     font-weight: 600;
@@ -784,7 +790,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 14px rgba(var(--sombra-rgb),0.35);
+    box-shadow: 0 6px 14px rgba(var(--sombra-rgb),0.35), var(--brillo-boton);
     border: 2px solid var(--acento-nav);
     cursor: pointer;
     z-index: 20;
@@ -911,7 +917,7 @@
     top: 100%;
     right: 2.5vw;
     margin-top: 6px;
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     padding: 6px;
@@ -1024,15 +1030,15 @@
         </div>
         <div class="fila-menu" id="fila-paleta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.6-.5 1.6-1.4 0-.4-.15-.75-.4-1a1.2 1.2 0 0 1 .85-2h1.3A3.65 3.65 0 0 0 19 12.95 9 9 0 0 0 12 3z"></path><circle cx="7.5" cy="11" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="10.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="15" cy="8" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="12.5" r="1.3" fill="currentColor" stroke="none"></circle></svg>Paleta de colores<span class="flecha-sub">›</span></div>
         <div class="submenu-paleta" id="submenu-paleta">
-        <div class="opcion-tema" data-tema="azul" onclick="elegirTema('azul')"><span class="nombre-tema">Azul clásico</span><span class="muestras"><i style="background:#F3F5F8"></i><i style="background:#FFFFFF"></i><i style="background:#18365B"></i><i style="background:#D6A84E"></i></span></div>
-        <div class="opcion-tema" data-tema="borgona" onclick="elegirTema('borgona')"><span class="nombre-tema">Borgoña real</span><span class="muestras"><i style="background:#FAF3EB"></i><i style="background:#FFFDF7"></i><i style="background:#641D2B"></i><i style="background:#D5A348"></i></span></div>
-        <div class="opcion-tema" data-tema="olivo" onclick="elegirTema('olivo')"><span class="nombre-tema">Verde olivo</span><span class="muestras"><i style="background:#F4F3E7"></i><i style="background:#FFFDF5"></i><i style="background:#344C2B"></i><i style="background:#C9A34E"></i></span></div>
-        <div class="opcion-tema" data-tema="tierra" onclick="elegirTema('tierra')"><span class="nombre-tema">Tierra bíblica</span><span class="muestras"><i style="background:#F8F0E5"></i><i style="background:#FFF9EF"></i><i style="background:#78452D"></i><i style="background:#D9A54D"></i></span></div>
-        <div class="opcion-tema" data-tema="purpura" onclick="elegirTema('purpura')"><span class="nombre-tema">Púrpura espiritual</span><span class="muestras"><i style="background:#F6F2F8"></i><i style="background:#FFFFFF"></i><i style="background:#49325F"></i><i style="background:#D7AD58"></i></span></div>
-        <div class="opcion-tema" data-tema="turquesa" onclick="elegirTema('turquesa')"><span class="nombre-tema">Turquesa renovación</span><span class="muestras"><i style="background:#EFF7F5"></i><i style="background:#FFFFFF"></i><i style="background:#12616A"></i><i style="background:#D6AC55"></i></span></div>
-        <div class="opcion-tema" data-tema="nocturna" onclick="elegirTema('nocturna')"><span class="nombre-tema">Nocturna</span><span class="muestras"><i style="background:#18212D"></i><i style="background:#293545"></i><i style="background:#202A38"></i><i style="background:#D5AC60"></i></span></div>
-        <div class="opcion-tema" data-tema="marfil" onclick="elegirTema('marfil')"><span class="nombre-tema">Marfil clásico</span><span class="muestras"><i style="background:#FCF8EF"></i><i style="background:#FFFFFF"></i><i style="background:#F2E7D1"></i><i style="background:#A96835"></i></span></div>
-        <div class="opcion-tema" data-tema="ambar" onclick="elegirTema('ambar')"><span class="nombre-tema">Ámbar inspirador</span><span class="muestras"><i style="background:#FFF3E5"></i><i style="background:#FFFCF6"></i><i style="background:#93421D"></i><i style="background:#D7A044"></i></span></div>
+        <div class="opcion-tema" data-tema="azul" onclick="elegirTema('azul')"><span class="muestras"><i style="background:#F3F5F8"></i><i style="background:#FFFFFF"></i><i style="background:#18365B"></i><i style="background:#D6A84E"></i></span><span class="nombre-tema">Azul clásico</span></div>
+        <div class="opcion-tema" data-tema="borgona" onclick="elegirTema('borgona')"><span class="muestras"><i style="background:#FAF3EB"></i><i style="background:#FFFDF7"></i><i style="background:#641D2B"></i><i style="background:#D5A348"></i></span><span class="nombre-tema">Borgoña real</span></div>
+        <div class="opcion-tema" data-tema="olivo" onclick="elegirTema('olivo')"><span class="muestras"><i style="background:#F4F3E7"></i><i style="background:#FFFDF5"></i><i style="background:#344C2B"></i><i style="background:#C9A34E"></i></span><span class="nombre-tema">Verde olivo</span></div>
+        <div class="opcion-tema" data-tema="tierra" onclick="elegirTema('tierra')"><span class="muestras"><i style="background:#F8F0E5"></i><i style="background:#FFF9EF"></i><i style="background:#78452D"></i><i style="background:#D9A54D"></i></span><span class="nombre-tema">Tierra bíblica</span></div>
+        <div class="opcion-tema" data-tema="purpura" onclick="elegirTema('purpura')"><span class="muestras"><i style="background:#F6F2F8"></i><i style="background:#FFFFFF"></i><i style="background:#49325F"></i><i style="background:#D7AD58"></i></span><span class="nombre-tema">Púrpura espiritual</span></div>
+        <div class="opcion-tema" data-tema="turquesa" onclick="elegirTema('turquesa')"><span class="muestras"><i style="background:#EFF7F5"></i><i style="background:#FFFFFF"></i><i style="background:#12616A"></i><i style="background:#D6AC55"></i></span><span class="nombre-tema">Turquesa renovación</span></div>
+        <div class="opcion-tema" data-tema="nocturna" onclick="elegirTema('nocturna')"><span class="muestras"><i style="background:#18212D"></i><i style="background:#293545"></i><i style="background:#202A38"></i><i style="background:#D5AC60"></i></span><span class="nombre-tema">Nocturna</span></div>
+        <div class="opcion-tema" data-tema="marfil" onclick="elegirTema('marfil')"><span class="muestras"><i style="background:#FCF8EF"></i><i style="background:#FFFFFF"></i><i style="background:#F2E7D1"></i><i style="background:#A96835"></i></span><span class="nombre-tema">Marfil clásico</span></div>
+        <div class="opcion-tema" data-tema="ambar" onclick="elegirTema('ambar')"><span class="muestras"><i style="background:#FFF3E5"></i><i style="background:#FFFCF6"></i><i style="background:#93421D"></i><i style="background:#D7A044"></i></span><span class="nombre-tema">Ámbar inspirador</span></div>
         </div>
         <div class="fila-menu" id="fila-acerca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"></circle></svg>Acerca de</div>
         <div class="fila-menu" id="fila-compartir-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.8"></circle><circle cx="6" cy="12" r="2.8"></circle><circle cx="18" cy="19" r="2.8"></circle><line x1="8.2" y1="10.6" x2="15.8" y2="6.2"></line><line x1="8.2" y1="13.4" x2="15.8" y2="17.8"></line></svg>Compartir la app</div>

@@ -52,7 +52,7 @@
     position: relative;
     overflow: hidden;
     background-image:
-      linear-gradient(180deg, rgba(var(--hero-rgb),0.5) 0%, rgba(var(--hero-rgb),0.32) 55%, rgba(var(--acento-rgb),0.18) 100%),
+      linear-gradient(180deg, rgba(var(--hero-rgb),0.35) 0%, rgba(var(--hero-rgb),0.22) 55%, rgba(var(--acento-rgb),0.15) 100%),
       url('fondo-inicio.jpg');
     background-size: cover;
     background-position: center top;
@@ -136,11 +136,12 @@
 
   .versiculo-dia {
     background: var(--tarjeta);
+    border: 1px solid var(--borde-tarjeta);
     border-radius: 6px 22px 6px 22px;
     padding: 1.5vh 4vw 1vh;
     position: relative;
-    box-shadow: 0 10px 30px rgba(var(--sombra-rgb), 0.25);
-    border: 1px solid rgba(var(--principal-rgb), 0.2);
+    box-shadow: var(--sombra-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
   }
 
   .llama {
@@ -212,7 +213,7 @@
     justify-content: center;
     cursor: pointer;
     z-index: 5;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.35);
+    box-shadow: 0 1px 3px rgba(var(--sombra-rgb), 0.22), 0 4px 8px -4px rgba(var(--sombra-rgb), 0.25), inset 0 1px 1px rgba(255,255,255,0.35);
   }
   .flecha-carrusel svg { width: 15px; height: 15px; }
 
@@ -226,8 +227,6 @@
     position: relative;
     perspective: 900px;
     overflow: hidden;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
     touch-action: pan-y;
     -webkit-user-select: none;
     user-select: none;
@@ -257,7 +256,7 @@
      se ve el borde irregular del papel. */
   .rollo-sombra {
     position: absolute; inset: 0;
-    filter: drop-shadow(0 6px 6px rgba(0,0,0,0.45));
+    filter: drop-shadow(0 3px 4px rgba(var(--sombra-rgb), 0.2));
     pointer-events: none;
   }
   .rollo .hoja {
@@ -277,7 +276,7 @@
     background:
       repeating-linear-gradient(180deg, rgba(110,70,30,0.16) 0 1px, transparent 1px 9px),
       linear-gradient(90deg, #8f6c3b 0%, #cfae72 14%, #f4e2b4 38%, #ead29a 62%, #b08a52 86%, #6f4e26 100%);
-    box-shadow: 3px 0 7px rgba(35,18,5,0.5), inset 0 0 4px rgba(70,40,15,0.5);
+    box-shadow: 2px 0 4px rgba(var(--sombra-rgb), 0.18), inset 0 0 3px rgba(var(--sombra-rgb), 0.22);
   }
   .rollo .enrollado.izq { left: 11px; }
   .rollo .enrollado.der {
@@ -285,13 +284,13 @@
     background:
       repeating-linear-gradient(180deg, rgba(110,70,30,0.16) 0 1px, transparent 1px 9px),
       linear-gradient(270deg, #8f6c3b 0%, #cfae72 14%, #f4e2b4 38%, #ead29a 62%, #b08a52 86%, #6f4e26 100%);
-    box-shadow: -3px 0 7px rgba(35,18,5,0.5), inset 0 0 4px rgba(70,40,15,0.5);
+    box-shadow: -2px 0 4px rgba(var(--sombra-rgb), 0.18), inset 0 0 3px rgba(var(--sombra-rgb), 0.22);
   }
   .rollo .enrollado::before,
   .rollo .enrollado::after {
     content: ''; position: absolute; left: -1px; right: -1px; height: 10px; border-radius: 50%;
     background: repeating-radial-gradient(ellipse at 50% 50%, #e9d19a 0 1.1px, #7d5a2d 1.1px 2.1px);
-    box-shadow: 0 0 3px rgba(40,20,5,0.55);
+    box-shadow: 0 0 2px rgba(var(--sombra-rgb), 0.25);
   }
   .rollo .enrollado::before { top: -5px; }
   .rollo .enrollado::after { bottom: -5px; }
@@ -300,7 +299,7 @@
   .rollo .vara {
     position: absolute; top: -10px; bottom: -10px; width: 30px; z-index: 3;
     background: url('texturas/vara.webp') center / 100% 100% no-repeat;
-    filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.5));
+    filter: drop-shadow(1px 2px 2px rgba(var(--sombra-rgb), 0.22));
   }
   .rollo .vara.izq { left: -8px; }
   .rollo .vara.der { right: -8px; }
@@ -510,7 +509,7 @@
   }
   .confirmar-salida.visible { display: flex; }
   .caja-confirmar {
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     border-radius: 6px 20px 6px 20px;
     padding: 2.4vh 5vw;
     width: 100%;
@@ -537,12 +536,13 @@
     cursor: pointer;
   }
   .btn-confirmar.cancelar {
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     color: var(--cita);
     border: 1.5px solid rgba(var(--principal-rgb),0.25);
   }
   .btn-confirmar.salir {
     background: linear-gradient(135deg, var(--principal), var(--principal-2));
+    box-shadow: var(--brillo-boton);
     color: var(--sobre-principal);
   }
 
@@ -565,7 +565,7 @@
     position: fixed;
     top: calc(2vh + 47px + max(0px, calc(env(safe-area-inset-top) - 4px - 1.5vh)));
     right: 1vw;
-    background: var(--tarjeta);
+    background: var(--tarjeta-solida);
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     padding: 6px;
@@ -695,15 +695,15 @@
       </div>
       <div class="fila-menu" id="fila-paleta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.6-.5 1.6-1.4 0-.4-.15-.75-.4-1a1.2 1.2 0 0 1 .85-2h1.3A3.65 3.65 0 0 0 19 12.95 9 9 0 0 0 12 3z"></path><circle cx="7.5" cy="11" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="10.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="15" cy="8" r="1.3" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="12.5" r="1.3" fill="currentColor" stroke="none"></circle></svg>Paleta de colores<span class="flecha-sub">›</span></div>
       <div class="submenu-paleta" id="submenu-paleta">
-        <div class="opcion-tema" data-tema="azul" onclick="elegirTema('azul')"><span class="nombre-tema">Azul clásico</span><span class="muestras"><i style="background:#F3F5F8"></i><i style="background:#FFFFFF"></i><i style="background:#18365B"></i><i style="background:#D6A84E"></i></span></div>
-        <div class="opcion-tema" data-tema="borgona" onclick="elegirTema('borgona')"><span class="nombre-tema">Borgoña real</span><span class="muestras"><i style="background:#FAF3EB"></i><i style="background:#FFFDF7"></i><i style="background:#641D2B"></i><i style="background:#D5A348"></i></span></div>
-        <div class="opcion-tema" data-tema="olivo" onclick="elegirTema('olivo')"><span class="nombre-tema">Verde olivo</span><span class="muestras"><i style="background:#F4F3E7"></i><i style="background:#FFFDF5"></i><i style="background:#344C2B"></i><i style="background:#C9A34E"></i></span></div>
-        <div class="opcion-tema" data-tema="tierra" onclick="elegirTema('tierra')"><span class="nombre-tema">Tierra bíblica</span><span class="muestras"><i style="background:#F8F0E5"></i><i style="background:#FFF9EF"></i><i style="background:#78452D"></i><i style="background:#D9A54D"></i></span></div>
-        <div class="opcion-tema" data-tema="purpura" onclick="elegirTema('purpura')"><span class="nombre-tema">Púrpura espiritual</span><span class="muestras"><i style="background:#F6F2F8"></i><i style="background:#FFFFFF"></i><i style="background:#49325F"></i><i style="background:#D7AD58"></i></span></div>
-        <div class="opcion-tema" data-tema="turquesa" onclick="elegirTema('turquesa')"><span class="nombre-tema">Turquesa renovación</span><span class="muestras"><i style="background:#EFF7F5"></i><i style="background:#FFFFFF"></i><i style="background:#12616A"></i><i style="background:#D6AC55"></i></span></div>
-        <div class="opcion-tema" data-tema="nocturna" onclick="elegirTema('nocturna')"><span class="nombre-tema">Nocturna</span><span class="muestras"><i style="background:#18212D"></i><i style="background:#293545"></i><i style="background:#202A38"></i><i style="background:#D5AC60"></i></span></div>
-        <div class="opcion-tema" data-tema="marfil" onclick="elegirTema('marfil')"><span class="nombre-tema">Marfil clásico</span><span class="muestras"><i style="background:#FCF8EF"></i><i style="background:#FFFFFF"></i><i style="background:#F2E7D1"></i><i style="background:#A96835"></i></span></div>
-        <div class="opcion-tema" data-tema="ambar" onclick="elegirTema('ambar')"><span class="nombre-tema">Ámbar inspirador</span><span class="muestras"><i style="background:#FFF3E5"></i><i style="background:#FFFCF6"></i><i style="background:#93421D"></i><i style="background:#D7A044"></i></span></div>
+        <div class="opcion-tema" data-tema="azul" onclick="elegirTema('azul')"><span class="muestras"><i style="background:#F3F5F8"></i><i style="background:#FFFFFF"></i><i style="background:#18365B"></i><i style="background:#D6A84E"></i></span><span class="nombre-tema">Azul clásico</span></div>
+        <div class="opcion-tema" data-tema="borgona" onclick="elegirTema('borgona')"><span class="muestras"><i style="background:#FAF3EB"></i><i style="background:#FFFDF7"></i><i style="background:#641D2B"></i><i style="background:#D5A348"></i></span><span class="nombre-tema">Borgoña real</span></div>
+        <div class="opcion-tema" data-tema="olivo" onclick="elegirTema('olivo')"><span class="muestras"><i style="background:#F4F3E7"></i><i style="background:#FFFDF5"></i><i style="background:#344C2B"></i><i style="background:#C9A34E"></i></span><span class="nombre-tema">Verde olivo</span></div>
+        <div class="opcion-tema" data-tema="tierra" onclick="elegirTema('tierra')"><span class="muestras"><i style="background:#F8F0E5"></i><i style="background:#FFF9EF"></i><i style="background:#78452D"></i><i style="background:#D9A54D"></i></span><span class="nombre-tema">Tierra bíblica</span></div>
+        <div class="opcion-tema" data-tema="purpura" onclick="elegirTema('purpura')"><span class="muestras"><i style="background:#F6F2F8"></i><i style="background:#FFFFFF"></i><i style="background:#49325F"></i><i style="background:#D7AD58"></i></span><span class="nombre-tema">Púrpura espiritual</span></div>
+        <div class="opcion-tema" data-tema="turquesa" onclick="elegirTema('turquesa')"><span class="muestras"><i style="background:#EFF7F5"></i><i style="background:#FFFFFF"></i><i style="background:#12616A"></i><i style="background:#D6AC55"></i></span><span class="nombre-tema">Turquesa renovación</span></div>
+        <div class="opcion-tema" data-tema="nocturna" onclick="elegirTema('nocturna')"><span class="muestras"><i style="background:#18212D"></i><i style="background:#293545"></i><i style="background:#202A38"></i><i style="background:#D5AC60"></i></span><span class="nombre-tema">Nocturna</span></div>
+        <div class="opcion-tema" data-tema="marfil" onclick="elegirTema('marfil')"><span class="muestras"><i style="background:#FCF8EF"></i><i style="background:#FFFFFF"></i><i style="background:#F2E7D1"></i><i style="background:#A96835"></i></span><span class="nombre-tema">Marfil clásico</span></div>
+        <div class="opcion-tema" data-tema="ambar" onclick="elegirTema('ambar')"><span class="muestras"><i style="background:#FFF3E5"></i><i style="background:#FFFCF6"></i><i style="background:#93421D"></i><i style="background:#D7A044"></i></span><span class="nombre-tema">Ámbar inspirador</span></div>
       </div>
       <div class="fila-menu" id="fila-acerca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"></circle></svg>Acerca de</div>
       <div class="fila-menu" id="fila-compartir-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.8"></circle><circle cx="6" cy="12" r="2.8"></circle><circle cx="18" cy="19" r="2.8"></circle><line x1="8.2" y1="10.6" x2="15.8" y2="6.2"></line><line x1="8.2" y1="13.4" x2="15.8" y2="17.8"></line></svg>Compartir la app</div>
@@ -863,11 +863,12 @@
       rollos.forEach((r, i) => {
         const d = diferencia(i), a = Math.abs(d), s = d < 0 ? -1 : 1, m = Math.min(a, 1);
         const x = s * (paso * m + Math.max(a - 1, 0) * W * 0.3);
-        const op = a <= 1 ? 1 - 0.4 * a : Math.max(0, 0.6 - (a - 1) * 1.2);
+        // Solo se ve el rollo central: al deslizar, el que sale y el que entra se funden y los vecinos quedan ocultos
+        const op = Math.max(0, 1 - a * 1.8);
         r.style.transform = `translate3d(${x}px,0,${-90 * m}px) rotateY(${-s * 40 * m}deg) scale(${1 - 0.12 * m})`;
         r.style.opacity = op;
         r.style.zIndex = 100 - Math.round(a * 10);
-        r.style.filter = `brightness(${1 - 0.18 * m})`;
+        r.style.filter = m > 0 ? `brightness(${1 - 0.1 * m})` : 'none';
         r.style.pointerEvents = op < 0.05 ? 'none' : 'auto';
         r.tabIndex = i === activo ? 0 : -1;
       });

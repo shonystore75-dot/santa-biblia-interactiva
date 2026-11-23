@@ -1,9 +1,9 @@
 // Paletas de color de la app. Se carga en el <head> de cada pantalla (antes de pintar).
-// - La paleta por defecto es "purpura" (Púrpura espiritual).
+// - La paleta por defecto es "turquesa" (Turquesa renovación); quien eligió Púrpura la conserva.
 // - Si hay guardada una paleta antigua (clásica, esmeralda, zafiro) o desconocida, se descarta y se usa la de por defecto.
 (function () {
   var VALIDOS = ['azul', 'borgona', 'olivo', 'tierra', 'purpura', 'turquesa', 'nocturna', 'marfil', 'ambar'];
-  var DEFECTO = 'purpura';
+  var DEFECTO = 'turquesa';
 
   function leerGuardada() {
     try {
