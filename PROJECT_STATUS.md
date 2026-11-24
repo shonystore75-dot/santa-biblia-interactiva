@@ -270,10 +270,30 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
 
 ## PALETAS DE COLOR (2026-11-22)
 - 9 paletas en `temas.css` (variables CSS), generado por `python scripts/generar-temas.py` (ahí están los colores base, los derivados y la tabla de contraste). NO editar `temas.css` a mano.
-- `temas.js` (cargado en el `<head>` de cada pantalla) valida la paleta guardada (`localStorage.temaApp`); por defecto `purpura`; las antiguas (clásica/esmeralda/zafiro) pasan a Púrpura.
+- `temas.js` (cargado en el `<head>` de cada pantalla) valida la paleta guardada (`localStorage.temaApp`); por defecto `turquesa` (`PALETA_POR_DEFECTO` en el generador); las antiguas (clásica/esmeralda/zafiro) pasan a Púrpura.
 - Marfil clásico usa la textura `marmol_marfil_2026-11-22_2110.webp` (variable `--textura`; `none` en las demás). Iconos de la barra inferior: máscaras `nav-*-mascara.png` pintadas con `--icono-nav`.
 - Android: `MainActivity` expone `AndroidTema.barraNavegacionClara(boolean)`; Marfil pone iconos oscuros en la barra de navegación del sistema.
 
 ## PENDIENTE DE QUITAR ANTES DE PUBLICAR
 - `historias.html`: opción de menú "Ver la guía de nuevo (prueba)" y su manejador. Buscar los comentarios `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (2 bloques: HTML del menú y JS) y borrarlos. También el modo `?guia=1` en `prepararAyudasDetalle()` (opcional).
 - `historias.html`: opción de menú "Reiniciar la mano (prueba)" (borra `manoSuscribirVeces` y `manoSuscribirToco`). Está dentro de los mismos bloques `PRUEBA_TEMPORAL_INICIO` / `PRUEBA_TEMPORAL_FIN` (HTML del menú y JS): se quita junto con "Ver la guía de nuevo (prueba)".
+
+## ESTADO DEL SISTEMA DE TEXTURAS Y ÚLTIMAS ENTREGAS (2026-11-23)
+**Hecho**
+- Texturas reales (mismo método: desplazamiento aditivo del color medio, una sola imagen sin mosaico, WebP optimizado) en tres paletas, todo generado desde `scripts/generar-temas.py` (`REAL` para Turquesa y Borgoña; Azul tiene su propio bloque):
+  - **Azul clásico:** cuero (`texturas/cuero_azul_realista.webp`, `scripts/generar-cuero-realista.py`), papel y algodón en tarjetas, sombras suaves.
+  - **Turquesa renovación:** cuero fino en encabezado y barra, papel tenue en fondo y tarjetas, cuero oscuro en los botones redondos del encabezado y el botón flotante de Leer (`scripts/generar-texturas-turquesa.py`).
+  - **Borgoña real:** piedra con vetas en encabezado y barra (la barra usa la franja `right 50%`), papel tenue, piedra oscura en los botones (`scripts/generar-texturas-borgona.py`, las genera con PIL; las del zip eran un espejo simétrico y se descartaron).
+- Velo del hero de Inicio a 0,85 (`--velo-hero-intensidad`, tintado con el color de cada paleta).
+- Glosario: botones A−/A+ con la misma clave `escalaTexto` y límites que Leer; términos y definiciones con la misma tipografía, tamaño base e interlineado que los versículos.
+- Video corto de "Jacob y Esaú" (`DqGUEMvtCSY`) añadido a `historias.json`.
+- Las otras paletas no se tocaron (se verificó que sus bloques de `temas.css` son idénticos).
+
+**Paletas pendientes del sistema de texturas:** Verde olivo, Tierra bíblica, Púrpura espiritual, Nocturna, Ámbar inspirador y Marfil clásico (Marfil conserva el mármol).
+
+**Pendientes**
+- Decidir el morado de Púrpura: #49325F o #5B2C6F.
+- Elementos de diseño de la referencia de Borgoña que NO se han añadido: placas de los números de versículo, rombo central, separadores de la barra inferior, borde del recuadro de publicidad (y el aro dorado más brillante de los botones).
+- Esquinas ornamentales.
+- Probar el video de Jacob y Esaú en el teléfono (reproducción, pantalla completa, guía de la primera vez, Suscribirse).
+- Quitar los ítems de prueba del menú ("Ver la guía de nuevo (prueba)" y "Reiniciar la mano (prueba)") antes de publicar (ver la sección anterior).
