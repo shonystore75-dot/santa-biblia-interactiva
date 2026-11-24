@@ -59,15 +59,14 @@ INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la d
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
 CUERO_BRILLO=0.03        # degradado vertical blanco leve sobre el cuero (arriba)
 TAM_PAPEL='256px'; TAM_ALGODON='256px'
-# ---- Turquesa renovacion: texturas reales (scripts/generar-texturas-turquesa.py). Ninguna es mosaico perfecto: nada se repite ----
-TQ_CUERO='texturas/cuero_turquesa_realista.webp'     # 1000x1000, media #12616A: encabezado (left top) y barra (right bottom), una sola imagen de 500 px
-TQ_PAPEL='texturas/papel_marfil_verdoso.webp'        # 1000x1000, media #EFF7F5 (= fondo): una sola imagen que cubre el telefono
-TQ_BOTON='texturas/cuero_turquesa_oscuro.webp'       # 512x512, media #184A51: botones redondos del encabezado y boton flotante de Leer
-TQ_INTENSIDAD_CUERO=1.0
-TQ_INTENSIDAD_PAPEL=1.0       # opacidad del papel sobre el fondo (el archivo ya tiene la media del fondo: no lo oscurece)
-TQ_VELO_TARJETA=0.65          # tarjetas: velo blanco encima del papel; 1-velo = intensidad del papel en la tarjeta
-TQ_TAM_PAPEL='cover'; TQ_TAM_TARJETA='600px auto'; TQ_TAM_BOTON='200px auto'
-TQ_COLOR_BOTON='#184A51'
+# ---- Texturas reales de Turquesa (scripts/generar-texturas-turquesa.py) y Borgona (scripts/generar-texturas-borgona.py) ----
+# cuero: encabezado y barra | papel: fondo (una sola imagen que cubre el telefono) y tarjetas (velo del color de la tarjeta encima) | boton: botones redondos del encabezado y boton flotante de Leer
+REAL={
+'turquesa':dict(cuero='texturas/cuero_turquesa_realista.webp',papel='texturas/papel_marfil_verdoso.webp',boton='texturas/cuero_turquesa_oscuro.webp',   # media #12616A / #EFF7F5 / #184A51
+                i_cuero=1.0,i_papel=1.0,velo_tarjeta=0.65,tam_cuero='500px auto',rep_cuero='no-repeat',tam_papel='cover',tam_tarjeta='600px auto',tam_boton='200px auto',color_boton='#184A51'),
+'borgona':dict(cuero='texturas/piedra_borgona.webp',papel='texturas/papel_borgona.webp',boton='texturas/piedra_borgona_oscura.webp',   # media #641D2B / #FAF3EB / #420E20
+                i_cuero=1.0,i_papel=1.0,velo_tarjeta=0.65,tam_cuero='500px auto',rep_cuero='no-repeat',tam_papel='cover',tam_tarjeta='600px auto',tam_boton='200px auto',color_boton='#420E20'),
+}
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
 import math
@@ -136,7 +135,7 @@ def css():
     o=['/* GENERADO por scripts/generar-temas.py: no editar a mano. 9 paletas; la de por defecto es Turquesa renovacion. */\n']
     def bloque(sel,n):
         d=derivar(n)
-        marfil = n=='marfil'; azul = n=='azul'; turq = n=='turquesa'
+        marfil = n=='marfil'; azul = n=='azul'; turq = n in REAL
         v=[('fondo',d['fondo']),('tarjeta',d['tarjeta_css']),('tarjeta-solida',d['tarjeta']),('texto',d['texto']),('nav',d['nav']),('acento',d['acento']),
            ('sobre-nav',d['sobre_nav']),('sobre-nav-suave',d['sobre_nav_suave']),('acento-nav',d['acento_nav']),('icono-nav',d['icono_nav']),
            ('principal',d['principal']),('sobre-principal',d['sobre_principal']),('cita',d['cita']),
@@ -157,12 +156,13 @@ def css():
                     tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
                     tarjeta=capas(TEX_ALGODON,max(1,round(INTENSIDAD_ALGODON))),tt=TAM_ALGODON)
         elif turq:
-            tx=dict(fondo="url('%s')"%TQ_PAPEL,tf=TQ_TAM_PAPEL,of='%g'%TQ_INTENSIDAD_PAPEL,barra="url('%s')"%TQ_CUERO,tb=TAM_CUERO,ob='%g'%TQ_INTENSIDAD_CUERO,
+            r=REAL[n]
+            tx=dict(fondo="url('%s')"%r['papel'],tf=r['tam_papel'],of='%g'%r['i_papel'],barra="url('%s')"%r['cuero'],tb=r['tam_cuero'],ob='%g'%r['i_cuero'],
                     tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
-                    tarjeta="linear-gradient(rgba(255,255,255,%g), rgba(255,255,255,%g)), url('%s')"%(TQ_VELO_TARJETA,TQ_VELO_TARJETA,TQ_PAPEL),tt=TQ_TAM_TARJETA)
+                    tarjeta="linear-gradient(rgba(%s,%g), rgba(%s,%g)), url('%s')"%(triple(d['tarjeta']),r['velo_tarjeta'],triple(d['tarjeta']),r['velo_tarjeta'],r['papel']),tt=r['tam_tarjeta'])
         else:
             tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
-        rep,posh,posn=('no-repeat',POS_CUERO_ENCABEZADO,POS_CUERO_BARRA) if (azul or turq) else ('repeat','0 0','0 0')
+        rep,posh,posn=((REAL[n]['rep_cuero'] if turq else 'no-repeat'),POS_CUERO_ENCABEZADO,POS_CUERO_BARRA) if (azul or turq) else ('repeat','0 0','0 0')
         v+=[('repeticion-barra',rep),('posicion-encabezado',posh),('posicion-nav',posn),('textura-fondo',tx['fondo']),('tamano-fondo',tx['tf']),('intensidad-fondo',tx['of']),('fondo-display','block' if tx['fondo']!='none' else 'none'),
             ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
             ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
@@ -240,17 +240,18 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
   box-shadow: var(--sombra-boton), var(--brillo-boton);
 }
 """)
-    o.append("""
-/* ===== Turquesa renovacion: papel tenue en las tarjetas (una sola imagen, sin mosaico) y cuero oscuro en los botones redondos ===== */
-:root[data-tema="turquesa"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
-:root[data-tema="turquesa"] #vista-detalle .texto-oracion {
+    for nn,r in REAL.items():
+        o.append("""
+/* ===== %(nombre)s: papel tenue en las tarjetas (una sola imagen, sin mosaico) y textura oscura en los botones redondos ===== */
+:root[data-tema="%(nn)s"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
+:root[data-tema="%(nn)s"] #vista-detalle .texto-oracion {
   background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: no-repeat; background-position: center top;
 }
-:root[data-tema="turquesa"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
-  background-color: @@COLOR_BOTON@@; background-image: url('@@TEX_BOTON@@'); background-size: @@TAM_BOTON@@; background-position: center; background-repeat: no-repeat;
+:root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
+  background-color: %(color_boton)s; background-image: url('%(boton)s'); background-size: %(tam_boton)s; background-position: center; background-repeat: no-repeat;
 }
-""")
-    return ''.join(o).replace('@@COLOR_BOTON@@',TQ_COLOR_BOTON).replace('@@TEX_BOTON@@',TQ_BOTON).replace('@@TAM_BOTON@@',TQ_TAM_BOTON).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
+""" % dict(r,nn=nn,nombre=NOMBRES[nn]))
+    return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
 def g_suave(d,te): return mix(d['texto'],te,0.18)
 
