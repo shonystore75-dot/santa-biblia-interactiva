@@ -159,7 +159,7 @@
   --aislar-barra: isolate;
   --repeticion-barra: no-repeat;
   --posicion-encabezado: left top;
-  --posicion-nav: right bottom;
+  --posicion-nav: right 50%;
   --textura-fondo: url('texturas/papel_borgona.webp');
   --tamano-fondo: cover;
   --intensidad-fondo: 1;
