@@ -1,6 +1,7 @@
 # Prepara las texturas de Tierra biblica a partir del zip Texturas_Tierra_Santa_Biblia_2026 (mismo metodo que Verde olivo).
 # Los mosaicos del zip son REFLEJADOS y traen manchas (puntos blancos en la madera, manchas negras en el papel): se arman
 # texturas nuevas con parches al azar de zonas limpias (semillas fijas), sin espejo; el papel ademas cierra sin costura.
+# La barra es madera rustica dibujada por el script (tablas, nudos, grietas, clavos) con el grano fino del recurso 04.
 # Encabezado: 'fondo_reconstruido' trae bloques emborronados donde estaban el titulo y los botones, y la curva dorada abajo.
 # Se arma uno nuevo: arbol (izquierda) + valle, sol y casa (derecha) para que ambos quepan en el encabezado del telefono,
 # se corta la curva dorada y se repinta la parte baja: matorrales a la izquierda (parches de la misma imagen) y empedrado dibujado a la derecha.
@@ -116,16 +117,75 @@ def empedrado(tam,grano,semilla):
             o[x,y]=tuple(col)
     return out.filter(ImageFilter.GaussianBlur(0.6))
 
+def ruido(tam,celda_x,celda_y,rnd):
+    """Ruido suave en 0..1 (rejilla al azar ampliada); celdas alargadas en x = vetas."""
+    w,h=tam; g=Image.new('L',(w//celda_x+4,h//celda_y+4)); g.putdata([rnd.randint(0,255) for _ in range(g.width*g.height)])
+    g=g.resize((g.width*celda_x,g.height*celda_y),Image.BICUBIC).crop((celda_x,celda_y,celda_x+w,celda_y+h))
+    return [v/255 for v in g.tobytes()]
+
 def barra(base):
-    L=(1000,280)
-    m=abrir(base,'04_madera_barra')
-    # vetas largas: franjas claras de arriba y abajo (sin la banda oscura ni los puntos blancos del centro), estiradas a lo ancho
-    donantes=[x.resize((x.width*3,x.height),Image.LANCZOS) for x in (m.crop((6,20,230,120)),m.crop((282,390,506,490)))]
-    im=parches(donantes,L,(440,56),23)
-    im=im.filter(ImageFilter.UnsharpMask(radius=2,percent=90,threshold=0))
-    im=contraste_de_media(im,1.7)
-    r=Image.new('L',(1,L[1])); r.putdata([round(255*0.22*(y/(L[1]-1))**1.3) for y in range(L[1])])
-    im=Image.composite(Image.new('RGB',L,PROFUNDO),im,r.resize(L))      # degradado leve (22 % abajo)
+    """Madera rustica: dos tablas gastadas, vetas onduladas que rodean los nudos, grietas, junta entre tablas y clavos viejos;
+    el grano fino sale del recurso 04 (zona sin los puntos blancos)."""
+    L=(1000,280); W,H=L; rnd=random.Random(23)
+    junta=lambda x: 103+2.2*math.sin(x/139.0+1.3)+1.3*math.sin(x/47.0)        # entre el icono y la etiqueta
+    junta2=lambda x: 236+2.5*math.sin(x/113.0+4.0)
+    onda=ruido(L,170,46,rnd); onda2=ruido(L,52,17,rnd); fibra=ruido(L,26,2,rnd); fibra2=ruido(L,9,1,rnd); manchas=ruido(L,120,60,rnd); aspero=ruido(L,3,2,rnd)
+    nudos=[(236,52,21,9),(655,168,27,11),(868,40,13,6),(452,205,17,8),(60,150,14,7),(560,70,8,4)]     # x, y, radio x, radio y
+    m=abrir(base,'04_madera_barra').crop((6,6,226,150)).resize((660,144),Image.LANCZOS)
+    grano=parches([m],L,(240,70),9); g=grano.load(); gb=grano.filter(ImageFilter.GaussianBlur(4)).load()
+    im=Image.new('RGB',L); o=im.load()
+    for y in range(H):
+        for x in range(W):
+            k=y*W+x
+            j1,j2=junta(x),junta2(x); tabla=0 if y<j1 else (1 if y<j2 else 2)
+            t=y+(onda[k]-0.5)*34+(onda2[k]-0.5)*9+tabla*57
+            oscuro_nudo=0.0
+            for nx,ny,rx,ry in nudos:
+                dx=(x-nx)/rx; dy=(y-ny)/ry; d2=dx*dx+dy*dy
+                if d2<40:
+                    t-=(y-ny)*1.35*math.exp(-d2/7.0)                           # las vetas se apartan del nudo
+                    r=math.sqrt(d2+(onda2[k]-0.5)*0.9 if d2+(onda2[k]-0.5)*0.9>0 else 0)
+                    if r<2.1:
+                        anillo=0.5+0.5*math.cos(r*9.0)
+                        oscuro_nudo=max(oscuro_nudo,(0.92-0.22*r+0.28*anillo)*(1-rampa(r,1.2,2.1)))
+            veta=math.sin(t*0.36+3.2*math.sin(t*0.071)+fibra[k]*2.2)
+            linea=max(0.0,veta)**5                                             # vetas oscuras finas
+            claro=max(0.0,-veta)**3
+            v=(1.0+0.30*claro-0.46*linea+0.42*(fibra[k]-0.5)+0.30*(fibra2[k]-0.5)+0.38*(manchas[k]-0.5)+0.16*(aspero[k]-0.5)
+               +(0.07,-0.09,0.0)[tabla])
+            v*=1-0.68*min(1.0,oscuro_nudo)
+            col=[(86,50,30)[c]*v+0.5*(g[x,y][c]-gb[x,y][c]) for c in range(3)]
+            gris=0.30*rampa(manchas[(k+W*97+311)%(W*H)],0.55,0.85)             # zonas desgastadas, algo grises
+            lum_=0.35*col[0]+0.5*col[1]+0.15*col[2]; col=[c+(lum_*1.12-c)*gris for c in col]
+            for j in (j1,j2):                                                  # junta: hueco oscuro con canto iluminado debajo
+                d=y-j
+                if -7<d<8:
+                    hueco=math.exp(-(d/2.1)**2); canto=math.exp(-((d-4.2)/1.5)**2); bisel=math.exp(-((d+3.8)/2.0)**2)
+                    col=[c*(1-0.82*hueco)*(1-0.22*bisel)+(46,30,16)[n]*canto for n,c in enumerate(col)]
+            o[x,y]=tuple(max(0,min(255,round(c))) for c in col)
+    # grietas a lo largo de la veta (afiladas en las puntas, con filo claro debajo)
+    S=3; hondo=Image.new('L',(W*S,H*S),0); filo=Image.new('L',(W*S,H*S),0); dh=ImageDraw.Draw(hondo); df=ImageDraw.Draw(filo)
+    grietas=[(0,40,150,2.6),(318,28,170,1.8),(720,66,210,2.8),(905,142,95,2.4),(120,128,190,2.0),(500,150,110,1.6),(805,196,180,2.2),(300,185,130,1.8),(560,20,80,1.4),(0,205,120,2.4)]
+    for x0,y0,largo,gr in grietas:
+        y=y0; pts=[]
+        for n in range(0,largo+1,6):
+            y+=rnd.uniform(-1.5,1.5); pts.append((x0+n,y))
+        for n in range(len(pts)-1):
+            f=math.sin(math.pi*(n+0.5)/(len(pts)-1))**0.6; a=pts[n]; c=pts[n+1]
+            dh.line([(a[0]*S,a[1]*S),(c[0]*S,c[1]*S)],fill=255,width=max(1,round(gr*f*S)))
+            df.line([(a[0]*S,(a[1]+gr*f*0.9+0.6)*S),(c[0]*S,(c[1]+gr*f*0.9+0.6)*S)],fill=round(150*f),width=S)
+    im=Image.composite(Image.new('RGB',L,(124,86,54)),im,filo.resize(L,Image.LANCZOS))
+    im=Image.composite(Image.new('RGB',L,(17,8,3)),im,hondo.resize(L,Image.LANCZOS))
+    # clavos de hierro viejos en los extremos de las tablas
+    d=ImageDraw.Draw(im)
+    for cx,cy in ((17,52),(983,56),(19,146),(981,143)):
+        d.ellipse((cx-8,cy-7,cx+8,cy+9),fill=(26,13,6)); d.ellipse((cx-6,cy-6,cx+6,cy+6),fill=(72,58,50)); d.ellipse((cx-4,cy-4,cx+1,cy+1),fill=(128,108,90))
+    im=im.filter(ImageFilter.UnsharpMask(radius=1.5,percent=60,threshold=1))
+    r=Image.new('L',(1,H)); r.putdata([round(255*0.18*(y/(H-1))**1.3) for y in range(H)])
+    im=Image.composite(Image.new('RGB',L,PROFUNDO),im,r.resize(L))      # degradado leve (18 % abajo)
+    # recorta los brillos para que el dorado de la etiqueta activa siga pasando 4,5:1
+    med=ImageStat.Stat(im).mean
+    im=Image.merge('RGB',[c.point([v if v<=med[n]+14 else round(med[n]+14+(v-med[n]-14)*0.55) for v in range(256)]) for n,c in enumerate(im.split())])
     return a_media(im,PRINCIPAL)
 
 def papel(base):
@@ -143,7 +203,7 @@ def boton(base):
 def android(base):
     return a_media(contraste_de_media(parches([piedra(base)],(1000,160),(80,80),5),0.9),ANDROID)
 
-TRABAJOS=[(encabezado,'texturas/encabezado_tierra.webp',86),(barra,'texturas/barra_tierra.webp',82),
+TRABAJOS=[(encabezado,'texturas/encabezado_tierra.webp',86),(barra,'texturas/barra_tierra.webp',86),
           (papel,'texturas/papel_tierra.webp',80),(boton,'texturas/piedra_tierra_oscura.webp',82),
           (android,'texturas/piedra_tierra_android.webp',78)]
 
