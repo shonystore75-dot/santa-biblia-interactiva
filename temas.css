@@ -190,7 +190,7 @@
   --nav: #354609;
   --acento: #D9A62C;
   --sobre-nav: #FFFFFF;
-  --sobre-nav-suave: #C2C8B5;
+  --sobre-nav-suave: #FFFFFF;
   --acento-nav: #F0D27A;
   --icono-nav: #F0CF72;
   --principal: #354609;
@@ -221,8 +221,8 @@
   --repeticion-barra: no-repeat;
   --posicion-encabezado: left top;
   --posicion-nav: center;
-  --textura-fondo: url('texturas/papel_olivo.webp');
-  --tamano-fondo: 512px auto;
+  --textura-fondo: linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%), url('texturas/papel_olivo.webp');
+  --tamano-fondo: 100% 100%, 512px auto;
   --intensidad-fondo: 0.7;
   --fondo-display: block;
   --textura-barra: url('texturas/barra_olivo.webp');
@@ -235,7 +235,7 @@
   --tamano-tarjeta: 512px auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
-  --repeticion-fondo: repeat;
+  --repeticion-fondo: no-repeat, repeat;
   --posicion-fondo: center top;
   --nav-grad: none;
 }
@@ -682,9 +682,16 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
   background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat; background-position: center top;
 }
 :root[data-tema="olivo"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
-  background-color: #273607; background-image: url('texturas/piedra_olivo_oscura.webp'); background-size: 160px auto; background-position: center; background-repeat: no-repeat;
+  background-color: #213004; background-image: url('texturas/piedra_olivo_oscura.webp'); background-size: 160px auto; background-position: center; background-repeat: no-repeat;
 }
 /* Verde olivo: imagen propia en el encabezado (cover, anclada a la derecha) con degradado oscuro suave bajo el titulo */
 :root[data-tema="olivo"] header:not(.hero)::before {
-  background-image: linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.40) 42%, rgba(24,38,5,0) 66%), url('texturas/encabezado_olivo.webp'); background-size: cover; background-position: right 20%; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.52) 44%, rgba(24,38,5,0) 68%), url('texturas/encabezado_olivo.webp'); background-size: cover, auto 140%; background-position: center, 85% 0; background-repeat: no-repeat;
+}
+/* Verde olivo: botones con borde dorado vivo */
+:root[data-tema="olivo"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
+/* Verde olivo: piedra verde en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+:root[data-tema="olivo"] nav::after {
+  display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
+  background: var(--oro-linea) top / 100% 2px no-repeat, linear-gradient(180deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0) 40%), url('texturas/piedra_olivo_android.webp') center / cover no-repeat;
 }

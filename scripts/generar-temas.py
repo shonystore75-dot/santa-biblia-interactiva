@@ -67,10 +67,12 @@ REAL={
 'borgona':dict(cuero='texturas/piedra_borgona.webp',papel='texturas/papel_borgona.webp',boton='texturas/piedra_borgona_oscura.webp',   # media #641D2B / #FAF3EB / #420E20
                 i_cuero=1.0,i_papel=1.0,velo_tarjeta=0.65,tam_cuero='500px auto',rep_cuero='no-repeat',pos_barra='right 50%',tam_papel='cover',tam_tarjeta='600px auto',tam_boton='200px auto',color_boton='#420E20'),
 # Verde olivo: el encabezado tiene su propia imagen (paisaje, anclado a la derecha) con un degradado oscuro a la izquierda; la barra es una imagen estirada (sin mosaico)
-'olivo':dict(cuero='texturas/barra_olivo.webp',papel='texturas/papel_olivo.webp',boton='texturas/piedra_olivo_oscura.webp',   # media #354609 / #FEF1D6 / #273607
+'olivo':dict(cuero='texturas/barra_olivo.webp',papel='texturas/papel_olivo.webp',boton='texturas/piedra_olivo_oscura.webp',   # media #2C3C05 / #FEF1D6 / #213004
              i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
-             tam_boton='160px auto',color_boton='#273607',tinte='none',encabezado='texturas/encabezado_olivo.webp',pos_imagen_encabezado='right 20%',
-             velo_encabezado='linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.40) 42%, rgba(24,38,5,0) 66%)'),
+             tam_boton='160px auto',color_boton='#213004',tinte='none',encabezado='texturas/encabezado_olivo.webp',pos_imagen_encabezado='85% 0',tam_imagen_encabezado='auto 140%',
+             velo_encabezado='linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.52) 44%, rgba(24,38,5,0) 68%)',
+             android='texturas/piedra_olivo_android.webp',
+             borde_fondo='linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%)'),
 }
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
@@ -127,6 +129,8 @@ def derivar(n):
         d['sobre_acento']=x
         d['hero']=nv
         d['btn_nav_bg']='rgba(255,255,255,0.12)'; d['btn_nav_borde']='rgba(%s,0.5)'%triple(a)
+    if n=='olivo':
+        d['sobre_nav_suave']='#FFFFFF'    # etiquetas blancas como en la referencia
     if n=='azul':
         d['cita']=x                      # referencias y titulos: #172B47
         d['sombra_rgb']='0,0,0'
@@ -165,6 +169,8 @@ def css():
             tx=dict(fondo="url('%s')"%r['papel'],tf=r['tam_papel'],of='%g'%r['i_papel'],barra="url('%s')"%r['cuero'],tb=r['tam_cuero'],ob='%g'%r['i_cuero'],
                     tinte=r.get('tinte','linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO),
                     tarjeta="linear-gradient(rgba(%s,%g), rgba(%s,%g)), url('%s')"%(triple(d['tarjeta']),r['velo_tarjeta'],triple(d['tarjeta']),r['velo_tarjeta'],r['papel']),tt=r['tam_tarjeta'])
+            if 'borde_fondo' in r:      # bordes calidos sobre el papel, como en la referencia
+                tx['fondo']=r['borde_fondo']+', '+tx['fondo']; tx['tf']='100% 100%, '+tx['tf']
         else:
             tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
         rep,posh,posn=((REAL[n]['rep_cuero'] if turq else 'no-repeat'),POS_CUERO_ENCABEZADO,(REAL[n].get('pos_barra',POS_CUERO_BARRA) if turq else POS_CUERO_BARRA)) if (azul or turq) else ('repeat','0 0','0 0')
@@ -172,7 +178,7 @@ def css():
             ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
             ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
             ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-papel',str(INTENSIDAD_PAPEL) if azul else '0'),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
-        if turq: v+=[('repeticion-fondo',REAL[n].get('rep_fondo','no-repeat')),('posicion-fondo','center top'),('nav-grad','none')]
+        if turq: v+=[('repeticion-fondo',('no-repeat, ' if 'borde_fondo' in REAL[n] else '')+REAL[n].get('rep_fondo','no-repeat')),('posicion-fondo','center top'),('nav-grad','none')]
         if azul:
             v+=[('nav-grad','none'),('sombra-tarjeta',SOMBRA_AZUL_TARJETA),('sombra-boton',SOMBRA_AZUL_BOTON)]
         o.append(sel+' {\n'+''.join('  --%s: %s;\n'%(k,x) for k,x in v)+'}\n')
@@ -259,7 +265,14 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
         if 'encabezado' in r:
             o.append("""/* %(nombre)s: imagen propia en el encabezado (cover, anclada a la derecha) con degradado oscuro suave bajo el titulo */
 :root[data-tema="%(nn)s"] header:not(.hero)::before {
-  background-image: %(velo_encabezado)s, url('%(encabezado)s'); background-size: cover; background-position: %(pos_imagen_encabezado)s; background-repeat: no-repeat;
+  background-image: %(velo_encabezado)s, url('%(encabezado)s'); background-size: cover, %(tam_imagen_encabezado)s; background-position: center, %(pos_imagen_encabezado)s; background-repeat: no-repeat;
+}
+/* %(nombre)s: botones con borde dorado vivo */
+:root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
+/* %(nombre)s: piedra verde en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+:root[data-tema="%(nn)s"] nav::after {
+  display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
+  background: var(--oro-linea) top / 100%% 2px no-repeat, linear-gradient(180deg, rgba(24,38,5,0.55) 0%%, rgba(24,38,5,0) 40%%), url('%(android)s') center / cover no-repeat;
 }
 """ % dict(r,nn=nn,nombre=NOMBRES[nn]))
     return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
