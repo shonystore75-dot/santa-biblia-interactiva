@@ -708,6 +708,11 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
   filter: brightness(0.94);
 }
 
+/* ===== Mantener el dedo sobre la navegacion: sin el aviso con la direccion del enlace ni menu del sistema =====
+   (el aviso es la sombra de arrastre de un <a href>; temas.js ademas anula 'dragstart' y 'contextmenu') */
+:root a, :root img { -webkit-user-drag: none; -webkit-touch-callout: none; }
+:root :is(a, header, nav, .tarjeta-termino) { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }
 :root .submenu-paleta.visible { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px 0 6px; margin: 2px 0 4px; border-left: 0; }

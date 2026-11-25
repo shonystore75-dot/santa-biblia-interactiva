@@ -49,6 +49,19 @@
     document.head.appendChild(l);
   });
 
+  // Mantener el dedo sobre la navegacion o un boton no debe mostrar nada del sistema: ni el arrastre del enlace
+  // (una etiqueta con su direccion) ni el menu contextual. El texto de lectura y los campos de texto no se tocan.
+  var SIN_MENU = 'a, button, img, header, nav, .tab, .pestana, .tab-legal, .item-libro, .num-capitulo, .item-guardado, .rollo, .flecha-carrusel, ' +
+    '.tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .btn-ir-verso-flotante, .btn-nav-cap, .btn-overlay, .btn-confirmar, .btn-copiar-lista';
+  function anularEn(selector) {
+    return function (e) {
+      var el = e.target && (e.target.nodeType === 1 ? e.target : e.target.parentElement);
+      if (el && el.closest(selector)) e.preventDefault();
+    };
+  }
+  document.addEventListener('dragstart', anularEn('a, img'), true);
+  document.addEventListener('contextmenu', anularEn(SIN_MENU), true);
+
   // Transiciones sin parpadeo: al cambiar de pantalla la parte nativa deja a la vista la pantalla anterior
   // hasta que esta avisa. Se avisa en cuanto lo imprescindible esta listo (fondo, encabezado y barra con sus
   // iconos, ya decodificados). Las fuentes y el contenido solo se esperan hasta LIMITE_MS desde que empezo la
