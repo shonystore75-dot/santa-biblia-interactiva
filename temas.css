@@ -244,23 +244,23 @@
 :root[data-tema="olivo"] #nav-guia { background-image: url('nav-guia-olivo.png'); }
 :root[data-tema="olivo"] #nav-favoritos { background-image: url('nav-favoritos-olivo.png'); }
 :root[data-tema="tierra"] {
-  --fondo: #F8F0E5;
-  --tarjeta: #FFF9EF;
-  --tarjeta-solida: #FFF9EF;
-  --texto: #543526;
-  --nav: #78452D;
-  --acento: #D9A54D;
+  --fondo: #FAF1E3;
+  --tarjeta: #FFFAF0;
+  --tarjeta-solida: #FFFAF0;
+  --texto: #392419;
+  --nav: #482B1D;
+  --acento: #D4A650;
   --sobre-nav: #FFFFFF;
-  --sobre-nav-suave: #D6C7C0;
+  --sobre-nav-suave: #FFFFFF;
   --acento-nav: #F0D27A;
   --icono-nav: #F0CF72;
-  --principal: #78452D;
+  --principal: #482B1D;
   --sobre-principal: #FFFFFF;
-  --cita: #78452D;
-  --oscuro: #78452D;
+  --cita: #482B1D;
+  --oscuro: #482B1D;
   --sobre-oscuro: #F0D27A;
-  --sobre-acento: #543526;
-  --acento-btn: #D9A54D;
+  --sobre-acento: #392419;
+  --acento-btn: #D4A650;
   --oro-linea: linear-gradient(90deg, #8A6420, #F0D27A 30%, #FFF1B8 50%, #E2B94F 70%, #8A6420);
   --oro-borde: #E2B94F;
   --oro-icono: #F0CF72;
@@ -268,34 +268,37 @@
   --oro-radio: 3px;
   --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
-  --btn-nav-borde: rgba(217,165,77,0.5);
-  --principal-rgb: 120,69,45;
-  --texto-rgb: 84,53,38;
-  --acento-rgb: 217,165,77;
-  --hero-rgb: 120,69,45;
-  --titulo-rollo: #78452D;
-  --tarjeta-rgb: 255,249,239;
-  --sombra-rgb: 84,53,38;
+  --btn-nav-borde: rgba(212,166,80,0.5);
+  --principal-rgb: 72,43,29;
+  --texto-rgb: 57,36,25;
+  --acento-rgb: 212,166,80;
+  --hero-rgb: 72,43,29;
+  --titulo-rollo: #482B1D;
+  --tarjeta-rgb: 255,250,240;
+  --sombra-rgb: 57,36,25;
   --palabras-jesus: #9B1024;
-  --z-barra: auto;
-  --aislar-barra: auto;
-  --repeticion-barra: repeat;
-  --posicion-encabezado: 0 0;
-  --posicion-nav: 0 0;
-  --textura-fondo: none;
-  --tamano-fondo: auto;
-  --intensidad-fondo: 0;
-  --fondo-display: none;
-  --textura-barra: none;
-  --tamano-barra: auto;
-  --intensidad-barra: 0;
-  --barra-display: none;
+  --z-barra: 40;
+  --aislar-barra: isolate;
+  --repeticion-barra: no-repeat;
+  --posicion-encabezado: left top;
+  --posicion-nav: center;
+  --textura-fondo: linear-gradient(90deg, rgba(222,168,92,0.24) 0%, rgba(222,168,92,0) 16%, rgba(222,168,92,0) 84%, rgba(222,168,92,0.24) 100%), url('texturas/papel_tierra.webp');
+  --tamano-fondo: 100% 100%, 512px auto;
+  --intensidad-fondo: 0.7;
+  --fondo-display: block;
+  --textura-barra: url('texturas/barra_tierra.webp');
+  --tamano-barra: 100% 100%;
+  --intensidad-barra: 1;
+  --barra-display: block;
   --barra-tinte: none;
   --tinte-display: none;
-  --textura-tarjeta: none;
-  --tamano-tarjeta: auto;
+  --textura-tarjeta: linear-gradient(rgba(255,250,240,0.65), rgba(255,250,240,0.65)), url('texturas/papel_tierra.webp');
+  --tamano-tarjeta: 512px auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: no-repeat, repeat;
+  --posicion-fondo: center top;
+  --nav-grad: none;
 }
 :root[data-tema="tierra"] #nav-inicio { background-image: url('nav-inicio-tierra.png'); }
 :root[data-tema="tierra"] #nav-leer { background-image: url('nav-leer-tierra.png'); }
@@ -699,4 +702,29 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 :root[data-tema="olivo"] nav::after {
   display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
   background: var(--oro-linea) top / 100% 2px no-repeat, linear-gradient(180deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0) 40%), url('texturas/piedra_olivo_android.webp') center / cover no-repeat;
+}
+
+/* ===== Tierra bíblica: papel tenue en las tarjetas (una sola imagen, sin mosaico) y textura oscura en los botones redondos ===== */
+:root[data-tema="tierra"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
+:root[data-tema="tierra"] #vista-detalle .texto-oracion {
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat; background-position: center top;
+}
+:root[data-tema="tierra"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
+  background-color: #45210F; background-image: url('texturas/piedra_tierra_oscura.webp'); background-size: 160px auto; background-position: center; background-repeat: no-repeat;
+}
+/* Tierra bíblica: imagen propia en el encabezado (cover, anclada a la derecha), sin velo sobre el paisaje */
+:root[data-tema="tierra"] header:not(.hero)::before {
+  background-image: url('texturas/encabezado_tierra.webp'); background-size: cover; background-position: 50% 0; background-repeat: no-repeat;
+}
+/* Tierra bíblica: oscurecimiento suave SOLO detras del titulo y el subtitulo (sigue el tamano de su caja) */
+:root[data-tema="tierra"] header:not(.hero) > div:has(> #titulo-header) { position: relative; }
+:root[data-tema="tierra"] header:not(.hero) > div:has(> #titulo-header)::before {
+  content: ''; position: absolute; inset: -20px -58px -34px; clip-path: inset(0 0 calc(34px - 1.4vh) 0); z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(43,20,6,0.79) 0%, rgba(43,20,6,0.71) 66%, rgba(43,20,6,0) 100%);
+}
+/* Tierra bíblica: botones con borde dorado vivo */
+:root[data-tema="tierra"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
+/* Tierra bíblica: piedra arenisca en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+:root[data-tema="tierra"] nav::after {
+  display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
+  background: var(--oro-linea) top / 100% 2px no-repeat, linear-gradient(180deg, rgba(43,20,6,0.55) 0%, rgba(43,20,6,0) 40%), url('texturas/piedra_tierra_android.webp') center / cover no-repeat;
 }

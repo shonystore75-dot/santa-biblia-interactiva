@@ -27,7 +27,7 @@ P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
 'azul':('#F7F5F0','#FFFCF6','#172B47','#102F50','#D6A84E'),
 'borgona':('#FAF3EB','#FFFDF7','#56202B','#641D2B','#D5A348'),
 'olivo':('#FEF1D6','#FFFDF2','#202815','#354609','#D9A62C'),   # paleta.json del zip (fondo algo menos amarillo que #FFF0C9)
-'tierra':('#F8F0E5','#FFF9EF','#543526','#78452D','#D9A54D'),
+'tierra':('#FAF1E3','#FFFAF0','#392419','#482B1D','#D4A650'),   # paleta.json del zip
 'purpura':('#F6F2F8','#FFFFFF','#49325F','#49325F','#D7AD58'),
 'turquesa':('#EFF7F5','#FFFFFF','#184A51','#12616A','#D6AC55'),
 'nocturna':('#18212D','#293545','#F5F0E5','#202A38','#D5AC60'),
@@ -59,7 +59,7 @@ INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la d
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
 CUERO_BRILLO=0.03        # degradado vertical blanco leve sobre el cuero (arriba)
 TAM_PAPEL='256px'; TAM_ALGODON='256px'
-# ---- Texturas reales de Turquesa, Borgona y Verde olivo (scripts/generar-texturas-<paleta>.py) ----
+# ---- Texturas reales de Turquesa, Borgona, Verde olivo y Tierra (scripts/generar-texturas-<paleta>.py) ----
 # cuero: encabezado y barra | papel: fondo (una sola imagen que cubre el telefono) y tarjetas (velo del color de la tarjeta encima) | boton: botones redondos del encabezado y boton flotante de Leer
 REAL={
 'turquesa':dict(cuero='texturas/cuero_turquesa_realista.webp',papel='texturas/papel_marfil_verdoso.webp',boton='texturas/cuero_turquesa_oscuro.webp',   # media #12616A / #EFF7F5 / #184A51
@@ -73,6 +73,14 @@ REAL={
              velo_texto='radial-gradient(closest-side, rgba(24,38,5,0.74) 0%, rgba(24,38,5,0.66) 66%, rgba(24,38,5,0) 100%)',
              android='texturas/piedra_olivo_android.webp',
              borde_fondo='linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%)'),
+# Tierra biblica: igual que Verde olivo (paisaje en el encabezado, halo solo tras el titulo, barra de madera, piedra arenisca tras los botones de Android)
+'tierra':dict(cuero='texturas/barra_tierra.webp',papel='texturas/papel_tierra.webp',boton='texturas/piedra_tierra_oscura.webp',   # media #482B1D / #FAF1E3 / #45210F
+             i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
+             tam_boton='160px auto',color_boton='#45210F',tinte='none',encabezado='texturas/encabezado_tierra.webp',pos_imagen_encabezado='50% 0',tam_imagen_encabezado='cover',
+             velo_texto='radial-gradient(closest-side, rgba(43,20,6,0.79) 0%, rgba(43,20,6,0.71) 66%, rgba(43,20,6,0) 100%)',
+             android='texturas/piedra_tierra_android.webp',inset_velo='-20px -58px -34px',   # arriba mas corto: no apaga el sol
+             nombre_piedra='arenisca',sombra_android='43,20,6',
+             borde_fondo='linear-gradient(90deg, rgba(222,168,92,0.24) 0%, rgba(222,168,92,0) 16%, rgba(222,168,92,0) 84%, rgba(222,168,92,0.24) 100%)'),
 }
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
@@ -129,7 +137,7 @@ def derivar(n):
         d['sobre_acento']=x
         d['hero']=nv
         d['btn_nav_bg']='rgba(255,255,255,0.12)'; d['btn_nav_borde']='rgba(%s,0.5)'%triple(a)
-    if n=='olivo':
+    if n in ('olivo','tierra'):
         d['sobre_nav_suave']='#FFFFFF'    # etiquetas blancas como en la referencia
     if n=='azul':
         d['cita']=x                      # referencias y titulos: #172B47
@@ -270,16 +278,16 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 /* %(nombre)s: oscurecimiento suave SOLO detras del titulo y el subtitulo (sigue el tamano de su caja) */
 :root[data-tema="%(nn)s"] header:not(.hero) > div:has(> #titulo-header) { position: relative; }
 :root[data-tema="%(nn)s"] header:not(.hero) > div:has(> #titulo-header)::before {
-  content: ''; position: absolute; inset: -34px -58px; clip-path: inset(0 0 calc(34px - 1.4vh) 0); z-index: -1; pointer-events: none; background: %(velo_texto)s;
+  content: ''; position: absolute; inset: %(inset_velo)s; clip-path: inset(0 0 calc(34px - 1.4vh) 0); z-index: -1; pointer-events: none; background: %(velo_texto)s;
 }
 /* %(nombre)s: botones con borde dorado vivo */
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-/* %(nombre)s: piedra verde en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+/* %(nombre)s: piedra %(nombre_piedra)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
 :root[data-tema="%(nn)s"] nav::after {
   display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
-  background: var(--oro-linea) top / 100%% 2px no-repeat, linear-gradient(180deg, rgba(24,38,5,0.55) 0%%, rgba(24,38,5,0) 40%%), url('%(android)s') center / cover no-repeat;
+  background: var(--oro-linea) top / 100%% 2px no-repeat, linear-gradient(180deg, rgba(%(sombra_android)s,0.55) 0%%, rgba(%(sombra_android)s,0) 40%%), url('%(android)s') center / cover no-repeat;
 }
-""" % dict(r,nn=nn,nombre=NOMBRES[nn]))
+""" % dict(dict(nombre_piedra='verde',sombra_android='24,38,5',inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
     return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
 def g_suave(d,te): return mix(d['texto'],te,0.18)

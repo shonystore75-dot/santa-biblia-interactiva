@@ -285,12 +285,13 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
   - **Turquesa renovación:** cuero fino en encabezado y barra, papel tenue en fondo y tarjetas, cuero oscuro en los botones redondos del encabezado y el botón flotante de Leer (`scripts/generar-texturas-turquesa.py`).
   - **Borgoña real:** piedra con vetas en encabezado y barra (la barra usa la franja `right 50%`), papel tenue, piedra oscura en los botones (`scripts/generar-texturas-borgona.py`, las genera con PIL; las del zip eran un espejo simétrico y se descartaron).
   - **Verde olivo** (2026-11-24): paisaje con olivo y pradera en el encabezado (anclado a la derecha, oscurecimiento solo detrás del título), barra inferior con relieve de piedra (media #354609), piedra verde detrás de los botones de Android, papel marfil tenue, textura oscura en los botones (`scripts/generar-texturas-olivo.py <carpeta extraída del zip>`; usa recortes sin espejo para barra y botones). Colores nuevos: fondo #FEF1D6, tarjeta #FFFDF2, tinta #202815, principal #354609, dorado #D9A62C. Sin añadir aún: rama de olivo, barra redondeada, placas de versículo, rombo, paisaje en publicidad, curva del encabezado.
+  - **Tierra bíblica** (2026-11-24): mismo tratamiento que Verde olivo (`scripts/generar-texturas-tierra.py <carpeta extraída del zip>`). El encabezado se recompone desde `fondo_reconstruido` (árbol + valle + casa; empedrado de la parte baja derecha dibujado por el script); barra de madera, papel marfil tenue, botones y piedra arenisca tras los botones de Android. Colores: fondo #FAF1E3, tarjeta #FFFAF0, tinta #392419, principal #482B1D, dorado #D4A650. Sin añadir: ramas doradas, paisaje de publicidad, barra redondeada, curva del encabezado, rombo.
 - Velo del hero de Inicio a 0,85 (`--velo-hero-intensidad`, tintado con el color de cada paleta).
 - Glosario: botones A−/A+ con la misma clave `escalaTexto` y límites que Leer; términos y definiciones con la misma tipografía, tamaño base e interlineado que los versículos.
 - Video corto de "Jacob y Esaú" (`DqGUEMvtCSY`) añadido a `historias.json`.
 - Las otras paletas no se tocaron (se verificó que sus bloques de `temas.css` son idénticos).
 
-**Paletas pendientes del sistema de texturas:** Tierra bíblica, Púrpura espiritual, Nocturna, Ámbar inspirador y Marfil clásico (Marfil conserva el mármol).
+**Paletas pendientes del sistema de texturas:** Púrpura espiritual, Nocturna, Ámbar inspirador y Marfil clásico (Marfil conserva el mármol).
 
 **Pendientes**
 - Decidir el morado de Púrpura: #49325F o #5B2C6F.
