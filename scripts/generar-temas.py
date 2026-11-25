@@ -194,6 +194,13 @@ def css():
         elif n in REAL: marco="url('%s') center / 160px auto no-repeat %s"%(REAL[n]['boton'],REAL[n]['color_boton'])
         else: marco='linear-gradient(180deg, %s, %s)'%(mix(d['nav'],'#000000',0.28),mix(d['nav'],'#000000',0.42))
         v.append(('marco-fondo',marco))
+        # bordes y luz de la placa: la pestana activa se distingue SOLO por el marco (y la etiqueta), nunca por filtros sobre el dibujo
+        if marfil:   # barra clara: bordes de bronce; el activo, dorado vivo y grueso
+            v+=[('marco-velo','rgba(122,74,31,0.07)'),('marco-borde','rgba(150,98,34,0.78)'),('marco-borde-activo','#B57A0C'),
+                ('marco-halo','rgba(226,160,24,0.80)'),('marco-luz','rgba(240,184,60,0.42)')]
+        else:
+            v+=[('marco-velo','rgba(0,0,0,0.20)'),('marco-borde','rgba(226,185,79,0.74)'),('marco-borde-activo','#FFE9A0'),
+                ('marco-halo','rgba(255,214,100,0.85)'),('marco-luz','rgba(255,214,110,0.30)')]
         o.append(sel+' {\n'+''.join('  --%s: %s;\n'%(k,x) for k,x in v)+'}\n')
     bloque(':root',PALETA_POR_DEFECTO)
     for n in P: bloque(':root[data-tema="%s"]'%n,n)
@@ -237,22 +244,19 @@ def css():
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
 
-/* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, con resplandor y una sombra oscura leve.
+/* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, sobre una placa redondeada en ::before.
+   El dibujo va SIEMPRE nitido (solo una sombra oscura corta, igual en todas las pestanas): la activa se distingue por la placa y la etiqueta.
    --icono-caja es el alto que ocupa en la barra (la barra mide lo mismo: relleno superior + caja + margen = 42px) y --icono-lienzo el lado
-   del archivo de 512px, cuyo dibujo ocupa 318/512 del alto. Variante con marco: html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
-:root { --icono-caja: 33px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }                  /* A: sin marco, dibujo de 29px de alto */
-:root[data-marco="si"] { --icono-caja: 38px; --icono-hueco: 2px; --icono-lienzo: 41px; }   /* B: placa de 48x38, dibujo de 25,5px */
+   del archivo de 512px, cuyo dibujo ocupa 319/512 del alto. La placa se activa con html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
+:root { --icono-caja: 33px; --icono-ancho: 48px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }          /* sin placa: dibujo de 29px de alto */
+:root[data-marco="si"] { --icono-caja: 36px; --icono-ancho: 54px; --icono-lienzo: 45px; }                /* placa de 54x36, dibujo de 28px, a 4px de la linea */
 :root nav { padding-top: calc(42px - var(--icono-caja) - var(--icono-hueco)); }
-:root .icono-nav { position: relative; width: 48px; height: var(--icono-caja); margin: 0 auto var(--icono-hueco); mix-blend-mode: normal; filter: none; }
-:root .item.activo .icono-nav { filter: none; }
+:root .icono-nav { position: relative; width: var(--icono-ancho); height: var(--icono-caja); margin: 0 auto var(--icono-hueco); }
 :root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 1px 1px var(--oro-sombra)); }
-/* solo la pestana activa lleva resplandor (en las inactivas difuminaba los bordes); la sombra corta va antes para que el contorno siga nitido */
-:root .item.activo .icono-nav::after { filter: drop-shadow(0 1px 1px var(--oro-sombra)) drop-shadow(0 0 calc(var(--oro-radio) + 2px) var(--oro-brillo)); }
-:root[data-marco="si"] .icono-nav::before { content: ''; position: absolute; inset: 0; box-sizing: border-box; border-radius: 13px; background: var(--marco-fondo); border: 1px solid var(--oro-borde); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 1px 3px var(--oro-sombra); }
-:root[data-marco="si"] .item.activo .icono-nav::before { box-shadow: 0 0 7px var(--oro-brillo), inset 0 1px 0 rgba(255,255,255,0.14); }
-/* en la placa el resplandor del dibujo es mas corto, para que no se empaste */
-:root[data-marco="si"] .icono-nav::after { filter: drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
-:root[data-marco="si"] .item.activo .icono-nav::after { filter: drop-shadow(0 0 3px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+/* placa: como los botones redondos del encabezado; las inactivas con borde tenue y fondo algo apagado */
+:root[data-marco="si"] .icono-nav::before { content: ''; position: absolute; inset: 0; box-sizing: border-box; border-radius: 12px; background: linear-gradient(var(--marco-velo), var(--marco-velo)), var(--marco-fondo); border: 1px solid var(--marco-borde); box-shadow: 0 1px 3px var(--oro-sombra); }
+/* activa: borde luminoso y grueso, halo detras de la placa y brillo interior leve */
+:root[data-marco="si"] .item.activo .icono-nav::before { background: var(--marco-fondo); border: 2px solid var(--marco-borde-activo); box-shadow: 0 0 8px 1px var(--marco-halo), inset 0 0 7px var(--marco-luz); }
 :root #nav-inicio::after { background-image: url('nav-inicio-oro.webp'); }
 :root #nav-leer::after { background-image: url('nav-leer-oro.webp'); }
 :root #nav-guia::after { background-image: url('nav-guia-oro.webp'); }
