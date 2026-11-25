@@ -16,6 +16,7 @@ PRINCIPAL=(0x48,0x2B,0x1D); PROFUNDO=(0x24,0x12,0x08)
 MARFIL=(0xFA,0xF1,0xE3)          # marfil de paleta.json (menos calido que el papel del zip, #FEEFD9)
 BOTON=(0x45,0x21,0x0F)           # marron rojizo oscuro de los botones de la referencia
 ANDROID=(0x70,0x42,0x20)         # piedra arenisca detras de los botones de Android
+BARRA=(0x6C,0x40,0x1F)           # madera de la barra: tono aclarado, parecido a la piedra de la zona Android
 TINTA='#392419'; ORO_TEXTO='#F0D27A'; ORO_ICONO='#F0CF72'
 # el titulo y el subtitulo llevan su propio oscurecimiento en CSS (generar-temas.py); su contraste se mide sobre capturas del telefono
 
@@ -185,8 +186,8 @@ def barra(base):
     im=Image.composite(Image.new('RGB',L,PROFUNDO),im,r.resize(L))      # degradado leve (18 % abajo)
     # recorta los brillos para que el dorado de la etiqueta activa siga pasando 4,5:1
     med=ImageStat.Stat(im).mean
-    im=Image.merge('RGB',[c.point([v if v<=med[n]+14 else round(med[n]+14+(v-med[n]-14)*0.55) for v in range(256)]) for n,c in enumerate(im.split())])
-    return a_media(im,PRINCIPAL)
+    im=Image.merge('RGB',[c.point([v if v<=med[n]+0 else round(med[n]+0+(v-med[n]-0)*0.25) for v in range(256)]) for n,c in enumerate(im.split())])
+    return a_media(im,BARRA)
 
 def papel(base):
     p=abrir(base,'02_papel_marfil')
