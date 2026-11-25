@@ -50,7 +50,6 @@
   --tinte-display: block;
   --textura-tarjeta: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('texturas/papel_marfil_verdoso.webp');
   --tamano-tarjeta: 600px auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
   --repeticion-fondo: no-repeat;
   --posicion-fondo: center top;
@@ -101,7 +100,7 @@
   --repeticion-barra: no-repeat;
   --posicion-encabezado: left top;
   --posicion-nav: right bottom;
-  --textura-fondo: url('texturas/02_papel_marfil_grisaceo.webp'), url('texturas/02_papel_marfil_grisaceo.webp'), url('texturas/02_papel_marfil_grisaceo.webp');
+  --textura-fondo: url('texturas/papel_azul_fondo.webp');
   --tamano-fondo: 256px;
   --intensidad-fondo: 1;
   --fondo-display: block;
@@ -113,8 +112,9 @@
   --tinte-display: block;
   --textura-tarjeta: url('texturas/03_papel_blanco_marfil.webp'), url('texturas/03_papel_blanco_marfil.webp');
   --tamano-tarjeta: 256px;
-  --intensidad-papel: 3;
   --intensidad-algodon: 2.5;
+  --repeticion-fondo: repeat;
+  --posicion-fondo: 0 0;
   --nav-grad: none;
   --sombra-tarjeta: 0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15);
   --sombra-boton: 0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16);
@@ -176,7 +176,6 @@
   --tinte-display: block;
   --textura-tarjeta: linear-gradient(rgba(255,253,247,0.65), rgba(255,253,247,0.65)), url('texturas/papel_borgona.webp');
   --tamano-tarjeta: 600px auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
   --repeticion-fondo: no-repeat;
   --posicion-fondo: center top;
@@ -239,7 +238,6 @@
   --tinte-display: none;
   --textura-tarjeta: linear-gradient(rgba(255,253,242,0.65), rgba(255,253,242,0.65)), url('texturas/papel_olivo.webp');
   --tamano-tarjeta: 512px auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
   --repeticion-fondo: no-repeat, repeat;
   --posicion-fondo: center top;
@@ -302,7 +300,6 @@
   --tinte-display: none;
   --textura-tarjeta: linear-gradient(rgba(255,250,240,0.65), rgba(255,250,240,0.65)), url('texturas/papel_tierra.webp');
   --tamano-tarjeta: 512px auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
   --repeticion-fondo: no-repeat, repeat;
   --posicion-fondo: center top;
@@ -365,8 +362,9 @@
   --tinte-display: none;
   --textura-tarjeta: none;
   --tamano-tarjeta: auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: repeat;
+  --posicion-fondo: 0 0;
   --marco-fondo: linear-gradient(180deg, #352444, #2A1D37);
   --marco-velo: rgba(0,0,0,0.20);
   --marco-borde: rgba(226,185,79,0.74);
@@ -425,7 +423,6 @@
   --tinte-display: block;
   --textura-tarjeta: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('texturas/papel_marfil_verdoso.webp');
   --tamano-tarjeta: 600px auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
   --repeticion-fondo: no-repeat;
   --posicion-fondo: center top;
@@ -488,8 +485,9 @@
   --tinte-display: none;
   --textura-tarjeta: none;
   --tamano-tarjeta: auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: repeat;
+  --posicion-fondo: 0 0;
   --marco-fondo: linear-gradient(180deg, #171E28, #131820);
   --marco-velo: rgba(0,0,0,0.20);
   --marco-borde: rgba(226,185,79,0.74);
@@ -548,8 +546,9 @@
   --tinte-display: none;
   --textura-tarjeta: none;
   --tamano-tarjeta: auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: repeat;
+  --posicion-fondo: 0 0;
   --marco-fondo: linear-gradient(180deg, #FFFDF8, #FBF3E2);
   --marco-velo: rgba(122,74,31,0.07);
   --marco-borde: rgba(150,98,34,0.78);
@@ -608,8 +607,9 @@
   --tinte-display: none;
   --textura-tarjeta: none;
   --tamano-tarjeta: auto;
-  --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: repeat;
+  --posicion-fondo: 0 0;
   --marco-fondo: linear-gradient(180deg, #6A3015, #552611);
   --marco-velo: rgba(0,0,0,0.20);
   --marco-borde: rgba(226,185,79,0.74);

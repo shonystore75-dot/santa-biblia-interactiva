@@ -53,9 +53,8 @@ INTENSIDAD_CUERO=1.0      # opacidad del cuero fotografico sobre #102F50 liso (1
 TEX_CUERO='texturas/cuero_azul_realista.webp'      # 1000x1000, color medio #102F50 (scripts/generar-cuero-realista.py); NO repite en mosaico: una sola imagen
 TAM_CUERO='500px auto'                              # ancho aprox. 460-520 px (el telefono no pasa de 480 px de ancho)
 POS_CUERO_ENCABEZADO='left top'; POS_CUERO_BARRA='right bottom'   # zonas distintas de la imagen para que no sean identicas
-TEX_PAPEL='texturas/02_papel_marfil_grisaceo.webp'  # overlay, alfa fijo 12/255
+TEX_PAPEL='texturas/papel_azul_fondo.webp'   # opaco, media exacta #F7F5F0 y grano x3 del papel original (scripts/generar-papel-azul.py)
 TEX_ALGODON='texturas/03_papel_blanco_marfil.webp'  # overlay, alfa fijo 7/255
-INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la del archivo). Elegido en la comparacion x1/x3/x5
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
 CUERO_BRILLO=0.03        # degradado vertical blanco leve sobre el cuero (arriba)
 TAM_PAPEL='256px'; TAM_ALGODON='256px'
@@ -168,8 +167,7 @@ def css():
         if marfil:
             tx=dict(fondo="url('marmol_marfil_fuerte.webp')",tf='600px',of='0.5',barra="url('marmol_marfil_fuerte.webp')",tb='600px',ob='0.5',tinte='none',tarjeta='none',tt='auto')
         elif azul:
-            nf=math.ceil(INTENSIDAD_PAPEL)
-            tx=dict(fondo=capas(TEX_PAPEL,nf),tf=TAM_PAPEL,of='%.4g'%(INTENSIDAD_PAPEL/nf),barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='%g'%INTENSIDAD_CUERO,
+            tx=dict(fondo="url('%s')"%TEX_PAPEL,tf=TAM_PAPEL,of='1',barra="url('%s')"%TEX_CUERO,tb=TAM_CUERO,ob='%g'%INTENSIDAD_CUERO,
                     tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
                     tarjeta=capas(TEX_ALGODON,max(1,round(INTENSIDAD_ALGODON))),tt=TAM_ALGODON)
         elif turq:
@@ -185,8 +183,12 @@ def css():
         v+=[('repeticion-barra',rep),('posicion-encabezado',posh),('posicion-nav',posn),('textura-fondo',tx['fondo']),('tamano-fondo',tx['tf']),('intensidad-fondo',tx['of']),('fondo-display','block' if tx['fondo']!='none' else 'none'),
             ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
             ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
-            ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-papel',str(INTENSIDAD_PAPEL) if azul else '0'),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
-        if turq: v+=[('repeticion-fondo',('no-repeat, ' if 'borde_fondo' in REAL[n] else '')+REAL[n].get('rep_fondo','no-repeat')),('posicion-fondo','center top'),('nav-grad','none')]
+            ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
+        # TODAS las paletas fijan la repeticion y la posicion del fondo: si falta, se hereda la de la paleta por defecto (:root),
+        # y un papel en mosaico queda dibujado una sola vez (un rectangulo en medio de la pantalla)
+        v+=[('repeticion-fondo',(('no-repeat, ' if 'borde_fondo' in REAL[n] else '')+REAL[n].get('rep_fondo','no-repeat')) if turq else 'repeat'),
+            ('posicion-fondo','center top' if turq else '0 0')]
+        if turq: v+=[('nav-grad','none')]
         if azul:
             v+=[('nav-grad','none'),('sombra-tarjeta',SOMBRA_AZUL_TARJETA),('sombra-boton',SOMBRA_AZUL_BOTON)]
         # fondo de la placa de los iconos de la barra (variante con marco): el de los botones redondos del encabezado; en Marfil, claro (el bronce necesita 3:1)
