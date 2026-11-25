@@ -73,13 +73,13 @@ REAL={
              velo_texto='radial-gradient(closest-side, rgba(24,38,5,0.74) 0%, rgba(24,38,5,0.66) 66%, rgba(24,38,5,0) 100%)',
              android='texturas/piedra_olivo_android.webp',
              borde_fondo='linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%)'),
-# Tierra biblica: igual que Verde olivo (paisaje en el encabezado, halo solo tras el titulo, barra de madera, piedra arenisca tras los botones de Android)
+# Tierra biblica: igual que Verde olivo (paisaje en el encabezado, halo solo tras el titulo, barra y zona de los botones de Android de madera rustica)
 'tierra':dict(cuero='texturas/barra_tierra.webp',papel='texturas/papel_tierra.webp',boton='texturas/piedra_tierra_oscura.webp',   # media #482B1D / #FAF1E3 / #45210F
              i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
              tam_boton='160px auto',color_boton='#45210F',tinte='none',encabezado='texturas/encabezado_tierra.webp',pos_imagen_encabezado='50% 0',tam_imagen_encabezado='cover',
              velo_texto='radial-gradient(closest-side, rgba(43,20,6,0.79) 0%, rgba(43,20,6,0.71) 66%, rgba(43,20,6,0) 100%)',
-             android='texturas/piedra_tierra_android.webp',inset_velo='-20px -58px -34px',   # arriba mas corto: no apaga el sol
-             nombre_piedra='arenisca',sombra_android='43,20,6',
+             android='texturas/madera_tierra_android.webp',inset_velo='-20px -58px -34px',   # arriba mas corto: no apaga el sol
+             material_android='madera rustica',sombra_android='43,20,6',
              borde_fondo='linear-gradient(90deg, rgba(222,168,92,0.24) 0%, rgba(222,168,92,0) 16%, rgba(222,168,92,0) 84%, rgba(222,168,92,0.24) 100%)'),
 }
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
@@ -282,12 +282,12 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 }
 /* %(nombre)s: botones con borde dorado vivo */
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-/* %(nombre)s: piedra %(nombre_piedra)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+/* %(nombre)s: %(material_android)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
 :root[data-tema="%(nn)s"] nav::after {
   display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
   background: var(--oro-linea) top / 100%% 2px no-repeat, linear-gradient(180deg, rgba(%(sombra_android)s,0.55) 0%%, rgba(%(sombra_android)s,0) 40%%), url('%(android)s') center / cover no-repeat;
 }
-""" % dict(dict(nombre_piedra='verde',sombra_android='24,38,5',inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
+""" % dict(dict(material_android='piedra verde',sombra_android='24,38,5',inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
     return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
 def g_suave(d,te): return mix(d['texto'],te,0.18)

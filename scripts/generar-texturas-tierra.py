@@ -1,13 +1,13 @@
 # Prepara las texturas de Tierra biblica a partir del zip Texturas_Tierra_Santa_Biblia_2026 (mismo metodo que Verde olivo).
 # Los mosaicos del zip son REFLEJADOS y traen manchas (puntos blancos en la madera, manchas negras en el papel): se arman
 # texturas nuevas con parches al azar de zonas limpias (semillas fijas), sin espejo; el papel ademas cierra sin costura.
-# La barra es madera rustica dibujada por el script (tablas, nudos, grietas, clavos) con el grano fino del recurso 04.
+# La barra y la zona de los botones de Android son madera rustica dibujada por el script (tablas, nudos, grietas, clavos) con el grano fino del recurso 04.
 # Encabezado: 'fondo_reconstruido' trae bloques emborronados donde estaban el titulo y los botones, y la curva dorada abajo.
 # Se arma uno nuevo: arbol (izquierda) + valle, sol y casa (derecha) para que ambos quepan en el encabezado del telefono,
 # se corta la curva dorada y se repinta la parte baja: matorrales a la izquierda (parches de la misma imagen) y empedrado dibujado a la derecha.
 # 'recorte_referencia' NO se usa.
 # Entrada: carpeta Tierra_Santa_Biblia_2026 (zip extraido FUERA del repo)
-# Salida: texturas/encabezado_tierra.webp, barra_tierra.webp, papel_tierra.webp, piedra_tierra_oscura.webp, piedra_tierra_android.webp
+# Salida: texturas/encabezado_tierra.webp, barra_tierra.webp, papel_tierra.webp, piedra_tierra_oscura.webp, madera_tierra_android.webp
 # Uso: python scripts/generar-texturas-tierra.py <carpeta extraida>     (imprime tamanos, colores y contraste sobre cada textura)
 import sys, os, random, math
 from PIL import Image, ImageDraw, ImageFilter, ImageStat
@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageStat
 PRINCIPAL=(0x48,0x2B,0x1D); PROFUNDO=(0x24,0x12,0x08)
 MARFIL=(0xFA,0xF1,0xE3)          # marfil de paleta.json (menos calido que el papel del zip, #FEEFD9)
 BOTON=(0x45,0x21,0x0F)           # marron rojizo oscuro de los botones de la referencia
-ANDROID=(0x70,0x42,0x20)         # piedra arenisca detras de los botones de Android
+ANDROID=(0x6C,0x40,0x1F)         # madera detras de los botones de Android (mismo tono que la barra)
 BARRA=(0x6C,0x40,0x1F)           # madera de la barra: tono aclarado, parecido a la piedra de la zona Android
 TINTA='#392419'; ORO_TEXTO='#F0D27A'; ORO_ICONO='#F0CF72'
 # el titulo y el subtitulo llevan su propio oscurecimiento en CSS (generar-temas.py); su contraste se mide sobre capturas del telefono
@@ -124,21 +124,18 @@ def ruido(tam,celda_x,celda_y,rnd):
     g=g.resize((g.width*celda_x,g.height*celda_y),Image.BICUBIC).crop((celda_x,celda_y,celda_x+w,celda_y+h))
     return [v/255 for v in g.tobytes()]
 
-def barra(base):
-    """Madera rustica: dos tablas gastadas, vetas onduladas que rodean los nudos, grietas, junta entre tablas y clavos viejos;
+def madera(base,L,semilla,juntas,nudos,grietas,clavos,objetivo):
+    """Madera rustica: tablas gastadas, vetas onduladas que rodean los nudos, grietas, junta entre tablas y clavos viejos;
     el grano fino sale del recurso 04 (zona sin los puntos blancos)."""
-    L=(1000,280); W,H=L; rnd=random.Random(23)
-    junta=lambda x: 103+2.2*math.sin(x/139.0+1.3)+1.3*math.sin(x/47.0)        # entre el icono y la etiqueta
-    junta2=lambda x: 236+2.5*math.sin(x/113.0+4.0)
+    W,H=L; rnd=random.Random(semilla)
     onda=ruido(L,170,46,rnd); onda2=ruido(L,52,17,rnd); fibra=ruido(L,26,2,rnd); fibra2=ruido(L,9,1,rnd); manchas=ruido(L,120,60,rnd); aspero=ruido(L,3,2,rnd)
-    nudos=[(236,52,21,9),(655,168,27,11),(868,40,13,6),(452,205,17,8),(60,150,14,7),(560,70,8,4)]     # x, y, radio x, radio y
     m=abrir(base,'04_madera_barra').crop((6,6,226,150)).resize((660,144),Image.LANCZOS)
     grano=parches([m],L,(240,70),9); g=grano.load(); gb=grano.filter(ImageFilter.GaussianBlur(4)).load()
     im=Image.new('RGB',L); o=im.load()
     for y in range(H):
         for x in range(W):
             k=y*W+x
-            j1,j2=junta(x),junta2(x); tabla=0 if y<j1 else (1 if y<j2 else 2)
+            js=[f(x) for f in juntas]; tabla=sum(y>=j for j in js)
             t=y+(onda[k]-0.5)*34+(onda2[k]-0.5)*9+tabla*57
             oscuro_nudo=0.0
             for nx,ny,rx,ry in nudos:
@@ -153,12 +150,12 @@ def barra(base):
             linea=max(0.0,veta)**5                                             # vetas oscuras finas
             claro=max(0.0,-veta)**3
             v=(1.0+0.30*claro-0.46*linea+0.42*(fibra[k]-0.5)+0.30*(fibra2[k]-0.5)+0.38*(manchas[k]-0.5)+0.16*(aspero[k]-0.5)
-               +(0.07,-0.09,0.0)[tabla])
+               +(0.07,-0.09,0.0)[tabla%3])
             v*=1-0.68*min(1.0,oscuro_nudo)
             col=[(86,50,30)[c]*v+0.5*(g[x,y][c]-gb[x,y][c]) for c in range(3)]
             gris=0.30*rampa(manchas[(k+W*97+311)%(W*H)],0.55,0.85)             # zonas desgastadas, algo grises
             lum_=0.35*col[0]+0.5*col[1]+0.15*col[2]; col=[c+(lum_*1.12-c)*gris for c in col]
-            for j in (j1,j2):                                                  # junta: hueco oscuro con canto iluminado debajo
+            for j in js:                                                  # junta: hueco oscuro con canto iluminado debajo
                 d=y-j
                 if -7<d<8:
                     hueco=math.exp(-(d/2.1)**2); canto=math.exp(-((d-4.2)/1.5)**2); bisel=math.exp(-((d+3.8)/2.0)**2)
@@ -166,7 +163,6 @@ def barra(base):
             o[x,y]=tuple(max(0,min(255,round(c))) for c in col)
     # grietas a lo largo de la veta (afiladas en las puntas, con filo claro debajo)
     S=3; hondo=Image.new('L',(W*S,H*S),0); filo=Image.new('L',(W*S,H*S),0); dh=ImageDraw.Draw(hondo); df=ImageDraw.Draw(filo)
-    grietas=[(0,40,150,2.6),(318,28,170,1.8),(720,66,210,2.8),(905,142,95,2.4),(120,128,190,2.0),(500,150,110,1.6),(805,196,180,2.2),(300,185,130,1.8),(560,20,80,1.4),(0,205,120,2.4)]
     for x0,y0,largo,gr in grietas:
         y=y0; pts=[]
         for n in range(0,largo+1,6):
@@ -179,7 +175,7 @@ def barra(base):
     im=Image.composite(Image.new('RGB',L,(17,8,3)),im,hondo.resize(L,Image.LANCZOS))
     # clavos de hierro viejos en los extremos de las tablas
     d=ImageDraw.Draw(im)
-    for cx,cy in ((17,52),(983,56),(19,146),(981,143)):
+    for cx,cy in clavos:
         d.ellipse((cx-8,cy-7,cx+8,cy+9),fill=(26,13,6)); d.ellipse((cx-6,cy-6,cx+6,cy+6),fill=(72,58,50)); d.ellipse((cx-4,cy-4,cx+1,cy+1),fill=(128,108,90))
     im=im.filter(ImageFilter.UnsharpMask(radius=1.5,percent=60,threshold=1))
     r=Image.new('L',(1,H)); r.putdata([round(255*0.18*(y/(H-1))**1.3) for y in range(H)])
@@ -187,7 +183,14 @@ def barra(base):
     # recorta los brillos para que el dorado de la etiqueta activa siga pasando 4,5:1
     med=ImageStat.Stat(im).mean
     im=Image.merge('RGB',[c.point([v if v<=med[n]+0 else round(med[n]+0+(v-med[n]-0)*0.25) for v in range(256)]) for n,c in enumerate(im.split())])
-    return a_media(im,BARRA)
+    return a_media(im,objetivo)
+
+def barra(base):
+    juntas=[lambda x: 103+2.2*math.sin(x/139.0+1.3)+1.3*math.sin(x/47.0),     # entre el icono y la etiqueta
+            lambda x: 236+2.5*math.sin(x/113.0+4.0)]
+    nudos=[(236,52,21,9),(655,168,27,11),(868,40,13,6),(452,205,17,8),(60,150,14,7),(560,70,8,4)]     # x, y, radio x, radio y
+    grietas=[(0,40,150,2.6),(318,28,170,1.8),(720,66,210,2.8),(905,142,95,2.4),(120,128,190,2.0),(500,150,110,1.6),(805,196,180,2.2),(300,185,130,1.8),(560,20,80,1.4),(0,205,120,2.4)]
+    return madera(base,(1000,280),23,juntas,nudos,grietas,((17,52),(983,56),(19,146),(981,143)),BARRA)
 
 def papel(base):
     p=abrir(base,'02_papel_marfil')
@@ -202,11 +205,15 @@ def boton(base):
     return a_media(contraste_de_media(im,0.7),BOTON)
 
 def android(base):
-    return a_media(contraste_de_media(parches([piedra(base)],(1000,160),(80,80),5),0.9),ANDROID)
+    """Zona de los botones de Android: la misma madera rustica (una junta baja; se ve la franja central de la imagen)."""
+    juntas=[lambda x: 118+2.0*math.sin(x/127.0+2.6)+1.2*math.sin(x/53.0)]
+    nudos=[(150,70,19,8),(405,98,10,5),(770,56,23,9),(930,104,12,6),(590,140,15,7)]
+    grietas=[(30,52,180,2.4),(260,96,150,1.9),(545,44,120,1.6),(650,90,200,2.6),(880,72,120,2.0),(80,134,160,1.8),(430,60,90,1.4)]
+    return madera(base,(1000,160),61,juntas,nudos,grietas,((17,72),(983,76)),ANDROID)
 
 TRABAJOS=[(encabezado,'texturas/encabezado_tierra.webp',86),(barra,'texturas/barra_tierra.webp',86),
           (papel,'texturas/papel_tierra.webp',80),(boton,'texturas/piedra_tierra_oscura.webp',82),
-          (android,'texturas/piedra_tierra_android.webp',78)]
+          (android,'texturas/madera_tierra_android.webp',86)]
 
 # ---- contraste sobre las texturas ----
 def lum(c):
@@ -232,7 +239,7 @@ if __name__=='__main__':
            ('etiqueta activa (dorado) sobre barra',ORO_TEXTO,fin['barra'],4.5),
            ('icono (dorado) sobre barra',ORO_ICONO,fin['barra'],3.0),
            ('icono (dorado) sobre boton redondo',ORO_TEXTO,fin['boton'].crop((64,64,128,128)),3.0),
-           ('botones de Android (blanco) sobre piedra','#FFFFFF',fin['android'],3.0)]
+           ('botones de Android (blanco) sobre madera','#FFFFFF',fin['android'],3.0)]
     print('\n| elemento sobre textura | peor 1 % | mediana | minimo | ok |\n|---|---|---|---|---|')
     for n,c,im,m in filas:
         p,med=peor(c,im); print('|',n,'|',p,'|',med,'|',m,'|','si' if p>=m else 'NO','|')
