@@ -274,6 +274,29 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root .phone .cargando::after { content: ''; display: block; width: 100%; height: 430px; margin-top: 14px; border-radius: 14px;
   background: repeating-linear-gradient(180deg, rgba(var(--principal-rgb), 0.09) 0 74px, transparent 74px 86px); }
 
+/* ===== Pulsacion de botones (todas las pantallas y paletas) =====
+   Sin el rectangulo azulado con que Android resalta el toque, ni contorno de foco al tocar con el dedo (con teclado,
+   :focus-visible conserva su contorno). El efecto propio sigue la forma de cada boton y no cambia su fondo ni su textura. */
+:root, :root * { -webkit-tap-highlight-color: transparent; }
+:root :focus:not(:focus-visible) { outline: none; }
+:root :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante, .flecha-carrusel, .visor-cerrar, .pin-mapa, .estrella-fav, .compartir-verso, .nota-btn,
+  .btn-buscar, .btn-nav-cap, .btn-overlay, .btn-confirmar, .btn-copiar-lista, .btn-leer-pasaje, .btn-suscribirse, .btn-cerrar-overlay, .btn-quitar, .btn-escala-fila,
+  .tab, .pestana, .tab-legal, .num-capitulo, .item-libro, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .item-guardado) {
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;   /* mantener el dedo no selecciona la letra del boton */
+}
+/* redondos: se encogen, se oscurecen un poco y muestran un halo dorado (el contorno sigue el border-radius) */
+:root :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante, .flecha-carrusel, .visor-cerrar, .pin-mapa, .estrella-fav, .compartir-verso, .nota-btn):active {
+  scale: 0.95; filter: brightness(0.9); outline: 3px solid rgba(231, 188, 84, 0.55); outline-offset: 0;
+}
+/* demas botones: se encogen y oscurecen levemente */
+:root :is(.btn-buscar, .btn-nav-cap, .btn-overlay, .btn-confirmar, .btn-copiar-lista, .btn-leer-pasaje, .btn-suscribirse, .tab, .pestana, .tab-legal, .num-capitulo):active {
+  scale: 0.97; filter: brightness(0.92);
+}
+/* tarjetas y filas: solo oscurecimiento leve */
+:root :is(.item-libro, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .item-guardado, .libro-busqueda, .resultado-verso, .fila-enlace, .btn-cerrar-overlay):active {
+  filter: brightness(0.94);
+}
+
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }
 :root .submenu-paleta.visible { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px 0 6px; margin: 2px 0 4px; border-left: 0; }
