@@ -10,13 +10,14 @@ spec = importlib.util.spec_from_file_location('g', os.path.join(RAIZ, 'scripts',
 g = importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
 
 RAMPAS = {
-    # el tono mas oscuro ya da 3:1 sobre la barra oscura mas clara
-    'oro':    [(0.0, '#DCB554'), (0.35, '#E8C464'), (0.65, '#F0CF72'), (1.0, '#FFF1B8')],
-    # nunca mas claro que #A8722E (3:1 sobre la barra de Marfil)
-    'bronce': [(0.0, '#613A12'), (0.45, '#82531F'), (0.8, '#98672A'), (1.0, '#A8722E')],
+    # dorado metalico: sombra ambar profunda -> dorado aprobado (#F0CF72) -> brillo casi blanco
+    'oro':    [(0.0, '#9A6612'), (0.30, '#C48E24'), (0.55, '#E2B440'), (0.75, '#F2CF6A'), (0.90, '#FCE79C'), (1.0, '#FFFBE6')],
+    # bronce para la barra clara de Marfil: el cuerpo queda por debajo de #A8722E (3:1); solo los brillos son mas claros
+    'bronce': [(0.0, '#2E1804'), (0.35, '#55300A'), (0.65, '#7C4C16'), (0.85, '#9C6726'), (0.95, '#B9843C'), (1.0, '#E4B770')],
 }
-LADO = 256          # lienzo cuadrado de cada icono
-MARGEN_MIN = 8      # margen lateral del icono mas ancho (el libro); fija el alto comun de los cuatro
+LADO = 512          # lienzo cuadrado de cada icono
+MARGEN_MIN = 16     # margen lateral del icono mas ancho (el libro); fija el alto comun de los cuatro
+NITIDEZ = ImageFilter.UnsharpMask(radius=3, percent=70, threshold=1)   # realza los biseles, que a ~1/4 de tamano se pierden
 # columnas de cada icono en la imagen original (2172 px de ancho)
 ZONAS = {'inicio': (0, 460), 'leer': (460, 1008), 'guia': (1008, 1385), 'favoritos': (1385, 1780), 'engranaje': (1780, 2172)}
 # huecos oscuros con un brillo que el umbral no distingue del dorado: se vacian con su poligono exacto
@@ -85,11 +86,12 @@ def main(origen):
             rgba = Image.merge('RGBA', [tt.point(c) for c in canales] + [a])
             ancho = round(a.width * alto_comun / a.height)
             rgba = rgba.convert('RGBa').resize((ancho, alto_comun), Image.LANCZOS).convert('RGBA')
-            lienzo = Image.new('RGBA', (LADO, LADO), tuple(g.rgb(rampa[1][1])) + (0,))
+            nitido = rgba.convert('RGB').filter(NITIDEZ); nitido.putalpha(rgba.getchannel('A')); rgba = nitido
+            lienzo = Image.new('RGBA', (LADO, LADO), tuple(g.rgb(rampa[2][1])) + (0,))
             lienzo.paste(rgba, ((LADO - ancho) // 2, (LADO - alto_comun) // 2))
             ruta = (os.path.join(destino_extra, 'engranaje-%s.webp' % nombre) if n == 'engranaje'
                     else os.path.join(RAIZ, 'nav-%s-%s.webp' % (n, nombre)))
-            lienzo.save(ruta, quality=92, alpha_quality=100, method=6)
+            lienzo.save(ruta, quality=95, alpha_quality=100, method=6)
             print(os.path.relpath(ruta, RAIZ), 'contenido %dx%d' % (ancho, alto_comun), os.path.getsize(ruta), 'bytes')
 
 

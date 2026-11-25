@@ -239,15 +239,15 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 
 /* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, con resplandor y una sombra oscura leve.
    --icono-caja es el alto que ocupa en la barra (la barra mide lo mismo: relleno superior + caja + margen = 42px) y --icono-lienzo el lado
-   del archivo de 256px, cuyo dibujo ocupa 159/256 del alto. Variante con marco: html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
+   del archivo de 512px, cuyo dibujo ocupa 318/512 del alto. Variante con marco: html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
 :root { --icono-caja: 33px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }                  /* A: sin marco, dibujo de 29px de alto */
 :root[data-marco="si"] { --icono-caja: 38px; --icono-hueco: 2px; --icono-lienzo: 41px; }   /* B: placa de 48x38, dibujo de 25,5px */
 :root nav { padding-top: calc(42px - var(--icono-caja) - var(--icono-hueco)); }
 :root .icono-nav { position: relative; width: 48px; height: var(--icono-caja); margin: 0 auto var(--icono-hueco); mix-blend-mode: normal; filter: none; }
 :root .item.activo .icono-nav { filter: none; }
-:root :is(#nav-inicio, #nav-leer, #nav-guia, #nav-favoritos) { background-image: none; }
-:root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
-:root .item.activo .icono-nav::after { filter: drop-shadow(0 0 calc(var(--oro-radio) + 1px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 1px 1px var(--oro-sombra)); }
+/* solo la pestana activa lleva resplandor (en las inactivas difuminaba los bordes); la sombra corta va antes para que el contorno siga nitido */
+:root .item.activo .icono-nav::after { filter: drop-shadow(0 1px 1px var(--oro-sombra)) drop-shadow(0 0 calc(var(--oro-radio) + 2px) var(--oro-brillo)); }
 :root[data-marco="si"] .icono-nav::before { content: ''; position: absolute; inset: 0; box-sizing: border-box; border-radius: 13px; background: var(--marco-fondo); border: 1px solid var(--oro-borde); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 1px 3px var(--oro-sombra); }
 :root[data-marco="si"] .item.activo .icono-nav::before { box-shadow: 0 0 7px var(--oro-brillo), inset 0 1px 0 rgba(255,255,255,0.14); }
 /* en la placa el resplandor del dibujo es mas corto, para que no se empaste */
