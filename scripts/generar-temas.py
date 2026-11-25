@@ -270,6 +270,10 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root[data-tema="marfil"] #nav-favoritos::after { background-image: url('nav-favoritos-bronce.webp'); }
 :root nav .item.activo { text-shadow: 0 0 8px var(--oro-brillo); }
 
+/* Mientras llega una lista (si la pantalla se muestra antes que su contenido): siluetas de tarjetas bajo el aviso */
+:root .phone .cargando::after { content: ''; display: block; width: 100%; height: 430px; margin-top: 14px; border-radius: 14px;
+  background: repeating-linear-gradient(180deg, rgba(var(--principal-rgb), 0.09) 0 74px, transparent 74px 86px); }
+
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }
 :root .submenu-paleta.visible { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px 0 6px; margin: 2px 0 4px; border-left: 0; }

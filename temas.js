@@ -50,9 +50,12 @@
   });
 
   // Transiciones sin parpadeo: al cambiar de pantalla la parte nativa deja a la vista la pantalla anterior
-  // hasta que esta avisa de que esta completa (contenido, fuentes e imagenes visibles ya decodificadas).
-  // Una pantalla puede retrasar el aviso asignando una promesa a window.esperaPantalla.
-  var ESPERA_MAXIMA_MS = 1200;
+  // hasta que esta avisa. Se avisa en cuanto lo imprescindible esta listo (fondo, encabezado y barra con sus
+  // iconos, ya decodificados). Las fuentes y el contenido solo se esperan hasta LIMITE_MS desde que empezo la
+  // carga, y las imagenes secundarias no se esperan: lo que falte aparece despues (el contenido, sobre las
+  // siluetas de .cargando). Una pantalla puede retrasar el aviso (dentro de ese limite) con window.esperaPantalla.
+  var LIMITE_MS = 150;
+  var ESPERA_MAXIMA_MS = 1200;   // tope si algo falla
 
   function sinCargando(vencido) {
     return new Promise(function (listo) {
@@ -60,22 +63,18 @@
     });
   }
 
-  // decodifica las imagenes de lo que esta a la vista: <img> y fondos CSS (barra, texturas, rollos...)
-  function imagenesVisibles() {
+  // decodifica los fondos de lo imprescindible: pantalla, encabezado, barra inferior e iconos
+  function imagenesPrincipales() {
     var urls = {};
     function anotar(valor) {
       var re = /url\("([^"]+)"\)/g, m;
       while ((m = re.exec(valor))) if (m[1].indexOf(location.origin) === 0 || m[1].indexOf('data:') === 0) urls[m[1]] = true;
     }
-    var todos = document.body.getElementsByTagName('*');
-    for (var i = 0; i < todos.length; i++) {
-      var el = todos[i], r = el.getBoundingClientRect();
-      if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
-      if (el.tagName === 'IMG' && el.currentSrc) anotar('url("' + el.currentSrc + '")');
+    Array.prototype.forEach.call(document.querySelectorAll('.phone, header, nav, .icono-nav'), function (el) {
       anotar(getComputedStyle(el).backgroundImage);
       anotar(getComputedStyle(el, '::before').backgroundImage);
       anotar(getComputedStyle(el, '::after').backgroundImage);
-    }
+    });
     return Promise.all(Object.keys(urls).map(function (u) {
       var img = new Image(); img.src = u;
       return img.decode ? img.decode().catch(function () {}) : null;
@@ -88,14 +87,19 @@
       if (avisado) return;
       avisado = true;
       if (window.performance && performance.mark) performance.mark('pantalla-lista');
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
+      // un fotograma para que lo ultimo se aplique; la parte nativa ademas espera a que este dibujado
+      requestAnimationFrame(function () {
         try { if (window.AndroidTema && window.AndroidTema.pantallaLista) window.AndroidTema.pantallaLista(); } catch (e) {}
-      }); });
+      });
     }
     setTimeout(avisar, ESPERA_MAXIMA_MS);
-    Promise.resolve(window.esperaPantalla)
-      .then(function () { return sinCargando(function () { return avisado; }); })
-      .then(function () { var imagenes = imagenesVisibles(); return Promise.all([imagenes, document.fonts && document.fonts.ready]); })
-      .then(avisar, avisar);
+    var vencido = false;
+    var limite = new Promise(function (listo) {
+      setTimeout(function () { vencido = true; listo(); }, Math.max(0, LIMITE_MS - performance.now()));
+    });
+    var contenido = Promise.resolve(window.esperaPantalla)
+      .then(function () { return sinCargando(function () { return vencido || avisado; }); });
+    var resto = Promise.all([contenido, document.fonts && document.fonts.ready]);
+    Promise.all([imagenesPrincipales(), Promise.race([resto, limite])]).then(avisar, avisar);
   });
 })();

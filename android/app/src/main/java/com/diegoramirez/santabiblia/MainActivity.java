@@ -7,10 +7,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.PixelCopy;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -27,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
 import com.getcapacitor.BridgeActivity;
+import java.util.Locale;
 
 /**
  * La app arranca directamente aquí (no hay una pantalla separada para el
@@ -52,9 +58,19 @@ public class MainActivity extends BridgeActivity {
 
     // Transición entre pantallas: foto de la pantalla anterior encima de la WebView mientras carga la nueva.
     private static final int ESPERA_MAXIMA_TRANSICION_MS = 1500;
-    private static final int FUNDIDO_MS = 140;
+    private static final int FUNDIDO_MS = 90;
     private ImageView capaTransicion;
-    private final Runnable finTransicion = this::fundirTransicion;
+    private final Runnable finTransicion = this::terminarCarga;
+    // Al cambiar de pantalla la WebView descarta toques: se recuerda el último de la barra inferior y se aplica al terminar la carga.
+    private static final int TOQUE_PREVIO_MAXIMO_MS = 600;   // antigüedad máxima de un toque dado justo antes de empezar la carga
+    private int toquesSinCarga;   // toques en la barra desde la última carga: el primero es el que la provoca
+    private static final int ALTO_BARRA_DP = 112;
+    private boolean cargandoPantalla;
+    private boolean enBarra;
+    private boolean guardandoToque;
+    private float[] toquePendiente;   // posición del último toque en la barra, en píxeles CSS de la página
+    private long momentoToque;
+    private float xInicio, yInicio;
 
     // Paleta Marfil clásico (barra inferior clara): los iconos de la barra de navegación del sistema deben ser oscuros.
     private volatile boolean navegacionClara = false;
@@ -102,11 +118,83 @@ public class MainActivity extends BridgeActivity {
         });
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent e) {
+        int accion = e.getActionMasked();
+        if (accion == MotionEvent.ACTION_DOWN) {
+            enBarra = enLaBarra(e);
+            guardandoToque = enBarra && cargandoPantalla;   // durante la carga el toque no llega a la página: solo se guarda
+            xInicio = e.getRawX();
+            yInicio = e.getRawY();
+        } else if (accion == MotionEvent.ACTION_UP && enBarra) {
+            float margen = ViewConfiguration.get(this).getScaledTouchSlop();
+            if (Math.abs(e.getRawX() - xInicio) <= margen && Math.abs(e.getRawY() - yInicio) <= margen) {
+                WebView web = getBridge().getWebView();
+                int[] origen = new int[2];
+                web.getLocationOnScreen(origen);
+                float densidad = getResources().getDisplayMetrics().density;
+                toquePendiente = new float[] { (e.getRawX() - origen[0]) / densidad, (e.getRawY() - origen[1]) / densidad };
+                momentoToque = e.getEventTime();
+                if (!guardandoToque) toquesSinCarga++;
+                if (guardandoToque && !cargandoPantalla) aplicarToquePendiente(null);   // terminó de cargar con el dedo aún apoyado
+            }
+        }
+        if (!guardandoToque) return super.dispatchTouchEvent(e);
+        if (accion == MotionEvent.ACTION_UP || accion == MotionEvent.ACTION_CANCEL) guardandoToque = false;
+        return true;
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.KEYCODE_BACK) toquePendiente = null;   // Atrás manda sobre un toque guardado
+        return super.dispatchKeyEvent(e);
+    }
+
+    private boolean enLaBarra(MotionEvent e) {
+        Bridge puente = getBridge();
+        if (puente == null || puente.getWebView() == null || capaVideo != null || contenedorPantallaCompleta != null) return false;
+        WebView web = puente.getWebView();
+        int[] origen = new int[2];
+        web.getLocationOnScreen(origen);
+        float desdeAbajo = origen[1] + web.getHeight() - e.getRawY();
+        return desdeAbajo >= 0 && desdeAbajo <= ALTO_BARRA_DP * getResources().getDisplayMetrics().density;
+    }
+
+    /** Pulsa el enlace de la barra que quedó bajo el toque, salvo que ya sea la pantalla que se está viendo. */
+    private void aplicarToquePendiente(ValueCallback<String> alTerminar) {
+        float[] t = toquePendiente;
+        toquePendiente = null;
+        Bridge puente = getBridge();
+        if (t == null || puente == null || puente.getWebView() == null) return;
+        puente.getWebView().evaluateJavascript(String.format(Locale.US,
+            "(function(x,y){var e=document.elementFromPoint(x,y),a=e&&e.closest('nav a.item');"
+            + "if(!a||a.pathname===location.pathname)return false;a.click();return true;})(%.1f,%.1f)", t[0], t[1]), alTerminar);
+    }
+
+    /** La página nueva ya está dibujada (o venció el tiempo): se atiende el toque guardado y se descubre la pantalla. */
+    private void terminarCarga() {
+        cargandoPantalla = false;
+        handler.removeCallbacks(finTransicion);
+        if (toquePendiente == null) {
+            fundirTransicion();
+            return;
+        }
+        // Si el toque lleva a otra pantalla, la copia se mantiene hasta que esa otra esté lista.
+        aplicarToquePendiente(cambia -> {
+            if (!"true".equals(cambia) && !cargandoPantalla) fundirTransicion();
+        });
+        handler.postDelayed(finTransicion, ESPERA_MAXIMA_TRANSICION_MS);
+    }
+
     private void conservarPantalla(WebView web) {
+        cargandoPantalla = true;
+        // Solo queda pendiente si hubo otro toque después del que provocó esta carga (la página que se va pudo perderlo).
+        if (toquesSinCarga < 2 || SystemClock.uptimeMillis() - momentoToque > TOQUE_PREVIO_MAXIMO_MS) toquePendiente = null;
+        toquesSinCarga = 0;
         // Sin copia durante el video de bienvenida o un video a pantalla completa (PixelCopy existe desde Android 8).
-        if (android.os.Build.VERSION.SDK_INT < 26 || capaVideo != null || contenedorPantallaCompleta != null) return;
         handler.removeCallbacks(finTransicion);
         handler.postDelayed(finTransicion, ESPERA_MAXIMA_TRANSICION_MS);
+        if (android.os.Build.VERSION.SDK_INT < 26 || capaVideo != null || contenedorPantallaCompleta != null) return;
         if (capaTransicion != null) {
             // Segundo cambio antes de terminar el primero: se mantiene (y se vuelve a mostrar entera) la copia que ya está.
             capaTransicion.animate().cancel();
@@ -169,12 +257,12 @@ public class MainActivity extends BridgeActivity {
 
     private void alEstarListaLaPantalla() {
         Bridge puente = getBridge();
-        if (puente == null || puente.getWebView() == null || capaTransicion == null) return;
+        if (puente == null || puente.getWebView() == null || !cargandoPantalla) return;
         // Espera a que lo ya dibujado por la página esté realmente en pantalla antes de descubrirlo.
         puente.getWebView().postVisualStateCallback(0, new WebView.VisualStateCallback() {
             @Override
             public void onComplete(long id) {
-                fundirTransicion();
+                terminarCarga();
             }
         });
     }
