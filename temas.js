@@ -41,4 +41,61 @@
   document.documentElement.setAttribute('data-tema', inicial);
   avisarSistema(inicial);
   document.addEventListener('DOMContentLoaded', function () { avisarSistema(window.temaActual()); });
+
+  // Precarga de los dibujos de la barra inferior de la paleta actual.
+  ['inicio', 'leer', 'guia', 'favoritos'].forEach(function (n) {
+    var l = document.createElement('link');
+    l.rel = 'preload'; l.as = 'image'; l.href = 'nav-' + n + '-' + (inicial === 'marfil' ? 'bronce' : 'oro') + '.webp';
+    document.head.appendChild(l);
+  });
+
+  // Transiciones sin parpadeo: al cambiar de pantalla la parte nativa deja a la vista la pantalla anterior
+  // hasta que esta avisa de que esta completa (contenido, fuentes e imagenes visibles ya decodificadas).
+  // Una pantalla puede retrasar el aviso asignando una promesa a window.esperaPantalla.
+  var ESPERA_MAXIMA_MS = 1200;
+
+  function sinCargando(vencido) {
+    return new Promise(function (listo) {
+      (function mirar() { if (!vencido() && document.querySelector('.cargando')) requestAnimationFrame(mirar); else listo(); })();
+    });
+  }
+
+  // decodifica las imagenes de lo que esta a la vista: <img> y fondos CSS (barra, texturas, rollos...)
+  function imagenesVisibles() {
+    var urls = {};
+    function anotar(valor) {
+      var re = /url\("([^"]+)"\)/g, m;
+      while ((m = re.exec(valor))) if (m[1].indexOf(location.origin) === 0 || m[1].indexOf('data:') === 0) urls[m[1]] = true;
+    }
+    var todos = document.body.getElementsByTagName('*');
+    for (var i = 0; i < todos.length; i++) {
+      var el = todos[i], r = el.getBoundingClientRect();
+      if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
+      if (el.tagName === 'IMG' && el.currentSrc) anotar('url("' + el.currentSrc + '")');
+      anotar(getComputedStyle(el).backgroundImage);
+      anotar(getComputedStyle(el, '::before').backgroundImage);
+      anotar(getComputedStyle(el, '::after').backgroundImage);
+    }
+    return Promise.all(Object.keys(urls).map(function (u) {
+      var img = new Image(); img.src = u;
+      return img.decode ? img.decode().catch(function () {}) : null;
+    }));
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var avisado = false;
+    function avisar() {
+      if (avisado) return;
+      avisado = true;
+      if (window.performance && performance.mark) performance.mark('pantalla-lista');
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        try { if (window.AndroidTema && window.AndroidTema.pantallaLista) window.AndroidTema.pantallaLista(); } catch (e) {}
+      }); });
+    }
+    setTimeout(avisar, ESPERA_MAXIMA_MS);
+    Promise.resolve(window.esperaPantalla)
+      .then(function () { return sinCargando(function () { return avisado; }); })
+      .then(function () { var imagenes = imagenesVisibles(); return Promise.all([imagenes, document.fonts && document.fonts.ready]); })
+      .then(avisar, avisar);
+  });
 })();

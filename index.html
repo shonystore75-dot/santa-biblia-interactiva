@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<style id="critico">/* generado por scripts/generar-temas.py */
+html{--critico-fondo:#EFF7F5;--critico-barra:#12616A;background:var(--critico-barra)}
+html[data-tema="azul"]{--critico-fondo:#F7F5F0;--critico-barra:#102F50}
+html[data-tema="borgona"]{--critico-fondo:#FAF3EB;--critico-barra:#641D2B}
+html[data-tema="olivo"]{--critico-fondo:#FEF1D6;--critico-barra:#354609}
+html[data-tema="tierra"]{--critico-fondo:#FAF1E3;--critico-barra:#482B1D}
+html[data-tema="purpura"]{--critico-fondo:#F6F2F8;--critico-barra:#49325F}
+html[data-tema="turquesa"]{--critico-fondo:#EFF7F5;--critico-barra:#12616A}
+html[data-tema="nocturna"]{--critico-fondo:#18212D;--critico-barra:#202A38}
+html[data-tema="marfil"]{--critico-fondo:#FCF8EF;--critico-barra:#F2E7D1}
+html[data-tema="ambar"]{--critico-fondo:#FFF3E5;--critico-barra:#93421D}
+.phone{background:var(--critico-fondo)}:where(header:not(.hero)),nav{background:var(--critico-barra)}
+</style>
 <script src="temas.js"></script>
 <link rel="stylesheet" href="temas.css">
 
@@ -980,7 +993,7 @@
   }
   iniciarCarruselExplorar();
 
-  cargarVersiculoDelDia();
+  window.esperaPantalla = cargarVersiculoDelDia();
 
   // Degradado inferior de la pantalla de inicio: solo mientras haya contenido por desplazar.
   (function () {

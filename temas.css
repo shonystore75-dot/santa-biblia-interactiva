@@ -656,13 +656,14 @@
 
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
+nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azul al tocar: quedaba a la vista durante el cambio de pantalla */
 
 /* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, sobre una placa redondeada en ::before.
    El dibujo va SIEMPRE nitido (solo una sombra oscura corta, igual en todas las pestanas): la activa se distingue por la placa y la etiqueta.
    --icono-caja es el alto que ocupa en la barra (la barra mide lo mismo: relleno superior + caja + margen = 42px) y --icono-lienzo el lado
-   del archivo de 512px, cuyo dibujo ocupa 319/512 del alto. La placa se activa con html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
+   del archivo de 192px, cuyo dibujo ocupa 119/192 del alto. La placa se activa con html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
 :root { --icono-caja: 33px; --icono-ancho: 48px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }          /* sin placa: dibujo de 29px de alto */
-:root[data-marco="si"] { --icono-caja: 36px; --icono-ancho: 54px; --icono-lienzo: 45px; }                /* placa de 54x36, dibujo de 28px, a 4px de la linea */
+:root[data-marco="si"] { --icono-caja: 36px; --icono-ancho: 54px; --icono-lienzo: 45.2px; }                /* placa de 54x36, dibujo de 28px, a 4px de la linea */
 :root nav { padding-top: calc(42px - var(--icono-caja) - var(--icono-hueco)); }
 :root .icono-nav { position: relative; width: var(--icono-ancho); height: var(--icono-caja); margin: 0 auto var(--icono-hueco); }
 :root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 1px 1px var(--oro-sombra)); }

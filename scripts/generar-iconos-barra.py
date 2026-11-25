@@ -15,9 +15,9 @@ RAMPAS = {
     # bronce para la barra clara de Marfil: el cuerpo queda por debajo de #A8722E (3:1); solo los brillos son mas claros
     'bronce': [(0.0, '#2E1804'), (0.35, '#55300A'), (0.65, '#7C4C16'), (0.85, '#9C6726'), (0.95, '#B9843C'), (1.0, '#E4B770')],
 }
-LADO = 512          # lienzo cuadrado de cada icono
-MARGEN_MIN = 16     # margen lateral del icono mas ancho (el libro); fija el alto comun de los cuatro
-NITIDEZ = ImageFilter.UnsharpMask(radius=3, percent=70, threshold=1)   # realza los biseles, que a ~1/4 de tamano se pierden
+LADO = 192          # lienzo cuadrado de cada icono: se muestra a ~45px css (~124px reales en el Xiaomi, 2,75x)
+MARGEN_MIN = 6      # margen lateral del icono mas ancho (el libro); fija el alto comun de los cuatro
+NITIDEZ = ImageFilter.UnsharpMask(radius=1.1, percent=70, threshold=1)   # realza los biseles, que al reducir se pierden
 # columnas de cada icono en la imagen original (2172 px de ancho)
 ZONAS = {'inicio': (0, 460), 'leer': (460, 1008), 'guia': (1008, 1385), 'favoritos': (1385, 1780), 'engranaje': (1780, 2172)}
 # huecos oscuros con un brillo que el umbral no distingue del dorado: se vacian con su poligono exacto

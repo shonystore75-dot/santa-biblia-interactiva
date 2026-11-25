@@ -1,17 +1,23 @@
 package com.diegoramirez.santabiblia;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.PixelCopy;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.widget.ImageView;
 import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.BridgeWebChromeClient;
+import com.getcapacitor.WebViewListener;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.core.view.WindowCompat;
@@ -44,6 +50,12 @@ public class MainActivity extends BridgeActivity {
     private WebChromeClient.CustomViewCallback callbackPantallaCompleta;
     private OnBackPressedCallback atrasPantallaCompleta;
 
+    // Transición entre pantallas: foto de la pantalla anterior encima de la WebView mientras carga la nueva.
+    private static final int ESPERA_MAXIMA_TRANSICION_MS = 1500;
+    private static final int FUNDIDO_MS = 140;
+    private ImageView capaTransicion;
+    private final Runnable finTransicion = this::fundirTransicion;
+
     // Paleta Marfil clásico (barra inferior clara): los iconos de la barra de navegación del sistema deben ser oscuros.
     private volatile boolean navegacionClara = false;
 
@@ -71,10 +83,81 @@ public class MainActivity extends BridgeActivity {
         mostrarVideoDeBienvenida();
         configurarPantallaCompletaWeb();
         configurarPuenteTema();
+        configurarTransiciones();
+    }
+
+    /**
+     * Cada pantalla es una página distinta y su primer fotograma sale antes que las imágenes, las fuentes
+     * y el contenido. Para que no se vea a medio pintar, al empezar la carga se deja encima una copia de
+     * lo que había y se funde cuando la página nueva avisa (AndroidTema.pantallaLista en temas.js).
+     */
+    private void configurarTransiciones() {
+        Bridge puente = getBridge();
+        if (puente == null) return;
+        puente.addWebViewListener(new WebViewListener() {
+            @Override
+            public void onPageStarted(WebView web) {
+                conservarPantalla(web);
+            }
+        });
+    }
+
+    private void conservarPantalla(WebView web) {
+        // Sin copia durante el video de bienvenida o un video a pantalla completa (PixelCopy existe desde Android 8).
+        if (android.os.Build.VERSION.SDK_INT < 26 || capaVideo != null || contenedorPantallaCompleta != null) return;
+        handler.removeCallbacks(finTransicion);
+        handler.postDelayed(finTransicion, ESPERA_MAXIMA_TRANSICION_MS);
+        if (capaTransicion != null) {
+            // Segundo cambio antes de terminar el primero: se mantiene (y se vuelve a mostrar entera) la copia que ya está.
+            capaTransicion.animate().cancel();
+            capaTransicion.setAlpha(1f);
+            return;
+        }
+        int ancho = web.getWidth(), alto = web.getHeight();
+        if (!web.isShown() || ancho == 0 || alto == 0) return;
+        ViewGroup raiz = findViewById(android.R.id.content);
+        int[] enVentana = new int[2], origenRaiz = new int[2];
+        web.getLocationInWindow(enVentana);
+        raiz.getLocationInWindow(origenRaiz);
+        Bitmap foto = Bitmap.createBitmap(ancho, alto, Bitmap.Config.ARGB_8888);
+        ImageView capa = new ImageView(this);
+        capaTransicion = capa;
+        Rect zona = new Rect(enVentana[0], enVentana[1], enVentana[0] + ancho, enVentana[1] + alto);
+        PixelCopy.request(getWindow(), zona, foto, resultado -> {
+            if (capaTransicion != capa) return;
+            if (resultado != PixelCopy.SUCCESS) {
+                capaTransicion = null;
+                return;
+            }
+            capa.setImageBitmap(foto);
+            FrameLayout.LayoutParams lugar = new FrameLayout.LayoutParams(ancho, alto);
+            lugar.leftMargin = enVentana[0] - origenRaiz[0];
+            lugar.topMargin = enVentana[1] - origenRaiz[1];
+            raiz.addView(capa, lugar);
+        }, handler);
+    }
+
+    private void fundirTransicion() {
+        handler.removeCallbacks(finTransicion);
+        final ImageView capa = capaTransicion;
+        if (capa == null) return;
+        if (capa.getParent() == null) {
+            capaTransicion = null;
+            return;
+        }
+        capa.animate().alpha(0f).setDuration(FUNDIDO_MS).withEndAction(() -> {
+            ((ViewGroup) capa.getParent()).removeView(capa);
+            if (capaTransicion == capa) capaTransicion = null;
+        });
     }
 
     /** Puente JS -> nativo: la web (temas.js) avisa de la paleta activa para elegir iconos claros u oscuros en la barra de navegación. */
     private class PuenteTema {
+        @JavascriptInterface
+        public void pantallaLista() {
+            runOnUiThread(MainActivity.this::alEstarListaLaPantalla);
+        }
+
         @JavascriptInterface
         public void barraNavegacionClara(final boolean clara) {
             runOnUiThread(() -> {
@@ -82,6 +165,18 @@ public class MainActivity extends BridgeActivity {
                 ocultarBarraDeEstado();
             });
         }
+    }
+
+    private void alEstarListaLaPantalla() {
+        Bridge puente = getBridge();
+        if (puente == null || puente.getWebView() == null || capaTransicion == null) return;
+        // Espera a que lo ya dibujado por la página esté realmente en pantalla antes de descubrirlo.
+        puente.getWebView().postVisualStateCallback(0, new WebView.VisualStateCallback() {
+            @Override
+            public void onComplete(long id) {
+                fundirTransicion();
+            }
+        });
     }
 
     private void configurarPuenteTema() {

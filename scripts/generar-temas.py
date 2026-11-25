@@ -243,13 +243,14 @@ def css():
 
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
+nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azul al tocar: quedaba a la vista durante el cambio de pantalla */
 
 /* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, sobre una placa redondeada en ::before.
    El dibujo va SIEMPRE nitido (solo una sombra oscura corta, igual en todas las pestanas): la activa se distingue por la placa y la etiqueta.
    --icono-caja es el alto que ocupa en la barra (la barra mide lo mismo: relleno superior + caja + margen = 42px) y --icono-lienzo el lado
-   del archivo de 512px, cuyo dibujo ocupa 319/512 del alto. La placa se activa con html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
+   del archivo de 192px, cuyo dibujo ocupa 119/192 del alto. La placa se activa con html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
 :root { --icono-caja: 33px; --icono-ancho: 48px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }          /* sin placa: dibujo de 29px de alto */
-:root[data-marco="si"] { --icono-caja: 36px; --icono-ancho: 54px; --icono-lienzo: 45px; }                /* placa de 54x36, dibujo de 28px, a 4px de la linea */
+:root[data-marco="si"] { --icono-caja: 36px; --icono-ancho: 54px; --icono-lienzo: 45.2px; }                /* placa de 54x36, dibujo de 28px, a 4px de la linea */
 :root nav { padding-top: calc(42px - var(--icono-caja) - var(--icono-hueco)); }
 :root .icono-nav { position: relative; width: var(--icono-ancho); height: var(--icono-caja); margin: 0 auto var(--icono-hueco); }
 :root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 1px 1px var(--oro-sombra)); }
@@ -318,6 +319,24 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 """ % dict(dict(material_android='piedra verde',sombra_android='24,38,5',inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
     return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
 
+def critico():
+    """colores de fondo y de barra en linea en el <head> de cada pantalla: se aplican aunque temas.css o las imagenes tarden"""
+    c = lambda n: '--critico-fondo:%s;--critico-barra:%s' % (P[n][0], P[n][3])
+    reglas = ['html{%s;background:var(--critico-barra)}' % c(PALETA_POR_DEFECTO)] + ['html[data-tema="%s"]{%s}' % (n, c(n)) for n in P]
+    reglas.append('.phone{background:var(--critico-fondo)}:where(header:not(.hero)),nav{background:var(--critico-barra)}')
+    return '<style id="critico">/* generado por scripts/generar-temas.py */\n' + '\n'.join(reglas) + '\n</style>'
+
+def escribir_critico():
+    import glob, re
+    for p in sorted(glob.glob('*.html')):
+        s = open(p, encoding='utf8', newline='').read()
+        nl = '\r\n' if '\r\n' in s else '\n'
+        bloque = critico().replace('\n', nl)
+        if '<style id="critico">' in s: n = re.sub(r'<style id="critico">.*?</style>', lambda m: bloque, s, flags=re.S)
+        else: n = s.replace('<head>' + nl, '<head>' + nl + bloque + nl, 1)
+        assert '<style id="critico">' in n, p
+        if n != s: open(p, 'w', encoding='utf8', newline='').write(n)
+
 def g_suave(d,te): return mix(d['texto'],te,0.18)
 
 def tabla():
@@ -333,6 +352,7 @@ def tabla():
 
 if __name__=='__main__':
     open('temas.css','w',encoding='utf8',newline='\n').write(css())
+    escribir_critico()
     cab=['Paleta','texto/tarjeta','texto/fondo','cita/tarjeta','cita/fondo','texto suave/tarjeta','texto suave/fondo','boton (texto/fondo del boton)','titulo en barra','texto dorado en barra (etiqueta activa, subtitulo)','etiqueta inactiva en barra','ICONO en barra (min. 3:1)','chip','boton dorado']
     print('| '+' | '.join(cab)+' |'); print('|'+'---|'*len(cab))
     for f in tabla(): print('| '+' | '.join(str(v) for v in f)+' |')
