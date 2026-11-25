@@ -684,9 +684,14 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 :root[data-tema="olivo"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
   background-color: #213004; background-image: url('texturas/piedra_olivo_oscura.webp'); background-size: 160px auto; background-position: center; background-repeat: no-repeat;
 }
-/* Verde olivo: imagen propia en el encabezado (cover, anclada a la derecha) con degradado oscuro suave bajo el titulo */
+/* Verde olivo: imagen propia en el encabezado (cover, anclada a la derecha), sin velo sobre el paisaje */
 :root[data-tema="olivo"] header:not(.hero)::before {
-  background-image: linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.52) 44%, rgba(24,38,5,0) 68%), url('texturas/encabezado_olivo.webp'); background-size: cover, auto 140%; background-position: center, 85% 0; background-repeat: no-repeat;
+  background-image: url('texturas/encabezado_olivo.webp'); background-size: auto 140%; background-position: 85% 0; background-repeat: no-repeat;
+}
+/* Verde olivo: oscurecimiento suave SOLO detras del titulo y el subtitulo (sigue el tamano de su caja) */
+:root[data-tema="olivo"] header:not(.hero) > div:has(> #titulo-header) { position: relative; }
+:root[data-tema="olivo"] header:not(.hero) > div:has(> #titulo-header)::before {
+  content: ''; position: absolute; inset: -34px -58px; clip-path: inset(0 0 calc(34px - 1.4vh) 0); z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(24,38,5,0.74) 0%, rgba(24,38,5,0.66) 66%, rgba(24,38,5,0) 100%);
 }
 /* Verde olivo: botones con borde dorado vivo */
 :root[data-tema="olivo"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }

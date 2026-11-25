@@ -67,10 +67,10 @@ REAL={
 'borgona':dict(cuero='texturas/piedra_borgona.webp',papel='texturas/papel_borgona.webp',boton='texturas/piedra_borgona_oscura.webp',   # media #641D2B / #FAF3EB / #420E20
                 i_cuero=1.0,i_papel=1.0,velo_tarjeta=0.65,tam_cuero='500px auto',rep_cuero='no-repeat',pos_barra='right 50%',tam_papel='cover',tam_tarjeta='600px auto',tam_boton='200px auto',color_boton='#420E20'),
 # Verde olivo: el encabezado tiene su propia imagen (paisaje, anclado a la derecha) con un degradado oscuro a la izquierda; la barra es una imagen estirada (sin mosaico)
-'olivo':dict(cuero='texturas/barra_olivo.webp',papel='texturas/papel_olivo.webp',boton='texturas/piedra_olivo_oscura.webp',   # media #2C3C05 / #FEF1D6 / #213004
+'olivo':dict(cuero='texturas/barra_olivo.webp',papel='texturas/papel_olivo.webp',boton='texturas/piedra_olivo_oscura.webp',   # media #354609 / #FEF1D6 / #213004
              i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
              tam_boton='160px auto',color_boton='#213004',tinte='none',encabezado='texturas/encabezado_olivo.webp',pos_imagen_encabezado='85% 0',tam_imagen_encabezado='auto 140%',
-             velo_encabezado='linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.52) 44%, rgba(24,38,5,0) 68%)',
+             velo_texto='radial-gradient(closest-side, rgba(24,38,5,0.74) 0%, rgba(24,38,5,0.66) 66%, rgba(24,38,5,0) 100%)',
              android='texturas/piedra_olivo_android.webp',
              borde_fondo='linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%)'),
 }
@@ -263,9 +263,14 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 }
 """ % dict(dict(rep_tarjeta='no-repeat'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
         if 'encabezado' in r:
-            o.append("""/* %(nombre)s: imagen propia en el encabezado (cover, anclada a la derecha) con degradado oscuro suave bajo el titulo */
+            o.append("""/* %(nombre)s: imagen propia en el encabezado (cover, anclada a la derecha), sin velo sobre el paisaje */
 :root[data-tema="%(nn)s"] header:not(.hero)::before {
-  background-image: %(velo_encabezado)s, url('%(encabezado)s'); background-size: cover, %(tam_imagen_encabezado)s; background-position: center, %(pos_imagen_encabezado)s; background-repeat: no-repeat;
+  background-image: url('%(encabezado)s'); background-size: %(tam_imagen_encabezado)s; background-position: %(pos_imagen_encabezado)s; background-repeat: no-repeat;
+}
+/* %(nombre)s: oscurecimiento suave SOLO detras del titulo y el subtitulo (sigue el tamano de su caja) */
+:root[data-tema="%(nn)s"] header:not(.hero) > div:has(> #titulo-header) { position: relative; }
+:root[data-tema="%(nn)s"] header:not(.hero) > div:has(> #titulo-header)::before {
+  content: ''; position: absolute; inset: -34px -58px; clip-path: inset(0 0 calc(34px - 1.4vh) 0); z-index: -1; pointer-events: none; background: %(velo_texto)s;
 }
 /* %(nombre)s: botones con borde dorado vivo */
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
