@@ -1,6 +1,6 @@
 # Genera temas.css a partir de las 9 paletas (y calcula los colores derivados).
 # Uso: python scripts/generar-temas.py  -> escribe temas.css, imprime la tabla de contraste
-# Los iconos de la barra inferior (nav-<icono>-<paleta>.png) se generan con scripts/generar-iconos-nav.py
+# Los iconos de la barra inferior (nav-<icono>-oro|bronce.webp) se generan con scripts/generar-iconos-barra.py
 def rgb(h): return [int(h[i:i+2],16) for i in (1,3,5)]
 def hx(c): return '#%02X%02X%02X'%tuple(int(round(v)) for v in c)
 def L(h):
@@ -189,9 +189,12 @@ def css():
         if turq: v+=[('repeticion-fondo',('no-repeat, ' if 'borde_fondo' in REAL[n] else '')+REAL[n].get('rep_fondo','no-repeat')),('posicion-fondo','center top'),('nav-grad','none')]
         if azul:
             v+=[('nav-grad','none'),('sombra-tarjeta',SOMBRA_AZUL_TARJETA),('sombra-boton',SOMBRA_AZUL_BOTON)]
+        # fondo de la placa de los iconos de la barra (variante con marco): el de los botones redondos del encabezado; en Marfil, claro (el bronce necesita 3:1)
+        if marfil: marco='linear-gradient(180deg, #FFFDF8, #FBF3E2)'
+        elif n in REAL: marco="url('%s') center / 160px auto no-repeat %s"%(REAL[n]['boton'],REAL[n]['color_boton'])
+        else: marco='linear-gradient(180deg, %s, %s)'%(mix(d['nav'],'#000000',0.28),mix(d['nav'],'#000000',0.42))
+        v.append(('marco-fondo',marco))
         o.append(sel+' {\n'+''.join('  --%s: %s;\n'%(k,x) for k,x in v)+'}\n')
-        # iconos de la barra inferior (imagenes recoloreadas con el dorado de la paleta)
-        o.append(''.join("%s #nav-%s { background-image: url('nav-%s-%s.png'); }\n"%(sel,i,i,n) for i in ('inicio','leer','guia','favoritos')))
     bloque(':root',PALETA_POR_DEFECTO)
     for n in P: bloque(':root[data-tema="%s"]'%n,n)
     o.append("""
@@ -234,9 +237,30 @@ def css():
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
 
-/* Iconos de la barra inferior: imagen recoloreada (dorado metalico vivo; bronce en Marfil) con resplandor y una sombra oscura leve */
-:root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); background-size: cover; background-position: center; background-repeat: no-repeat; }
-:root .item.activo .icono-nav { filter: drop-shadow(0 0 calc(var(--oro-radio) + 1px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+/* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, con resplandor y una sombra oscura leve.
+   --icono-caja es el alto que ocupa en la barra (la barra mide lo mismo: relleno superior + caja + margen = 42px) y --icono-lienzo el lado
+   del archivo de 256px, cuyo dibujo ocupa 159/256 del alto. Variante con marco: html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
+:root { --icono-caja: 33px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }                  /* A: sin marco, dibujo de 29px de alto */
+:root[data-marco="si"] { --icono-caja: 38px; --icono-hueco: 2px; --icono-lienzo: 41px; }   /* B: placa de 48x38, dibujo de 25,5px */
+:root nav { padding-top: calc(42px - var(--icono-caja) - var(--icono-hueco)); }
+:root .icono-nav { position: relative; width: 48px; height: var(--icono-caja); margin: 0 auto var(--icono-hueco); mix-blend-mode: normal; filter: none; }
+:root .item.activo .icono-nav { filter: none; }
+:root :is(#nav-inicio, #nav-leer, #nav-guia, #nav-favoritos) { background-image: none; }
+:root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root .item.activo .icono-nav::after { filter: drop-shadow(0 0 calc(var(--oro-radio) + 1px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root[data-marco="si"] .icono-nav::before { content: ''; position: absolute; inset: 0; box-sizing: border-box; border-radius: 13px; background: var(--marco-fondo); border: 1px solid var(--oro-borde); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 1px 3px var(--oro-sombra); }
+:root[data-marco="si"] .item.activo .icono-nav::before { box-shadow: 0 0 7px var(--oro-brillo), inset 0 1px 0 rgba(255,255,255,0.14); }
+/* en la placa el resplandor del dibujo es mas corto, para que no se empaste */
+:root[data-marco="si"] .icono-nav::after { filter: drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root[data-marco="si"] .item.activo .icono-nav::after { filter: drop-shadow(0 0 3px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root #nav-inicio::after { background-image: url('nav-inicio-oro.webp'); }
+:root #nav-leer::after { background-image: url('nav-leer-oro.webp'); }
+:root #nav-guia::after { background-image: url('nav-guia-oro.webp'); }
+:root #nav-favoritos::after { background-image: url('nav-favoritos-oro.webp'); }
+:root[data-tema="marfil"] #nav-inicio::after { background-image: url('nav-inicio-bronce.webp'); }
+:root[data-tema="marfil"] #nav-leer::after { background-image: url('nav-leer-bronce.webp'); }
+:root[data-tema="marfil"] #nav-guia::after { background-image: url('nav-guia-bronce.webp'); }
+:root[data-tema="marfil"] #nav-favoritos::after { background-image: url('nav-favoritos-bronce.webp'); }
 :root nav .item.activo { text-shadow: 0 0 8px var(--oro-brillo); }
 
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */

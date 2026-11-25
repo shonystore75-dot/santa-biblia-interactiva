@@ -55,11 +55,8 @@
   --repeticion-fondo: no-repeat;
   --posicion-fondo: center top;
   --nav-grad: none;
+  --marco-fondo: url('texturas/cuero_turquesa_oscuro.webp') center / 160px auto no-repeat #184A51;
 }
-:root #nav-inicio { background-image: url('nav-inicio-turquesa.png'); }
-:root #nav-leer { background-image: url('nav-leer-turquesa.png'); }
-:root #nav-guia { background-image: url('nav-guia-turquesa.png'); }
-:root #nav-favoritos { background-image: url('nav-favoritos-turquesa.png'); }
 :root[data-tema="azul"] {
   --fondo: #F7F5F0;
   --tarjeta: #FFFCF6;
@@ -116,11 +113,8 @@
   --nav-grad: none;
   --sombra-tarjeta: 0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15);
   --sombra-boton: 0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16);
+  --marco-fondo: linear-gradient(180deg, #0C223A, #091B2E);
 }
-:root[data-tema="azul"] #nav-inicio { background-image: url('nav-inicio-azul.png'); }
-:root[data-tema="azul"] #nav-leer { background-image: url('nav-leer-azul.png'); }
-:root[data-tema="azul"] #nav-guia { background-image: url('nav-guia-azul.png'); }
-:root[data-tema="azul"] #nav-favoritos { background-image: url('nav-favoritos-azul.png'); }
 :root[data-tema="borgona"] {
   --fondo: #FAF3EB;
   --tarjeta: #FFFDF7;
@@ -177,11 +171,8 @@
   --repeticion-fondo: no-repeat;
   --posicion-fondo: center top;
   --nav-grad: none;
+  --marco-fondo: url('texturas/piedra_borgona_oscura.webp') center / 160px auto no-repeat #420E20;
 }
-:root[data-tema="borgona"] #nav-inicio { background-image: url('nav-inicio-borgona.png'); }
-:root[data-tema="borgona"] #nav-leer { background-image: url('nav-leer-borgona.png'); }
-:root[data-tema="borgona"] #nav-guia { background-image: url('nav-guia-borgona.png'); }
-:root[data-tema="borgona"] #nav-favoritos { background-image: url('nav-favoritos-borgona.png'); }
 :root[data-tema="olivo"] {
   --fondo: #FEF1D6;
   --tarjeta: #FFFDF2;
@@ -238,11 +229,8 @@
   --repeticion-fondo: no-repeat, repeat;
   --posicion-fondo: center top;
   --nav-grad: none;
+  --marco-fondo: url('texturas/piedra_olivo_oscura.webp') center / 160px auto no-repeat #213004;
 }
-:root[data-tema="olivo"] #nav-inicio { background-image: url('nav-inicio-olivo.png'); }
-:root[data-tema="olivo"] #nav-leer { background-image: url('nav-leer-olivo.png'); }
-:root[data-tema="olivo"] #nav-guia { background-image: url('nav-guia-olivo.png'); }
-:root[data-tema="olivo"] #nav-favoritos { background-image: url('nav-favoritos-olivo.png'); }
 :root[data-tema="tierra"] {
   --fondo: #FAF1E3;
   --tarjeta: #FFFAF0;
@@ -299,11 +287,8 @@
   --repeticion-fondo: no-repeat, repeat;
   --posicion-fondo: center top;
   --nav-grad: none;
+  --marco-fondo: url('texturas/piedra_tierra_oscura.webp') center / 160px auto no-repeat #45210F;
 }
-:root[data-tema="tierra"] #nav-inicio { background-image: url('nav-inicio-tierra.png'); }
-:root[data-tema="tierra"] #nav-leer { background-image: url('nav-leer-tierra.png'); }
-:root[data-tema="tierra"] #nav-guia { background-image: url('nav-guia-tierra.png'); }
-:root[data-tema="tierra"] #nav-favoritos { background-image: url('nav-favoritos-tierra.png'); }
 :root[data-tema="purpura"] {
   --fondo: #F6F2F8;
   --tarjeta: #FFFFFF;
@@ -357,11 +342,8 @@
   --tamano-tarjeta: auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --marco-fondo: linear-gradient(180deg, #352444, #2A1D37);
 }
-:root[data-tema="purpura"] #nav-inicio { background-image: url('nav-inicio-purpura.png'); }
-:root[data-tema="purpura"] #nav-leer { background-image: url('nav-leer-purpura.png'); }
-:root[data-tema="purpura"] #nav-guia { background-image: url('nav-guia-purpura.png'); }
-:root[data-tema="purpura"] #nav-favoritos { background-image: url('nav-favoritos-purpura.png'); }
 :root[data-tema="turquesa"] {
   --fondo: #EFF7F5;
   --tarjeta: #FFFFFF;
@@ -418,11 +400,8 @@
   --repeticion-fondo: no-repeat;
   --posicion-fondo: center top;
   --nav-grad: none;
+  --marco-fondo: url('texturas/cuero_turquesa_oscuro.webp') center / 160px auto no-repeat #184A51;
 }
-:root[data-tema="turquesa"] #nav-inicio { background-image: url('nav-inicio-turquesa.png'); }
-:root[data-tema="turquesa"] #nav-leer { background-image: url('nav-leer-turquesa.png'); }
-:root[data-tema="turquesa"] #nav-guia { background-image: url('nav-guia-turquesa.png'); }
-:root[data-tema="turquesa"] #nav-favoritos { background-image: url('nav-favoritos-turquesa.png'); }
 :root[data-tema="nocturna"] {
   --fondo: #18212D;
   --tarjeta: #293545;
@@ -476,11 +455,8 @@
   --tamano-tarjeta: auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --marco-fondo: linear-gradient(180deg, #171E28, #131820);
 }
-:root[data-tema="nocturna"] #nav-inicio { background-image: url('nav-inicio-nocturna.png'); }
-:root[data-tema="nocturna"] #nav-leer { background-image: url('nav-leer-nocturna.png'); }
-:root[data-tema="nocturna"] #nav-guia { background-image: url('nav-guia-nocturna.png'); }
-:root[data-tema="nocturna"] #nav-favoritos { background-image: url('nav-favoritos-nocturna.png'); }
 :root[data-tema="marfil"] {
   --fondo: #FCF8EF;
   --tarjeta: rgba(255,255,255,0.8);
@@ -534,11 +510,8 @@
   --tamano-tarjeta: auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --marco-fondo: linear-gradient(180deg, #FFFDF8, #FBF3E2);
 }
-:root[data-tema="marfil"] #nav-inicio { background-image: url('nav-inicio-marfil.png'); }
-:root[data-tema="marfil"] #nav-leer { background-image: url('nav-leer-marfil.png'); }
-:root[data-tema="marfil"] #nav-guia { background-image: url('nav-guia-marfil.png'); }
-:root[data-tema="marfil"] #nav-favoritos { background-image: url('nav-favoritos-marfil.png'); }
 :root[data-tema="ambar"] {
   --fondo: #FFF3E5;
   --tarjeta: #FFFCF6;
@@ -592,11 +565,8 @@
   --tamano-tarjeta: auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --marco-fondo: linear-gradient(180deg, #6A3015, #552611);
 }
-:root[data-tema="ambar"] #nav-inicio { background-image: url('nav-inicio-ambar.png'); }
-:root[data-tema="ambar"] #nav-leer { background-image: url('nav-leer-ambar.png'); }
-:root[data-tema="ambar"] #nav-guia { background-image: url('nav-guia-ambar.png'); }
-:root[data-tema="ambar"] #nav-favoritos { background-image: url('nav-favoritos-ambar.png'); }
 
 /* ===== Derivados comunes (se recalculan con cada paleta) ===== */
 :root {
@@ -637,9 +607,30 @@
 /* Los enlaces de la barra inferior nunca van subrayados (Favoritos salia subrayado en Inicio) */
 nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:visited { text-decoration: none; outline: none; }
 
-/* Iconos de la barra inferior: imagen recoloreada (dorado metalico vivo; bronce en Marfil) con resplandor y una sombra oscura leve */
-:root .icono-nav { mix-blend-mode: normal; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); background-size: cover; background-position: center; background-repeat: no-repeat; }
-:root .item.activo .icono-nav { filter: drop-shadow(0 0 calc(var(--oro-radio) + 1px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+/* Iconos de la barra inferior: dibujo recoloreado (dorado metalico; bronce en Marfil) en ::after, con resplandor y una sombra oscura leve.
+   --icono-caja es el alto que ocupa en la barra (la barra mide lo mismo: relleno superior + caja + margen = 42px) y --icono-lienzo el lado
+   del archivo de 256px, cuyo dibujo ocupa 159/256 del alto. Variante con marco: html[data-marco="si"] (variable MARCO_BARRA en temas.js). */
+:root { --icono-caja: 33px; --icono-hueco: 2px; --icono-lienzo: 46.7px; }                  /* A: sin marco, dibujo de 29px de alto */
+:root[data-marco="si"] { --icono-caja: 38px; --icono-hueco: 2px; --icono-lienzo: 41px; }   /* B: placa de 48x38, dibujo de 25,5px */
+:root nav { padding-top: calc(42px - var(--icono-caja) - var(--icono-hueco)); }
+:root .icono-nav { position: relative; width: 48px; height: var(--icono-caja); margin: 0 auto var(--icono-hueco); mix-blend-mode: normal; filter: none; }
+:root .item.activo .icono-nav { filter: none; }
+:root :is(#nav-inicio, #nav-leer, #nav-guia, #nav-favoritos) { background-image: none; }
+:root .icono-nav::after { content: ''; position: absolute; left: 50%; top: 50%; width: var(--icono-lienzo); height: var(--icono-lienzo); transform: translate(-50%, -50%); background: center / 100% 100% no-repeat; pointer-events: none; filter: drop-shadow(0 0 var(--oro-radio) var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root .item.activo .icono-nav::after { filter: drop-shadow(0 0 calc(var(--oro-radio) + 1px) var(--oro-brillo)) drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root[data-marco="si"] .icono-nav::before { content: ''; position: absolute; inset: 0; box-sizing: border-box; border-radius: 13px; background: var(--marco-fondo); border: 1px solid var(--oro-borde); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 1px 3px var(--oro-sombra); }
+:root[data-marco="si"] .item.activo .icono-nav::before { box-shadow: 0 0 7px var(--oro-brillo), inset 0 1px 0 rgba(255,255,255,0.14); }
+/* en la placa el resplandor del dibujo es mas corto, para que no se empaste */
+:root[data-marco="si"] .icono-nav::after { filter: drop-shadow(0 0 2px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root[data-marco="si"] .item.activo .icono-nav::after { filter: drop-shadow(0 0 3px var(--oro-brillo)) drop-shadow(0 1px 1px var(--oro-sombra)); }
+:root #nav-inicio::after { background-image: url('nav-inicio-oro.webp'); }
+:root #nav-leer::after { background-image: url('nav-leer-oro.webp'); }
+:root #nav-guia::after { background-image: url('nav-guia-oro.webp'); }
+:root #nav-favoritos::after { background-image: url('nav-favoritos-oro.webp'); }
+:root[data-tema="marfil"] #nav-inicio::after { background-image: url('nav-inicio-bronce.webp'); }
+:root[data-tema="marfil"] #nav-leer::after { background-image: url('nav-leer-bronce.webp'); }
+:root[data-tema="marfil"] #nav-guia::after { background-image: url('nav-guia-bronce.webp'); }
+:root[data-tema="marfil"] #nav-favoritos::after { background-image: url('nav-favoritos-bronce.webp'); }
 :root nav .item.activo { text-shadow: 0 0 8px var(--oro-brillo); }
 
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */

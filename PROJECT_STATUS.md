@@ -271,7 +271,7 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
 ## PALETAS DE COLOR (2026-11-22)
 - 9 paletas en `temas.css` (variables CSS), generado por `python scripts/generar-temas.py` (ahí están los colores base, los derivados y la tabla de contraste). NO editar `temas.css` a mano.
 - `temas.js` (cargado en el `<head>` de cada pantalla) valida la paleta guardada (`localStorage.temaApp`); por defecto `turquesa` (`PALETA_POR_DEFECTO` en el generador); las antiguas (clásica/esmeralda/zafiro) pasan a Púrpura.
-- Marfil clásico usa la textura `marmol_marfil_2026-11-22_2110.webp` (variable `--textura`; `none` en las demás). Iconos de la barra inferior: máscaras `nav-*-mascara.png` pintadas con `--icono-nav`.
+- Marfil clásico usa la textura `marmol_marfil_2026-11-22_2110.webp` (variable `--textura`; `none` en las demás). Iconos de la barra inferior (2026-11-25): `nav-<inicio|leer|guia|favoritos>-<oro|bronce>.webp`, recortados y recoloreados por `scripts/generar-iconos-barra.py` desde `resources/iconos/iconos-dorados-fuente.png` (bronce solo en Marfil; el engranaje queda en `resources/iconos/`, fuera de la app). Variante con placa detrás de cada icono: `MARCO_BARRA` en `temas.js` (por defecto `false`; Diego aún no ha elegido). Los `nav-*.png` antiguos ya no se usan y se pueden borrar.
 - Android: `MainActivity` expone `AndroidTema.barraNavegacionClara(boolean)`; Marfil pone iconos oscuros en la barra de navegación del sistema.
 
 ## PENDIENTE DE QUITAR ANTES DE PUBLICAR

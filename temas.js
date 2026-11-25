@@ -4,6 +4,9 @@
 (function () {
   var VALIDOS = ['azul', 'borgona', 'olivo', 'tierra', 'purpura', 'turquesa', 'nocturna', 'marfil', 'ambar'];
   var DEFECTO = 'turquesa';
+  // Barra inferior: false = iconos sin marco (variante A); true = cada icono sobre una placa con borde dorado (variante B).
+  var MARCO_BARRA = false;
+  if (MARCO_BARRA) document.documentElement.setAttribute('data-marco', 'si');
 
   function leerGuardada() {
     try {

@@ -1,3 +1,5 @@
+# OBSOLETO para los iconos: la barra usa scripts/generar-iconos-barra.py (los nav-<icono>-<paleta>.png ya no se referencian).
+# Sigue sirviendo para generar marmol_marfil_fuerte.webp.
 # Genera los iconos de la barra inferior de cada paleta (nav-<icono>-<paleta>.png) y la textura fuerte del marmol
 # a partir de los originales nav-<icono>.png (dorado sobre negro) y marmol_marfil_2026-11-22_2110.webp.
 # Uso: python scripts/generar-iconos-nav.py   (despues de cambiar colores en generar-temas.py)
