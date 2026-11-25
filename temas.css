@@ -723,8 +723,8 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 }
 /* Tierra bíblica: botones con borde dorado vivo */
 :root[data-tema="tierra"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-/* Tierra bíblica: madera rustica en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+/* Tierra bíblica: piedra arenisca en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
 :root[data-tema="tierra"] nav::after {
   display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
-  background: var(--oro-linea) top / 100% 2px no-repeat, linear-gradient(180deg, rgba(43,20,6,0.55) 0%, rgba(43,20,6,0) 40%), url('texturas/madera_tierra_android.webp') center / cover no-repeat;
+  background: var(--oro-linea) top / 100% 2px no-repeat, linear-gradient(180deg, rgba(43,20,6,0.55) 0%, rgba(43,20,6,0) 40%), url('texturas/piedra_tierra_android.webp') center / cover no-repeat;
 }
