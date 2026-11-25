@@ -26,7 +26,7 @@ NOMBRES={'azul':'Azul clásico','borgona':'Borgoña real','olivo':'Verde olivo',
 P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
 'azul':('#F7F5F0','#FFFCF6','#172B47','#102F50','#D6A84E'),
 'borgona':('#FAF3EB','#FFFDF7','#56202B','#641D2B','#D5A348'),
-'olivo':('#F4F3E7','#FFFDF5','#2E4129','#344C2B','#C9A34E'),
+'olivo':('#FEF1D6','#FFFDF2','#202815','#354609','#D9A62C'),   # paleta.json del zip (fondo algo menos amarillo que #FFF0C9)
 'tierra':('#F8F0E5','#FFF9EF','#543526','#78452D','#D9A54D'),
 'purpura':('#F6F2F8','#FFFFFF','#49325F','#49325F','#D7AD58'),
 'turquesa':('#EFF7F5','#FFFFFF','#184A51','#12616A','#D6AC55'),
@@ -59,13 +59,18 @@ INTENSIDAD_PAPEL=3        # multiplica la opacidad del papel del fondo (1 = la d
 INTENSIDAD_ALGODON=2.5    # idem para las tarjetas
 CUERO_BRILLO=0.03        # degradado vertical blanco leve sobre el cuero (arriba)
 TAM_PAPEL='256px'; TAM_ALGODON='256px'
-# ---- Texturas reales de Turquesa (scripts/generar-texturas-turquesa.py) y Borgona (scripts/generar-texturas-borgona.py) ----
+# ---- Texturas reales de Turquesa, Borgona y Verde olivo (scripts/generar-texturas-<paleta>.py) ----
 # cuero: encabezado y barra | papel: fondo (una sola imagen que cubre el telefono) y tarjetas (velo del color de la tarjeta encima) | boton: botones redondos del encabezado y boton flotante de Leer
 REAL={
 'turquesa':dict(cuero='texturas/cuero_turquesa_realista.webp',papel='texturas/papel_marfil_verdoso.webp',boton='texturas/cuero_turquesa_oscuro.webp',   # media #12616A / #EFF7F5 / #184A51
                 i_cuero=1.0,i_papel=1.0,velo_tarjeta=0.65,tam_cuero='500px auto',rep_cuero='no-repeat',tam_papel='cover',tam_tarjeta='600px auto',tam_boton='200px auto',color_boton='#184A51'),
 'borgona':dict(cuero='texturas/piedra_borgona.webp',papel='texturas/papel_borgona.webp',boton='texturas/piedra_borgona_oscura.webp',   # media #641D2B / #FAF3EB / #420E20
                 i_cuero=1.0,i_papel=1.0,velo_tarjeta=0.65,tam_cuero='500px auto',rep_cuero='no-repeat',pos_barra='right 50%',tam_papel='cover',tam_tarjeta='600px auto',tam_boton='200px auto',color_boton='#420E20'),
+# Verde olivo: el encabezado tiene su propia imagen (paisaje, anclado a la derecha) con un degradado oscuro a la izquierda; la barra es una imagen estirada (sin mosaico)
+'olivo':dict(cuero='texturas/barra_olivo.webp',papel='texturas/papel_olivo.webp',boton='texturas/piedra_olivo_oscura.webp',   # media #354609 / #FEF1D6 / #273607
+             i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
+             tam_boton='160px auto',color_boton='#273607',tinte='none',encabezado='texturas/encabezado_olivo.webp',pos_imagen_encabezado='right 20%',
+             velo_encabezado='linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.40) 42%, rgba(24,38,5,0) 66%)'),
 }
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
@@ -158,7 +163,7 @@ def css():
         elif turq:
             r=REAL[n]
             tx=dict(fondo="url('%s')"%r['papel'],tf=r['tam_papel'],of='%g'%r['i_papel'],barra="url('%s')"%r['cuero'],tb=r['tam_cuero'],ob='%g'%r['i_cuero'],
-                    tinte='linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO,
+                    tinte=r.get('tinte','linear-gradient(180deg, rgba(255,255,255,%.2f), rgba(255,255,255,0))'%CUERO_BRILLO),
                     tarjeta="linear-gradient(rgba(%s,%g), rgba(%s,%g)), url('%s')"%(triple(d['tarjeta']),r['velo_tarjeta'],triple(d['tarjeta']),r['velo_tarjeta'],r['papel']),tt=r['tam_tarjeta'])
         else:
             tx=dict(fondo='none',tf='auto',of='0',barra='none',tb='auto',ob='0',tinte='none',tarjeta='none',tt='auto')
@@ -167,7 +172,7 @@ def css():
             ('textura-barra',tx['barra']),('tamano-barra',tx['tb']),('intensidad-barra',tx['ob']),('barra-display','block' if tx['barra']!='none' else 'none'),
             ('barra-tinte',tx['tinte']),('tinte-display','block' if tx['tinte']!='none' else 'none'),
             ('textura-tarjeta',tx['tarjeta']),('tamano-tarjeta',tx['tt']),('intensidad-papel',str(INTENSIDAD_PAPEL) if azul else '0'),('intensidad-algodon',str(INTENSIDAD_ALGODON) if azul else '0')]
-        if turq: v+=[('repeticion-fondo','no-repeat'),('posicion-fondo','center top'),('nav-grad','none')]
+        if turq: v+=[('repeticion-fondo',REAL[n].get('rep_fondo','no-repeat')),('posicion-fondo','center top'),('nav-grad','none')]
         if azul:
             v+=[('nav-grad','none'),('sombra-tarjeta',SOMBRA_AZUL_TARJETA),('sombra-boton',SOMBRA_AZUL_BOTON)]
         o.append(sel+' {\n'+''.join('  --%s: %s;\n'%(k,x) for k,x in v)+'}\n')
@@ -245,10 +250,16 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 /* ===== %(nombre)s: papel tenue en las tarjetas (una sola imagen, sin mosaico) y textura oscura en los botones redondos ===== */
 :root[data-tema="%(nn)s"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
 :root[data-tema="%(nn)s"] #vista-detalle .texto-oracion {
-  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: no-repeat; background-position: center top;
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: %(rep_tarjeta)s; background-position: center top;
 }
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
   background-color: %(color_boton)s; background-image: url('%(boton)s'); background-size: %(tam_boton)s; background-position: center; background-repeat: no-repeat;
+}
+""" % dict(dict(rep_tarjeta='no-repeat'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
+        if 'encabezado' in r:
+            o.append("""/* %(nombre)s: imagen propia en el encabezado (cover, anclada a la derecha) con degradado oscuro suave bajo el titulo */
+:root[data-tema="%(nn)s"] header:not(.hero)::before {
+  background-image: %(velo_encabezado)s, url('%(encabezado)s'); background-size: cover; background-position: %(pos_imagen_encabezado)s; background-repeat: no-repeat;
 }
 """ % dict(r,nn=nn,nombre=NOMBRES[nn]))
     return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)

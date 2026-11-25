@@ -183,23 +183,23 @@
 :root[data-tema="borgona"] #nav-guia { background-image: url('nav-guia-borgona.png'); }
 :root[data-tema="borgona"] #nav-favoritos { background-image: url('nav-favoritos-borgona.png'); }
 :root[data-tema="olivo"] {
-  --fondo: #F4F3E7;
-  --tarjeta: #FFFDF5;
-  --tarjeta-solida: #FFFDF5;
-  --texto: #2E4129;
-  --nav: #344C2B;
-  --acento: #C9A34E;
+  --fondo: #FEF1D6;
+  --tarjeta: #FFFDF2;
+  --tarjeta-solida: #FFFDF2;
+  --texto: #202815;
+  --nav: #354609;
+  --acento: #D9A62C;
   --sobre-nav: #FFFFFF;
-  --sobre-nav-suave: #C2C9BF;
+  --sobre-nav-suave: #C2C8B5;
   --acento-nav: #F0D27A;
   --icono-nav: #F0CF72;
-  --principal: #344C2B;
+  --principal: #354609;
   --sobre-principal: #FFFFFF;
-  --cita: #344C2B;
-  --oscuro: #344C2B;
+  --cita: #354609;
+  --oscuro: #354609;
   --sobre-oscuro: #F0D27A;
-  --sobre-acento: #2E4129;
-  --acento-btn: #C9A34E;
+  --sobre-acento: #202815;
+  --acento-btn: #D9A62C;
   --oro-linea: linear-gradient(90deg, #8A6420, #F0D27A 30%, #FFF1B8 50%, #E2B94F 70%, #8A6420);
   --oro-borde: #E2B94F;
   --oro-icono: #F0CF72;
@@ -207,34 +207,37 @@
   --oro-radio: 3px;
   --oro-sombra: rgba(0,0,0,0.35);
   --btn-nav-bg: rgba(255,255,255,0.12);
-  --btn-nav-borde: rgba(201,163,78,0.5);
-  --principal-rgb: 52,76,43;
-  --texto-rgb: 46,65,41;
-  --acento-rgb: 201,163,78;
-  --hero-rgb: 52,76,43;
-  --titulo-rollo: #344C2B;
-  --tarjeta-rgb: 255,253,245;
-  --sombra-rgb: 46,65,41;
+  --btn-nav-borde: rgba(217,166,44,0.5);
+  --principal-rgb: 53,70,9;
+  --texto-rgb: 32,40,21;
+  --acento-rgb: 217,166,44;
+  --hero-rgb: 53,70,9;
+  --titulo-rollo: #354609;
+  --tarjeta-rgb: 255,253,242;
+  --sombra-rgb: 32,40,21;
   --palabras-jesus: #9B1024;
-  --z-barra: auto;
-  --aislar-barra: auto;
-  --repeticion-barra: repeat;
-  --posicion-encabezado: 0 0;
-  --posicion-nav: 0 0;
-  --textura-fondo: none;
-  --tamano-fondo: auto;
-  --intensidad-fondo: 0;
-  --fondo-display: none;
-  --textura-barra: none;
-  --tamano-barra: auto;
-  --intensidad-barra: 0;
-  --barra-display: none;
+  --z-barra: 40;
+  --aislar-barra: isolate;
+  --repeticion-barra: no-repeat;
+  --posicion-encabezado: left top;
+  --posicion-nav: center;
+  --textura-fondo: url('texturas/papel_olivo.webp');
+  --tamano-fondo: 512px auto;
+  --intensidad-fondo: 0.7;
+  --fondo-display: block;
+  --textura-barra: url('texturas/barra_olivo.webp');
+  --tamano-barra: 100% 100%;
+  --intensidad-barra: 1;
+  --barra-display: block;
   --barra-tinte: none;
   --tinte-display: none;
-  --textura-tarjeta: none;
-  --tamano-tarjeta: auto;
+  --textura-tarjeta: linear-gradient(rgba(255,253,242,0.65), rgba(255,253,242,0.65)), url('texturas/papel_olivo.webp');
+  --tamano-tarjeta: 512px auto;
   --intensidad-papel: 0;
   --intensidad-algodon: 0;
+  --repeticion-fondo: repeat;
+  --posicion-fondo: center top;
+  --nav-grad: none;
 }
 :root[data-tema="olivo"] #nav-inicio { background-image: url('nav-inicio-olivo.png'); }
 :root[data-tema="olivo"] #nav-leer { background-image: url('nav-leer-olivo.png'); }
@@ -671,4 +674,17 @@ nav a.item, nav a.item:hover, nav a.item:focus, nav a.item:active, nav a.item:vi
 }
 :root[data-tema="borgona"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
   background-color: #420E20; background-image: url('texturas/piedra_borgona_oscura.webp'); background-size: 200px auto; background-position: center; background-repeat: no-repeat;
+}
+
+/* ===== Verde olivo: papel tenue en las tarjetas (una sola imagen, sin mosaico) y textura oscura en los botones redondos ===== */
+:root[data-tema="olivo"] :is(.versiculo-dia, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .tarjeta-termino, .item-libro, .num-capitulo, .item-guardado),
+:root[data-tema="olivo"] #vista-detalle .texto-oracion {
+  background-image: var(--textura-tarjeta); background-size: var(--tamano-tarjeta); background-repeat: repeat; background-position: center top;
+}
+:root[data-tema="olivo"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) {
+  background-color: #273607; background-image: url('texturas/piedra_olivo_oscura.webp'); background-size: 160px auto; background-position: center; background-repeat: no-repeat;
+}
+/* Verde olivo: imagen propia en el encabezado (cover, anclada a la derecha) con degradado oscuro suave bajo el titulo */
+:root[data-tema="olivo"] header:not(.hero)::before {
+  background-image: linear-gradient(90deg, rgba(24,38,5,0.55) 0%, rgba(24,38,5,0.40) 42%, rgba(24,38,5,0) 66%), url('texturas/encabezado_olivo.webp'); background-size: cover; background-position: right 20%; background-repeat: no-repeat;
 }
