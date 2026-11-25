@@ -15,7 +15,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageStat
 PRINCIPAL=(0x48,0x2B,0x1D); PROFUNDO=(0x24,0x12,0x08)
 MARFIL=(0xFA,0xF1,0xE3)          # marfil de paleta.json (menos calido que el papel del zip, #FEEFD9)
 BOTON=(0x45,0x21,0x0F)           # marron rojizo oscuro de los botones de la referencia
-ANDROID=(0x66,0x3E,0x24)         # piedra detras de los botones de Android (arenisca, mas clara que la barra)
+BARRA=(0x60,0x3C,0x26)           # piedra de la barra: marron de la paleta (#482B1D) aclarado
+ANDROID=(0x8A,0x5C,0x38)         # piedra detras de los botones de Android (arenisca, mas clara que la barra)
 TINTA='#392419'; ORO_TEXTO='#F0D27A'; ORO_ICONO='#F0CF72'
 # el titulo y el subtitulo llevan su propio oscurecimiento en CSS (generar-temas.py); su contraste se mide sobre capturas del telefono
 
@@ -123,7 +124,7 @@ def ruido(tam,celda,rnd):
     g=g.resize((g.width*celda,g.height*celda),Image.BICUBIC).crop((celda,celda,celda+w,celda+h))
     return [v/255 for v in g.tobytes()]
 
-def losas(L,semilla,celda,objetivo):
+def losas(L,semilla,celda,objetivo,corte=8,brillo=0.5):
     """Empedrado de arenisca como el sendero del encabezado: losas irregulares (Voronoi) con junta hundida, canto superior
     iluminado, color propio por piedra (marron, terracota, cobre), picado y grano. Sin mosaico: una sola imagen."""
     W,H=L; cw,ch=celda; rnd=random.Random(semilla); sem={}
@@ -161,11 +162,11 @@ def losas(L,semilla,celda,objetivo):
     im=im.filter(ImageFilter.GaussianBlur(0.5)).filter(ImageFilter.UnsharpMask(radius=1.6,percent=60,threshold=1))
     # recorta los brillos para que el dorado de la etiqueta activa pase 4,5:1
     med=ImageStat.Stat(im).mean
-    im=Image.merge('RGB',[c.point([v if v<=med[n]+8 else round(med[n]+8+(v-med[n]-8)*0.5) for v in range(256)]) for n,c in enumerate(im.split())])
+    im=Image.merge('RGB',[c.point([v if v<=med[n]+corte else round(med[n]+corte+(v-med[n]-corte)*brillo) for v in range(256)]) for n,c in enumerate(im.split())])
     return a_media(im,objetivo)
 
 def barra(base):
-    return losas((1000,280),14,(132,84),PRINCIPAL)      # media = marron profundo de la paleta (#482B1D)
+    return losas((1000,280),14,(132,84),BARRA,corte=4,brillo=0.22)
 
 def papel(base):
     p=abrir(base,'02_papel_marfil')
