@@ -76,7 +76,10 @@ REAL={
 'tierra':dict(cuero='texturas/piedra_tierra_franja.webp',papel='texturas/papel_tierra.webp',boton='texturas/piedra_tierra_oscura.webp',   # piedra de la franja: scripts/generar-franja-tierra.py
              i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='max(104%, 390px) auto',rep_cuero='no-repeat',pos_barra='center',franja=True,tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
              tam_boton='160px auto',color_boton='#45210F',tinte='none',encabezado='texturas/encabezado_tierra.webp',pos_imagen_encabezado='50% 0',tam_imagen_encabezado='cover',
-             velo_texto='rgba(43,20,6,0.74)',velo_bajo='18px',   # velo_bajo: lo que el titulo esta subido (hueco extra hasta el borde del encabezado)
+             velo_texto='rgba(43,20,6,0.40)',velo_largo='rgba(43,20,6,0.20)',   # velo aclarado (antes 0,74); el de los titulos largos se suma al de la caja: 0,52 en total
+             sombra_titulo='0 1px 2px rgba(24,10,2,1), 0 0 3px rgba(24,10,2,1), 0 0 7px rgba(24,10,2,0.90)',   # con el velo claro, la legibilidad la dan estas sombras de letra
+             sombra_sub='0 1px 2px rgba(0,0,0,0.90), 0 0 2px rgba(24,10,2,1), 0 0 3px rgba(24,10,2,1), 0 0 7px rgba(24,10,2,0.90)',color_sub='#FFE6A3',
+             velo_bajo='18px',   # velo_bajo: lo que el titulo esta subido (hueco extra hasta el borde del encabezado)
              borde_fondo='linear-gradient(90deg, rgba(222,168,92,0.24) 0%, rgba(222,168,92,0) 16%, rgba(222,168,92,0) 84%, rgba(222,168,92,0.24) 100%)'),
 }
 def mascara(izq,der,arr,aba):
@@ -382,12 +385,17 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 }
 /* %(nombre)s: los titulos largos sobresalen de la caja: llevan su propio velo */
 :root[data-tema="%(nn)s"] header:not(.hero) #titulo-header.titulo-ancho::before {
-  content: ''; position: absolute; top: -22px; left: -34px; right: -56px; bottom: -16px; z-index: -1; pointer-events: none; background: %(velo_texto)s;
+  content: ''; position: absolute; top: -22px; left: -34px; right: -56px; bottom: -16px; z-index: -1; pointer-events: none; background: %(velo_largo)s;
   %(mascara_titulo)s
 }
 /* %(nombre)s: botones con borde dorado vivo */
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-""" % dict(r,nn=nn,nombre=NOMBRES[nn],mascara_bloque=mascara(48,80,38,'calc(1.4vh + %s + 6px)'%r['velo_bajo']),mascara_titulo=mascara(40,58,28,'20px')))
+""" % dict(dict(velo_largo=r['velo_texto']),**r,nn=nn,nombre=NOMBRES[nn],mascara_bloque=mascara(48,80,38,'calc(1.4vh + %s + 6px)'%r['velo_bajo']),mascara_titulo=mascara(40,58,28,'20px')))
+        if 'sombra_sub' in r:
+            o.append("""/* %(nombre)s: sombra fina en las letras del titulo y el subtitulo (el velo es claro) */
+:root[data-tema="%(nn)s"] header:not(.hero) #titulo-header { text-shadow: %(sombra_titulo)s; }
+:root[data-tema="%(nn)s"] header:not(.hero) #subtitulo-header { color: %(color_sub)s; text-shadow: %(sombra_sub)s; }
+""" % dict(r,nn=nn,nombre=NOMBRES[nn]))
         if 'android' in r:
             o.append("""/* %(nombre)s: %(material_android)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
 :root[data-tema="%(nn)s"] nav::after {
