@@ -292,8 +292,8 @@
   --tamano-fondo: 100% 100%, 512px auto;
   --intensidad-fondo: 0.7;
   --fondo-display: block;
-  --textura-barra: url('texturas/barra_tierra.webp');
-  --tamano-barra: 100% 100%;
+  --textura-barra: url('texturas/piedra_tierra_franja.webp');
+  --tamano-barra: max(104%, 390px) auto;
   --intensidad-barra: 1;
   --barra-display: block;
   --barra-tinte: none;
@@ -808,8 +808,27 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 }
 /* Tierra bíblica: botones con borde dorado vivo */
 :root[data-tema="tierra"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-/* Tierra bíblica: piedra arenisca en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
-:root[data-tema="tierra"] nav::after {
-  display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
-  background: var(--oro-linea) top / 100% 2px no-repeat, linear-gradient(180deg, rgba(43,20,6,0.55) 0%, rgba(43,20,6,0) 40%), url('texturas/piedra_tierra_android.webp') center / cover no-repeat;
-}
+/* ===== Tierra bíblica: franja inferior: una sola piedra hasta el borde de la pantalla y marco dorado alrededor de la barra ===== */
+:root[data-tema="tierra"] nav { background: transparent; border: 0; padding-top: 7px; padding-left: 8px; padding-right: 8px; isolation: isolate; }
+:root[data-tema="tierra"] nav::before { top: 1px; z-index: -3; border-radius: 26px 26px 0 0; background-color: var(--nav);
+  /* un velo calido hacia abajo para que los botones blancos de Android se lean sobre las piedras claras */
+  background-image: linear-gradient(180deg, rgba(36,18,7,0) 45%, rgba(36,18,7,0.42) 100%), var(--textura-barra); background-size: 100% 100%, var(--tamano-barra); background-position: center, center; }
+:root[data-tema="tierra"] nav::after { content: ''; display: block; position: absolute; z-index: -2; box-sizing: border-box; pointer-events: none;
+  top: 1px; left: 3px; right: 3px; bottom: max(3px, calc(env(safe-area-inset-bottom) - 6px)); height: auto; border-radius: 24px;
+  border: 3px solid; border-color: #FFE08A #EDB83F #F7C443;
+  background: linear-gradient(180deg, rgba(36,18,7,0.22), rgba(36,18,7,0.36));
+  box-shadow: 0 0 0 1px #8A6420, inset 0 0 0 1px rgba(138,100,32,0.9), inset 0 0 6px rgba(245,214,139,0.35), 0 3px 6px rgba(36,18,7,0.6); }
+:root[data-tema="tierra"] nav .item { position: relative; flex: 1 1 0; min-width: 0; min-height: 48px; color: #FFFDF2;
+  text-shadow: 0 1px 2px rgba(24,10,2,1), 0 0 5px rgba(24,10,2,0.95); }
+:root[data-tema="tierra"] nav .item + .item::before { content: ''; position: absolute; z-index: -1; left: 0; top: 5px; bottom: 3px; width: 1px;
+  background: linear-gradient(180deg, transparent, #E8C46A 30%, #E8C46A 70%, transparent); }
+/* solo la seccion activa: fondo calido y luz dorada abajo */
+:root[data-tema="tierra"] nav .item.activo::after { content: ''; position: absolute; z-index: -1; left: 3px; right: 3px; top: -1px; bottom: -3px; border-radius: 12px; pointer-events: none;
+  background: radial-gradient(closest-side, #FFFFFF 0%, rgba(255,226,130,0.9) 35%, rgba(255,190,60,0) 100%) bottom center / 34px 9px no-repeat,
+    linear-gradient(90deg, transparent, #FFD560 25%, #FFF6C8 50%, #FFD560 75%, transparent) bottom 3px center / 90% 2px no-repeat,
+    radial-gradient(75% 60% at 50% 100%, rgba(255,182,45,0.80), rgba(255,150,30,0) 100%),
+    linear-gradient(180deg, rgba(70,28,2,0.45), rgba(170,82,8,0.62)); }
+@media (max-width: 340px) { :root[data-tema="tierra"] nav .item { font-size: 9.5px; letter-spacing: 0.1px; } }   /* telefonos muy angostos: FAVORITOS no toca el marco */
+/* iconos dorados directamente sobre la piedra (sin placa), un poco mayores */
+:root[data-tema="tierra"] nav .item .icono-nav::before { display: none; }
+:root[data-tema="tierra"] nav .item .icono-nav::after { width: 50px; height: 50px; filter: drop-shadow(0 1px 1px rgba(24,10,2,1)) drop-shadow(0 0 3px rgba(24,10,2,0.8)); }

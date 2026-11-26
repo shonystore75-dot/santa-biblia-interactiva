@@ -1,13 +1,13 @@
 # Prepara las texturas de Tierra biblica a partir del zip Texturas_Tierra_Santa_Biblia_2026 (mismo metodo que Verde olivo).
 # Los mosaicos del zip son REFLEJADOS y traen manchas (puntos blancos en la madera, manchas negras en el papel): se arman
 # texturas nuevas con parches al azar de zonas limpias (semillas fijas), sin espejo; el papel ademas cierra sin costura.
-# La barra y la zona de los botones de Android son un empedrado de arenisca dibujado por el script, a juego con el sendero del encabezado.
+# La franja inferior (barra y botones de Android) tiene su propia piedra: scripts/generar-franja-tierra.py.
 # Encabezado: 'fondo_reconstruido' trae bloques emborronados donde estaban el titulo y los botones, y la curva dorada abajo.
 # Se arma uno nuevo: arbol (izquierda) + valle, sol y casa (derecha) para que ambos quepan en el encabezado del telefono,
 # se corta la curva dorada y se repinta la parte baja: matorrales a la izquierda (parches de la misma imagen) y empedrado dibujado a la derecha.
 # 'recorte_referencia' NO se usa.
 # Entrada: carpeta Tierra_Santa_Biblia_2026 (zip extraido FUERA del repo)
-# Salida: texturas/encabezado_tierra.webp, barra_tierra.webp, papel_tierra.webp, piedra_tierra_oscura.webp, piedra_tierra_android.webp
+# Salida: texturas/encabezado_tierra.webp, papel_tierra.webp, piedra_tierra_oscura.webp
 # Uso: python scripts/generar-texturas-tierra.py <carpeta extraida>     (imprime tamanos, colores y contraste sobre cada textura)
 import sys, os, random, math
 from PIL import Image, ImageDraw, ImageFilter, ImageStat
@@ -15,8 +15,6 @@ from PIL import Image, ImageDraw, ImageFilter, ImageStat
 PRINCIPAL=(0x48,0x2B,0x1D); PROFUNDO=(0x24,0x12,0x08)
 MARFIL=(0xFA,0xF1,0xE3)          # marfil de paleta.json (menos calido que el papel del zip, #FEEFD9)
 BOTON=(0x45,0x21,0x0F)           # marron rojizo oscuro de los botones de la referencia
-BARRA=(0x60,0x3C,0x26)           # piedra de la barra: marron de la paleta (#482B1D) aclarado
-ANDROID=(0x8A,0x5C,0x38)         # piedra detras de los botones de Android (arenisca, mas clara que la barra)
 TINTA='#392419'; ORO_TEXTO='#F0D27A'; ORO_ICONO='#F0CF72'
 # el titulo y el subtitulo llevan su propio oscurecimiento en CSS (generar-temas.py); su contraste se mide sobre capturas del telefono
 
@@ -118,56 +116,6 @@ def empedrado(tam,grano,semilla):
             o[x,y]=tuple(col)
     return out.filter(ImageFilter.GaussianBlur(0.6))
 
-def ruido(tam,celda,rnd):
-    """Ruido suave en 0..1 (rejilla al azar ampliada)."""
-    w,h=tam; g=Image.new('L',(w//celda+4,h//celda+4)); g.putdata([rnd.randint(0,255) for _ in range(g.width*g.height)])
-    g=g.resize((g.width*celda,g.height*celda),Image.BICUBIC).crop((celda,celda,celda+w,celda+h))
-    return [v/255 for v in g.tobytes()]
-
-def losas(L,semilla,celda,objetivo,corte=8,brillo=0.5):
-    """Empedrado de arenisca como el sendero del encabezado: losas irregulares (Voronoi) con junta hundida, canto superior
-    iluminado, color propio por piedra (marron, terracota, cobre), picado y grano. Sin mosaico: una sola imagen."""
-    W,H=L; cw,ch=celda; rnd=random.Random(semilla); sem={}
-    TONOS=[(108,72,46),(116,74,46),(114,80,50),(100,68,44),(124,86,54),(106,68,42)]
-    def piedra_de(i,j):
-        if (i,j) not in sem:
-            sem[(i,j)]=(i+0.5*(j%2)+rnd.uniform(-0.30,0.30), j+rnd.uniform(-0.28,0.28), rnd.choice(TONOS), rnd.uniform(0.90,1.10), rnd.uniform(-0.5,0.5), rnd.uniform(-0.5,0.5))
-        return sem[(i,j)]
-    torcido=ruido(L,34,rnd); torcido2=ruido(L,34,rnd); quiebre=ruido(L,11,rnd); nube=ruido(L,46,rnd); medio=ruido(L,9,rnd); fino=ruido(L,3,rnd); polvo=ruido(L,1,rnd)
-    im=Image.new('RGB',L); o=im.load()
-    for y in range(H):
-        for x in range(W):
-            k=y*W+x
-            X=x/cw+(torcido[k]-0.5)*0.12+(quiebre[k]-0.5)*0.035
-            Y=y/ch+(torcido2[k]-0.5)*0.12+(quiebre[(k+977)%(W*H)]-0.5)*0.045
-            a=b=(9e9,None)
-            for j in range(int(Y)-1,int(Y)+3):
-                for i in range(int(X)-2,int(X)+3):
-                    q=piedra_de(i,j); d=((X-q[0])*cw/ch)**2+(Y-q[1])**2
-                    if d<a[0]: a,b=(d,q),a
-                    elif d<b[0]: b=(d,q)
-            q=a[1]; r=b[1]
-            ex=(r[0]-q[0])*cw/ch; ey=r[1]-q[1]; sep=math.hypot(ex,ey) or 1
-            borde=(b[0]-a[0])/(2*sep)*ch                                   # distancia en pixeles a la junta
-            dentro=rampa(borde,1.6,5.0)                                    # 0 en la junta, 1 en la losa
-            hacia_arriba=-ey/sep                                           # 1 si la junta mas cercana queda arriba
-            bisel=math.exp(-((borde-7.0)/5.0)**2)*hacia_arriba
-            lomo=0.80+0.20*rampa(borde,3.0,17.0)                          # la losa se redondea: mas oscura junto al canto
-            inclina=q[4]*(X-q[0])*0.16+q[5]*(Y-q[1])*0.16                  # cada losa algo inclinada respecto a la luz
-            v=q[3]*lomo*(1.04+inclina+0.26*(nube[k]-0.5)+0.16*(medio[k]-0.5)+0.14*(fino[k]-0.5)+0.12*(polvo[k]-0.5))
-            if medio[k]<0.24 and fino[k]<0.34: v*=0.90                     # picaduras
-            col=[q[2][c]*v+(64,48,30)[c]*bisel*(1.0 if bisel>0 else 0.6) for c in range(3)]
-            junta=[(50,30,17)[c]*(0.8+0.5*fino[k]) for c in range(3)]
-            o[x,y]=tuple(max(0,min(255,round(junta[c]+(col[c]-junta[c])*dentro))) for c in range(3))
-    im=im.filter(ImageFilter.GaussianBlur(0.5)).filter(ImageFilter.UnsharpMask(radius=1.6,percent=60,threshold=1))
-    # recorta los brillos para que el dorado de la etiqueta activa pase 4,5:1
-    med=ImageStat.Stat(im).mean
-    im=Image.merge('RGB',[c.point([v if v<=med[n]+corte else round(med[n]+corte+(v-med[n]-corte)*brillo) for v in range(256)]) for n,c in enumerate(im.split())])
-    return a_media(im,objetivo)
-
-def barra(base):
-    return losas((1000,280),14,(132,84),BARRA,corte=4,brillo=0.22)
-
 def papel(base):
     p=abrir(base,'02_papel_marfil')
     donantes=[p.crop((70,40,250,250)),p.crop((262,262,442,472))]        # sin las manchas negras de las esquinas
@@ -180,13 +128,8 @@ def boton(base):
     im=parches([piedra(base)],(192,192),(72,72),41)
     return a_media(contraste_de_media(im,0.7),BOTON)
 
-def android(base):
-    """Zona de los botones de Android: el mismo empedrado, losas algo menores y un tono arenisca mas claro."""
-    return losas((1000,160),73,(104,62),ANDROID)
-
-TRABAJOS=[(encabezado,'texturas/encabezado_tierra.webp',86),(barra,'texturas/barra_tierra.webp',86),
-          (papel,'texturas/papel_tierra.webp',80),(boton,'texturas/piedra_tierra_oscura.webp',82),
-          (android,'texturas/piedra_tierra_android.webp',84)]
+TRABAJOS=[(encabezado,'texturas/encabezado_tierra.webp',86),
+          (papel,'texturas/papel_tierra.webp',80),(boton,'texturas/piedra_tierra_oscura.webp',82)]
 
 # ---- contraste sobre las texturas ----
 def lum(c):
@@ -208,11 +151,7 @@ if __name__=='__main__':
         im=Image.open(salida).convert('RGB'); st=ImageStat.Stat(im); fin[f.__name__]=im
         print(salida,im.size,os.path.getsize(salida),'bytes, media','#%02X%02X%02X'%tuple(round(x) for x in st.mean),'desv. tipica',[round(x,1) for x in st.stddev])
     filas=[('texto (tinta) sobre papel',TINTA,fin['papel'],4.5),
-           ('etiqueta (blanco) sobre barra','#FFFFFF',fin['barra'],4.5),
-           ('etiqueta activa (dorado) sobre barra',ORO_TEXTO,fin['barra'],4.5),
-           ('icono (dorado) sobre barra',ORO_ICONO,fin['barra'],3.0),
-           ('icono (dorado) sobre boton redondo',ORO_TEXTO,fin['boton'].crop((64,64,128,128)),3.0),
-           ('botones de Android (blanco) sobre piedra','#FFFFFF',fin['android'],3.0)]
+           ('icono (dorado) sobre boton redondo',ORO_TEXTO,fin['boton'].crop((64,64,128,128)),3.0)]
     print('\n| elemento sobre textura | peor 1 % | mediana | minimo | ok |\n|---|---|---|---|---|')
     for n,c,im,m in filas:
         p,med=peor(c,im); print('|',n,'|',p,'|',med,'|',m,'|','si' if p>=m else 'NO','|')

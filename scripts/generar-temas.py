@@ -73,12 +73,11 @@ REAL={
              android='texturas/piedra_olivo_android.webp',
              borde_fondo='linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%)'),
 # Tierra biblica: igual que Verde olivo (paisaje en el encabezado, halo solo tras el titulo, barra y piedra arenisca tras los botones de Android)
-'tierra':dict(cuero='texturas/barra_tierra.webp',papel='texturas/papel_tierra.webp',boton='texturas/piedra_tierra_oscura.webp',   # media #482B1D / #FAF1E3 / #45210F
-             i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
+'tierra':dict(cuero='texturas/piedra_tierra_franja.webp',papel='texturas/papel_tierra.webp',boton='texturas/piedra_tierra_oscura.webp',   # piedra de la franja: scripts/generar-franja-tierra.py
+             i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='max(104%, 390px) auto',rep_cuero='no-repeat',pos_barra='center',franja=True,tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
              tam_boton='160px auto',color_boton='#45210F',tinte='none',encabezado='texturas/encabezado_tierra.webp',pos_imagen_encabezado='50% 0',tam_imagen_encabezado='cover',
              velo_texto='radial-gradient(closest-side, rgba(43,20,6,0.79) 0%, rgba(43,20,6,0.71) 66%, rgba(43,20,6,0) 100%)',
-             android='texturas/piedra_tierra_android.webp',inset_velo='-20px -58px -34px',   # arriba mas corto: no apaga el sol
-             material_android='piedra arenisca',sombra_android='43,20,6',
+             inset_velo='-20px -58px -34px',   # arriba mas corto: no apaga el sol
              borde_fondo='linear-gradient(90deg, rgba(222,168,92,0.24) 0%, rgba(222,168,92,0) 16%, rgba(222,168,92,0) 84%, rgba(222,168,92,0.24) 100%)'),
 }
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
@@ -359,13 +358,45 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 }
 /* %(nombre)s: botones con borde dorado vivo */
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-/* %(nombre)s: %(material_android)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
+""" % dict(dict(inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
+        if 'android' in r:
+            o.append("""/* %(nombre)s: %(material_android)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
 :root[data-tema="%(nn)s"] nav::after {
   display: block; top: auto; height: max(0px, calc(env(safe-area-inset-bottom) - 6px));
   background: var(--oro-linea) top / 100%% 2px no-repeat, linear-gradient(180deg, rgba(%(sombra_android)s,0.55) 0%%, rgba(%(sombra_android)s,0) 40%%), url('%(android)s') center / cover no-repeat;
 }
-""" % dict(dict(material_android='piedra verde',sombra_android='24,38,5',inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
+""" % dict(dict(material_android='piedra verde',sombra_android='24,38,5'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
+        if r.get('franja'):
+            o.append(FRANJA % dict(nn=nn,nombre=NOMBRES[nn]))
     return ''.join(o).replace('@@VELO@@',str(VELO_HERO)).replace('@@LINEA_PX@@',ORO_LINEA_PX).replace('@@BORDE_PX@@',ORO_BORDE_PX)
+
+# Franja inferior de una sola superficie de piedra (barra de la app + zona de Android) con la barra enmarcada en oro.
+# Capas dentro de nav: ::before piedra (-3), ::after marco (-2), separadores y luz de la pestana activa (-1).
+FRANJA="""/* ===== %(nombre)s: franja inferior: una sola piedra hasta el borde de la pantalla y marco dorado alrededor de la barra ===== */
+:root[data-tema="%(nn)s"] nav { background: transparent; border: 0; padding-top: 7px; padding-left: 8px; padding-right: 8px; isolation: isolate; }
+:root[data-tema="%(nn)s"] nav::before { top: 1px; z-index: -3; border-radius: 26px 26px 0 0; background-color: var(--nav);
+  /* un velo calido hacia abajo para que los botones blancos de Android se lean sobre las piedras claras */
+  background-image: linear-gradient(180deg, rgba(36,18,7,0) 45%%, rgba(36,18,7,0.42) 100%%), var(--textura-barra); background-size: 100%% 100%%, var(--tamano-barra); background-position: center, center; }
+:root[data-tema="%(nn)s"] nav::after { content: ''; display: block; position: absolute; z-index: -2; box-sizing: border-box; pointer-events: none;
+  top: 1px; left: 3px; right: 3px; bottom: max(3px, calc(env(safe-area-inset-bottom) - 6px)); height: auto; border-radius: 24px;
+  border: 3px solid; border-color: #FFE08A #EDB83F #F7C443;
+  background: linear-gradient(180deg, rgba(36,18,7,0.22), rgba(36,18,7,0.36));
+  box-shadow: 0 0 0 1px #8A6420, inset 0 0 0 1px rgba(138,100,32,0.9), inset 0 0 6px rgba(245,214,139,0.35), 0 3px 6px rgba(36,18,7,0.6); }
+:root[data-tema="%(nn)s"] nav .item { position: relative; flex: 1 1 0; min-width: 0; min-height: 48px; color: #FFFDF2;
+  text-shadow: 0 1px 2px rgba(24,10,2,1), 0 0 5px rgba(24,10,2,0.95); }
+:root[data-tema="%(nn)s"] nav .item + .item::before { content: ''; position: absolute; z-index: -1; left: 0; top: 5px; bottom: 3px; width: 1px;
+  background: linear-gradient(180deg, transparent, #E8C46A 30%%, #E8C46A 70%%, transparent); }
+/* solo la seccion activa: fondo calido y luz dorada abajo */
+:root[data-tema="%(nn)s"] nav .item.activo::after { content: ''; position: absolute; z-index: -1; left: 3px; right: 3px; top: -1px; bottom: -3px; border-radius: 12px; pointer-events: none;
+  background: radial-gradient(closest-side, #FFFFFF 0%%, rgba(255,226,130,0.9) 35%%, rgba(255,190,60,0) 100%%) bottom center / 34px 9px no-repeat,
+    linear-gradient(90deg, transparent, #FFD560 25%%, #FFF6C8 50%%, #FFD560 75%%, transparent) bottom 3px center / 90%% 2px no-repeat,
+    radial-gradient(75%% 60%% at 50%% 100%%, rgba(255,182,45,0.80), rgba(255,150,30,0) 100%%),
+    linear-gradient(180deg, rgba(70,28,2,0.45), rgba(170,82,8,0.62)); }
+@media (max-width: 340px) { :root[data-tema="%(nn)s"] nav .item { font-size: 9.5px; letter-spacing: 0.1px; } }   /* telefonos muy angostos: FAVORITOS no toca el marco */
+/* iconos dorados directamente sobre la piedra (sin placa), un poco mayores */
+:root[data-tema="%(nn)s"] nav .item .icono-nav::before { display: none; }
+:root[data-tema="%(nn)s"] nav .item .icono-nav::after { width: 50px; height: 50px; filter: drop-shadow(0 1px 1px rgba(24,10,2,1)) drop-shadow(0 0 3px rgba(24,10,2,0.8)); }
+"""
 
 def critico():
     """colores de fondo y de barra en linea en el <head> de cada pantalla: se aplican aunque temas.css o las imagenes tarden"""
