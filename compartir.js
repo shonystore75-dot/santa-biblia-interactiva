@@ -7,6 +7,7 @@ const ENLACE_INSTALACION = ''; // rellenar cuando la app este publicada: se anad
 const Compartir = (() => {
   const CLAVE_ESTILO = 'compartirEstilo';
   const CARPETA = 'compartir'; // dentro de la cache de la app
+  const TIPO = 'image/jpeg', CALIDAD = 0.95; // en el telefono: 6 veces mas ligero y cerca de 1 s mas rapido que PNG
   let enCurso = false;
   let fuentesListas = null;
 
@@ -124,7 +125,7 @@ const Compartir = (() => {
 
   async function compartirImagenes(lienzos, verso) {
     const base = verso.referencia.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-');
-    const nombres = lienzos.map((_, i) => `${base}${lienzos.length > 1 ? `-${i + 1}` : ''}.png`);
+    const nombres = lienzos.map((_, i) => `${base}${lienzos.length > 1 ? `-${i + 1}` : ''}.jpg`);
     const mensaje = conEnlace(NOMBRE_APP);
 
     if (esNativo()) {
@@ -136,7 +137,7 @@ const Compartir = (() => {
       const rutas = [];
       try {
         for (let i = 0; i < lienzos.length; i++) {
-          const datos = lienzos[i].toDataURL('image/png').split(',')[1];
+          const datos = lienzos[i].toDataURL(TIPO, CALIDAD).split(',')[1];
           const { uri } = await Filesystem.writeFile({ path: `${CARPETA}/${nombres[i]}`, data: datos, directory: 'CACHE', recursive: true });
           rutas.push(uri);
         }
@@ -154,7 +155,7 @@ const Compartir = (() => {
     }
 
     // Navegador (pruebas): comparte el archivo si puede; si no, lo descarga.
-    const ficheros = await Promise.all(lienzos.map((l, i) => new Promise(res => l.toBlob(b => res(new File([b], nombres[i], { type: 'image/png' })), 'image/png'))));
+    const ficheros = await Promise.all(lienzos.map((l, i) => new Promise(res => l.toBlob(b => res(new File([b], nombres[i], { type: TIPO })), TIPO, CALIDAD))));
     if (navigator.canShare && navigator.canShare({ files: ficheros })) {
       await navigator.share({ files: ficheros, text: mensaje }).catch(() => {});
       return;
