@@ -69,17 +69,26 @@ REAL={
 'olivo':dict(cuero='texturas/barra_olivo.webp',papel='texturas/papel_olivo.webp',boton='texturas/piedra_olivo_oscura.webp',   # media #354609 / #FEF1D6 / #213004
              i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='100% 100%',rep_cuero='no-repeat',pos_barra='center',tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
              tam_boton='160px auto',color_boton='#213004',tinte='none',encabezado='texturas/encabezado_olivo.webp',pos_imagen_encabezado='85% 0',tam_imagen_encabezado='auto 140%',
-             velo_texto='radial-gradient(closest-side, rgba(24,38,5,0.74) 0%, rgba(24,38,5,0.66) 66%, rgba(24,38,5,0) 100%)',
+             velo_texto='rgba(24,38,5,0.70)',velo_bajo='0px',
              android='texturas/piedra_olivo_android.webp',
              borde_fondo='linear-gradient(90deg, rgba(236,190,84,0.30) 0%, rgba(236,190,84,0) 16%, rgba(236,190,84,0) 84%, rgba(236,190,84,0.30) 100%)'),
 # Tierra biblica: igual que Verde olivo (paisaje en el encabezado, halo solo tras el titulo, barra y piedra arenisca tras los botones de Android)
 'tierra':dict(cuero='texturas/piedra_tierra_franja.webp',papel='texturas/papel_tierra.webp',boton='texturas/piedra_tierra_oscura.webp',   # piedra de la franja: scripts/generar-franja-tierra.py
              i_cuero=1.0,i_papel=0.7,velo_tarjeta=0.65,tam_cuero='max(104%, 390px) auto',rep_cuero='no-repeat',pos_barra='center',franja=True,tam_papel='512px auto',rep_fondo='repeat',tam_tarjeta='512px auto',rep_tarjeta='repeat',
              tam_boton='160px auto',color_boton='#45210F',tinte='none',encabezado='texturas/encabezado_tierra.webp',pos_imagen_encabezado='50% 0',tam_imagen_encabezado='cover',
-             velo_texto='radial-gradient(closest-side, rgba(43,20,6,0.79) 0%, rgba(43,20,6,0.71) 66%, rgba(43,20,6,0) 100%)',
-             inset_velo='-20px -58px -34px',   # arriba mas corto: no apaga el sol
+             velo_texto='rgba(43,20,6,0.74)',velo_bajo='18px',   # velo_bajo: lo que el titulo esta subido (hueco extra hasta el borde del encabezado)
              borde_fondo='linear-gradient(90deg, rgba(222,168,92,0.24) 0%, rgba(222,168,92,0) 16%, rgba(222,168,92,0) 84%, rgba(222,168,92,0.24) 100%)'),
 }
+def mascara(izq,der,arr,aba):
+    """desvanecido suave por los 4 lados: dos mascaras lineales (con curva en S) cruzadas; cada argumento es el ancho de la rampa de ese lado"""
+    curva=((0,0),(0.2,0.08),(0.4,0.32),(0.6,0.68),(0.8,0.92),(1,1))
+    def lado(angulo,a,b):
+        a,b=[v if isinstance(v,str) else '%dpx'%v for v in (a,b)]
+        p=['rgba(0,0,0,%g) calc(%s * %g)'%(alfa,a,t) for t,alfa in curva]
+        p+=['rgba(0,0,0,%g) calc(100%% - %s * %g)'%(alfa,b,t) for t,alfa in reversed(curva)]
+        return 'linear-gradient(%s, %s)'%(angulo,', '.join(p))
+    m=lado('90deg',izq,der)+', '+lado('180deg',arr,aba)
+    return '-webkit-mask-image: %s; mask-image: %s; -webkit-mask-composite: source-in; mask-composite: intersect;'%(m,m)
 SOMBRA_AZUL_TARJETA='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.15)'   # negra 12-18 %, blur 3-12 px
 SOMBRA_AZUL_BOTON='0 1px 3px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.16)'
 import math
@@ -365,14 +374,20 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root[data-tema="%(nn)s"] header:not(.hero)::before {
   background-image: url('%(encabezado)s'); background-size: %(tam_imagen_encabezado)s; background-position: %(pos_imagen_encabezado)s; background-repeat: no-repeat;
 }
-/* %(nombre)s: oscurecimiento suave SOLO detras del titulo y el subtitulo (sigue el tamano de su caja) */
+/* %(nombre)s: oscurecimiento difuso, sin contorno, SOLO detras del titulo y el subtitulo (sigue el tamano de su caja; las mascaras lo desvanecen por los 4 lados) */
 :root[data-tema="%(nn)s"] header:not(.hero) > div:has(> #titulo-header) { position: relative; }
 :root[data-tema="%(nn)s"] header:not(.hero) > div:has(> #titulo-header)::before {
-  content: ''; position: absolute; inset: %(inset_velo)s; clip-path: inset(0 0 calc(34px - 1.4vh) 0); z-index: -1; pointer-events: none; background: %(velo_texto)s;
+  content: ''; position: absolute; top: -30px; left: -42px; right: -76px; bottom: calc(-1.4vh - %(velo_bajo)s); z-index: -1; pointer-events: none; background: %(velo_texto)s;
+  %(mascara_bloque)s
+}
+/* %(nombre)s: los titulos largos sobresalen de la caja: llevan su propio velo */
+:root[data-tema="%(nn)s"] header:not(.hero) #titulo-header.titulo-ancho::before {
+  content: ''; position: absolute; top: -22px; left: -34px; right: -56px; bottom: -16px; z-index: -1; pointer-events: none; background: %(velo_texto)s;
+  %(mascara_titulo)s
 }
 /* %(nombre)s: botones con borde dorado vivo */
 :root[data-tema="%(nn)s"] :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante) { border: var(--oro-borde-px) solid var(--oro-borde); }
-""" % dict(dict(inset_velo='-34px -58px'),**dict(r,nn=nn,nombre=NOMBRES[nn])))
+""" % dict(r,nn=nn,nombre=NOMBRES[nn],mascara_bloque=mascara(48,80,38,'calc(1.4vh + %s + 6px)'%r['velo_bajo']),mascara_titulo=mascara(40,58,28,'20px')))
         if 'android' in r:
             o.append("""/* %(nombre)s: %(material_android)s en la zona de los botones de Android (debajo de la barra inferior), separada por una linea dorada */
 :root[data-tema="%(nn)s"] nav::after {
