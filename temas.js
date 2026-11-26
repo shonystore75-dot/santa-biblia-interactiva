@@ -62,6 +62,39 @@
   document.addEventListener('dragstart', anularEn('a, img'), true);
   document.addEventListener('contextmenu', anularEn(SIN_MENU), true);
 
+  // Titulos largos del encabezado ("Deuteronomio 28"): una sola linea. Si no cabe junto a los botones, la linea sube lo justo
+  // para pasar por encima de buscar y A-/A+, y solo si aun asi llegaria al menu se reduce la letra.
+  document.addEventListener('DOMContentLoaded', function () {
+    var t = document.getElementById('titulo-header');
+    if (!t) return;
+    var bloque = t.parentElement, cabecera = t.closest('header'), pendiente = false;
+    function ajustar() {
+      pendiente = false;
+      t.classList.remove('titulo-ancho'); t.style.fontSize = ''; bloque.style.top = '';
+      var herramientas = cabecera.querySelector('.control-tamano'), menu = cabecera.querySelector('.btn-menu');
+      if (!herramientas || !menu) return;   // sin botones en medio, el titulo puede ocupar dos lineas
+      var columna = bloque.getBoundingClientRect().width;
+      t.classList.add('titulo-ancho');
+      if (t.getBoundingClientRect().width <= columna + 0.5) { t.classList.remove('titulo-ancho'); return; }
+      var base = parseFloat(getComputedStyle(t).fontSize);
+      var libre = menu.getBoundingClientRect().left - 6 - t.getBoundingClientRect().left, ancho = t.getBoundingClientRect().width;
+      if (ancho > libre) t.style.fontSize = Math.max(13, Math.floor(base * libre / ancho * 10) / 10) + 'px';
+      var r = t.getBoundingClientRect(), h = herramientas.getBoundingClientRect(), letra = parseFloat(getComputedStyle(t).fontSize);
+      var sobra = (r.bottom - letra * 0.22) - (h.top - 4);   // borde inferior de las mayusculas contra el borde superior de los botones
+      if (r.right > h.left - 4 && sobra > 0) {
+        // con 'top' y no 'translate': asi el halo oscuro del titulo sigue pintandose detras de los botones
+        bloque.style.position = 'relative';
+        bloque.style.top = ((parseFloat(getComputedStyle(bloque).top) || 0) - Math.ceil(sobra)) + 'px';
+      }
+    }
+    function pedir() { if (!pendiente) { pendiente = true; requestAnimationFrame(ajustar); } }
+    new MutationObserver(ajustar).observe(t, { childList: true, characterData: true, subtree: true });
+    window.addEventListener('resize', pedir);
+    new MutationObserver(pedir).observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema'] });
+    if (document.fonts) document.fonts.ready.then(ajustar);
+    ajustar();
+  });
+
   // Transiciones sin parpadeo: al cambiar de pantalla la parte nativa deja a la vista la pantalla anterior
   // hasta que esta avisa. Se avisa en cuanto lo imprescindible esta listo (fondo, encabezado y barra con sus
   // iconos, ya decodificados). Las fuentes y el contenido solo se esperan hasta LIMITE_MS desde que empezo la
