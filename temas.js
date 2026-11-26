@@ -80,7 +80,10 @@
       var libre = menu.getBoundingClientRect().left - 6 - t.getBoundingClientRect().left, ancho = t.getBoundingClientRect().width;
       if (ancho > libre) t.style.fontSize = Math.max(13, Math.floor(base * libre / ancho * 10) / 10) + 'px';
       var r = t.getBoundingClientRect(), h = herramientas.getBoundingClientRect(), letra = parseFloat(getComputedStyle(t).fontSize);
-      var sobra = (r.bottom - letra * 0.22) - (h.top - 4);   // borde inferior de las mayusculas contra el borde superior de los botones
+      // --subir-extra: lo que la paleta sube de mas tambien los titulos largos; con tilde la mitad, para no entrar en la barra de estado
+      var extra = parseFloat(getComputedStyle(bloque).getPropertyValue('--subir-extra')) || 0;
+      if (/[áéíóúüñ]/i.test(t.textContent)) extra /= 2;
+      var sobra = (r.bottom - letra * 0.22) - (h.top - 4 - extra);   // borde inferior de las mayusculas contra el borde superior de los botones
       if (r.right > h.left - 4 && sobra > 0) {
         // con 'top' y no 'translate': asi el halo oscuro del titulo sigue pintandose detras de los botones
         bloque.style.position = 'relative';

@@ -319,9 +319,9 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root .contenido-ads .marcador { line-height: 1.35; }
 :root .contenido-ads .marcador-sub { font-size: 9px; line-height: 1.3; }
 
-/* ===== Titulo del encabezado: en Tierra va 12px mas arriba (con su subtitulo). Los titulos que no caben en su columna
+/* ===== Titulo del encabezado: en Tierra va 18px mas arriba (con su subtitulo). Los titulos que no caben en su columna
    (temas.js les pone .titulo-ancho) se quedan en una linea y pasan POR ENCIMA de los botones de buscar y A-/A+ ===== */
-:root[data-tema="tierra"] header:not(.hero) > div:has(> #titulo-header) { top: -12px; }
+:root[data-tema="tierra"] header:not(.hero) > div:has(> #titulo-header) { top: -18px; --subir-extra: 6px; }
 :root header:not(.hero) > div:has(> #titulo-header) { min-width: 0; }
 :root header:not(.hero) #titulo-header.titulo-ancho { white-space: nowrap; width: max-content; position: relative; }
 
