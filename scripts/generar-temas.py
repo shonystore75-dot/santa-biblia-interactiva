@@ -321,6 +321,10 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root header:not(.hero) > div:has(> #titulo-header) { min-width: 0; }
 :root header:not(.hero) #titulo-header.titulo-ancho { white-space: nowrap; width: max-content; position: relative; }
 
+/* ===== Numeros de versiculo (todas las paletas): letra serif de la app en negrita, sobre la linea, con subrayado dorado fino ===== */
+:root .phone .verso .num { display: inline-block; font-family: 'Source Serif 4', serif; font-weight: 700; font-size: 0.86em; line-height: 1.1;
+  vertical-align: baseline; color: var(--cita); padding: 0 1px 1px; margin-right: 6px; border-bottom: 1.5px solid var(--oro-borde); }
+
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }
 :root .submenu-paleta.visible { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px 0 6px; margin: 2px 0 4px; border-left: 0; }
