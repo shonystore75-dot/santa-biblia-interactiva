@@ -994,6 +994,67 @@ html[data-tema="ambar"]{--critico-fondo:#FFF3E5;--critico-barra:#93421D}
   }
   .opcion-tema:active { background: rgba(var(--texto-rgb),0.08); }
   .opcion-tema.activo { background: rgba(var(--acento-rgb),0.3); font-weight: 600; }
+  /* --- Hoja inferior para compartir un versículo (compartir.js) --- */
+  .overlay-pantalla.fondo-compartir { align-items: flex-end; padding: 0; }
+  .hoja-compartir {
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--tarjeta-solida);
+    border-top: 1px solid var(--oro-borde);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.4);
+    padding: 16px 4vw calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .titulo-compartir {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--texto);
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .fila-estilos {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    justify-content: safe center;
+    padding: 4px;
+    scrollbar-width: none;
+  }
+  .opcion-compartir {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    color: var(--texto);
+  }
+  .miniatura-compartir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(36vw, 150px);
+    height: min(36vw, 150px);
+    border-radius: 8px;
+    border: 1px solid rgba(var(--principal-rgb),0.25);
+    background: rgba(var(--principal-rgb),0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .opcion-texto .miniatura-compartir { font-size: 34px; color: var(--cita); }
+  .opcion-compartir.elegida .miniatura-compartir { outline: 3px solid var(--oro-borde); outline-offset: 1px; }
+  .opcion-compartir.elegida { font-weight: 600; }
+  .aviso-compartir { font-size: 14px; line-height: 1.5; color: var(--texto); text-align: center; margin-bottom: 14px; }
+  .hoja-compartir .btn-overlay { border: 0; }
+  .hoja-compartir .btn-overlay.cancelar { border: 1.5px solid rgba(var(--principal-rgb),0.25); }
+  .hoja-compartir .btn-cerrar-overlay { width: 100%; border: 0; background: none; padding: 8px; }
 </style>
 </head>
 <body>
@@ -1070,6 +1131,8 @@ html[data-tema="ambar"]{--critico-fondo:#FFF3E5;--critico-barra:#93421D}
     </nav>
   </div>
 
+<script src="compartir-estilos.js"></script>
+<script src="compartir.js"></script>
 <script>
   const main = document.getElementById('main');
   const btnAtras = document.getElementById('btn-atras');
@@ -1885,33 +1948,14 @@ html[data-tema="ambar"]{--critico-fondo:#FFF3E5;--critico-barra:#93421D}
     temporizadorToast = setTimeout(() => toast.classList.remove('visible'), 2200);
   }
 
+  // Abre la hoja de estilos (compartir.js). El texto sale de los datos del libro, no de la pantalla.
   function compartirVerso(cap, num) {
     const datosLibro = cacheLibros[libroActual.id];
     const capitulo = datosLibro.find(c => c.c === cap);
     const versoObj = capitulo.v.find(v => v[0] === num);
-    const texto = (versoObj ? versoObj[1] : '')
-      .replace(/<br\s*\/?>\s*<em>[\s\S]*?<\/em>\s*$/i, '')
-      .replace(/<[^>]+>/g, '');
-    const referencia = `${libroActual.nombre} ${cap}:${num}`;
-    const mensaje = `"${texto}"\n${referencia} (Santa Biblia 2026)`;
-
-    const pluginCompartirVerso = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share;
-    if (pluginCompartirVerso) {
-      pluginCompartirVerso.share({ text: mensaje, title: referencia, dialogTitle: referencia }).catch(() => {});
-      return;
-    }
-    if (navigator.share) {
-      navigator.share({ text: mensaje, title: referencia }).catch(() => {});
-      return;
-    }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(mensaje)
-        .then(() => mostrarToast('Versículo copiado'))
-        .catch(() => mostrarToast('No se pudo copiar'));
-    } else {
-      mostrarToast('No se pudo copiar');
-    }
+    if (!versoObj) return;
+    limpiarSeleccionVerso();
+    Compartir.abrir({ html: versoObj[1], referencia: `${libroActual.nombre} ${cap}:${num}` });
   }
 
   function abrirCapitulo(numCap, desdeBusqueda) {

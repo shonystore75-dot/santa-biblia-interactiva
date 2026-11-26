@@ -292,7 +292,7 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root :focus:not(:focus-visible) { outline: none; }
 :root :is(.btn-atras, .btn-menu, .btn-tamano, .btn-ir-verso-flotante, .flecha-carrusel, .visor-cerrar, .pin-mapa, .estrella-fav, .compartir-verso, .nota-btn,
   .btn-buscar, .btn-nav-cap, .btn-overlay, .btn-confirmar, .btn-copiar-lista, .btn-leer-pasaje, .btn-suscribirse, .btn-cerrar-overlay, .btn-quitar, .btn-escala-fila,
-  .tab, .pestana, .tab-legal, .num-capitulo, .item-libro, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .item-guardado) {
+  .tab, .pestana, .tab-legal, .num-capitulo, .item-libro, .tarjeta-oracion, .tarjeta-historia, .tarjeta-mapa, .tarjeta-favorito, .item-guardado, .opcion-compartir) {
   -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;   /* mantener el dedo no selecciona la letra del boton */
 }
 /* redondos: se encogen, se oscurecen un poco y muestran un halo dorado (el contorno sigue el border-radius) */
@@ -300,7 +300,7 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
   scale: 0.95; filter: brightness(0.9); outline: 3px solid rgba(231, 188, 84, 0.55); outline-offset: 0;
 }
 /* demas botones: se encogen y oscurecen levemente */
-:root :is(.btn-buscar, .btn-nav-cap, .btn-overlay, .btn-confirmar, .btn-copiar-lista, .btn-leer-pasaje, .btn-suscribirse, .tab, .pestana, .tab-legal, .num-capitulo):active {
+:root :is(.btn-buscar, .btn-nav-cap, .btn-overlay, .btn-confirmar, .btn-copiar-lista, .btn-leer-pasaje, .btn-suscribirse, .tab, .pestana, .tab-legal, .num-capitulo, .opcion-compartir):active {
   scale: 0.97; filter: brightness(0.92);
 }
 /* tarjetas y filas: solo oscurecimiento leve */
