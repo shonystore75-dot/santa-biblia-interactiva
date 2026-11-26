@@ -713,6 +713,20 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root a, :root img { -webkit-user-drag: none; -webkit-touch-callout: none; }
 :root :is(a, header, nav, .tarjeta-termino) { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 
+/* ===== Glosario: buscador y contador fijos, sin que el texto pase por detras =====
+   La lista tiene su propio desplazamiento DEBAJO del bloque: nada queda tras el buscador, el contador ni el hueco bajo el encabezado,
+   y el fondo del bloque es el mismo de la pantalla (color y textura de papel de cada paleta), sin capas encima. */
+:root main:has(.caja-busqueda-glosario) { display: flex; flex-direction: column; overflow: hidden; padding-bottom: 0; }
+:root .caja-busqueda-glosario { position: static; flex: 0 0 auto; background: transparent; margin-bottom: 0; }
+:root #lista-glosario { flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 0 -5vw; padding: 0.4vh 5vw 3vh;
+  scrollbar-width: thin; scrollbar-color: rgba(var(--principal-rgb),0.65) rgba(var(--principal-rgb),0.08); }
+:root .contador-glosario { font-family: 'Source Serif 4', serif; }
+
+/* ===== Recuadro de publicidad: igual en todas las pantallas (como en Leer) ===== */
+:root .contenido-ads { width: 100%; }
+:root .contenido-ads .marcador { font-family: 'Cinzel', serif; font-weight: 600; font-size: 10.5px; letter-spacing: 0.3px; }
+:root .phone .etiqueta-ads { padding: 2px 8px 3px; border-radius: 0 0 6px 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
 /* ===== Selector de paleta del menu: cuadricula 3x3 (las 9 sin hacer scroll) ===== */
 :root .menu-principal { min-width: 236px; }
 :root .submenu-paleta.visible { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px 0 6px; margin: 2px 0 4px; border-left: 0; }
