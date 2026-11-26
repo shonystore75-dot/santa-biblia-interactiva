@@ -311,7 +311,7 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
 
 ## COMPARTIR VERSÍCULO COMO IMAGEN (2026-11-26)
 - Al tocar compartir en un versículo de Leer se abre una hoja con las miniaturas de los estilos y «Solo texto» (`compartir.js`); el último elegido se guarda en `compartirEstilo`.
-- Estilos en `compartir-estilos.js` (1080×1080; hoy solo «Clásico»). **Agregar uno = añadir un objeto a `ESTILOS_COMPARTIR`**: `id`, `nombre`, `fuentes` (opcional) y `dibujar(ctx, {palabras, cita, pie})`, que devuelve `false` si el texto no cabe (usar `LienzoTexto.ajustar` / `dibujar`). Una letra nueva se declara en `FUENTES_COMPARTIR` y se guarda en `fuentes/`.
+- Estilos en `compartir-estilos.js` (1080×1080: «Clásico», con marco, y «Pergamino», sin marco). **Agregar uno = añadir un objeto a `ESTILOS_COMPARTIR`**: `id`, `nombre`, `fuentes` (opcional) y `dibujar(ctx, {palabras, cita, pie})`, que devuelve `false` si el texto no cabe (usar `LienzoTexto.ajustar` / `dibujar`). Una letra nueva se declara en `FUENTES_COMPARTIR` y se guarda en `fuentes/`.
 - Letra Source Serif 4 incluida en `fuentes/` (OFL). Plugin nuevo: `@capacitor/filesystem` (temporales en la caché, carpeta `compartir`). La imagen se envía en JPEG 95 %.
 - Al publicar la app: rellenar `ENLACE_INSTALACION` en `compartir.js`.
 - Probado en el Xiaomi: la imagen llega al menú y al selector de WhatsApp, cancelar no deja archivos y Leer va a 60 fps. Falta confirmar un envío completo.

@@ -266,6 +266,184 @@ const estiloClasico = {
   },
 };
 
+// ---------- Estilo pergamino: sin marco, el papel ocupa toda la imagen ----------
+
+let fondoPergamino = null; // la textura se calcula una sola vez
+
+// Ruido suave (manchas irregulares) entre 0 y 1.
+function crearRuido(azar) {
+  const N = 256;
+  const tabla = Float32Array.from({ length: N * N }, azar);
+  const valor = (x, y) => tabla[(y & (N - 1)) * N + (x & (N - 1))];
+  const suave = (t) => t * t * (3 - 2 * t);
+  const capa = (x, y) => {
+    const xi = Math.floor(x), yi = Math.floor(y), u = suave(x - xi), v = suave(y - yi);
+    const a = valor(xi, yi) + (valor(xi + 1, yi) - valor(xi, yi)) * u;
+    const b = valor(xi, yi + 1) + (valor(xi + 1, yi + 1) - valor(xi, yi + 1)) * u;
+    return a + (b - a) * v;
+  };
+  // varias escalas sumadas
+  return (x, y) => capa(x, y) * 0.54 + capa(x * 2.1 + 31, y * 2.1 + 17) * 0.28 + capa(x * 4.3 + 7, y * 4.3 + 53) * 0.18;
+}
+
+// Los tonos se mantienen claros (tambien en bordes y manchas) para que la letra mas clara conserve
+// un contraste de 4,5:1 o mas en cualquier punto.
+function crearPergamino() {
+  const L = LADO_COMPARTIR, M = L / 2;
+  const azar = LienzoTexto.azar(2026);
+  const ruido = crearRuido(azar);
+  const mezcla = (a, b, t) => a + (b - a) * t;
+  const entre = (v, min, max) => Math.max(0, Math.min(1, (v - min) / (max - min)));
+
+  // base: crema y ocre claro en manchas amplias, con bordes irregulares algo mas oscuros
+  const base = document.createElement('canvas');
+  base.width = base.height = M;
+  const cb = base.getContext('2d');
+  const datos = cb.createImageData(M, M);
+  const CREMA = [246, 233, 200], OCRE = [232, 207, 154], BORDE = [220, 191, 135];
+  for (let y = 0; y < M; y++) {
+    for (let x = 0; x < M; x++) {
+      const tono = entre(ruido(x / 95, y / 95), 0.28, 0.74);
+      const dx = Math.abs(x / (M - 1) - 0.5) * 2, dy = Math.abs(y / (M - 1) - 0.5) * 2;
+      const lejos = Math.pow(dx ** 4 + dy ** 4, 0.25); // 0 en el centro, ~1 en los lados
+      const orilla = entre(lejos + (ruido(x / 38 + 90, y / 38 + 40) - 0.5) * 0.34, 0.62, 1.08);
+      const i = (y * M + x) * 4;
+      for (let k = 0; k < 3; k++) {
+        datos.data[i + k] = mezcla(mezcla(CREMA[k], OCRE[k], tono * 0.8), BORDE[k], orilla * orilla * (3 - 2 * orilla));
+      }
+      datos.data[i + 3] = 255;
+    }
+  }
+  cb.putImageData(datos, 0, 0);
+
+  const lienzo = document.createElement('canvas');
+  lienzo.width = lienzo.height = L;
+  const c = lienzo.getContext('2d');
+  c.imageSmoothingQuality = 'high';
+  c.drawImage(base, 0, 0, L, L);
+
+  // manchas leves de humedad, de contorno irregular y con un cerco apenas marcado
+  c.save();
+  c.filter = 'blur(3px)';
+  for (let i = 0; i < 13; i++) {
+    const x = azar() * L, y = azar() * L, r = 22 + azar() * 70;
+    const radios = Array.from({ length: 14 }, () => r * (0.6 + azar() * 0.75));
+    const punto = (k) => {
+      const a = (k / radios.length) * Math.PI * 2;
+      return [x + Math.cos(a) * radios[k % radios.length], y + Math.sin(a) * radios[k % radios.length] * 0.75];
+    };
+    const medio = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+    c.beginPath();
+    c.moveTo(...medio(punto(0), punto(1)));
+    for (let k = 1; k <= radios.length; k++) c.quadraticCurveTo(...punto(k), ...medio(punto(k), punto(k + 1)));
+    c.closePath();
+    c.fillStyle = 'rgba(172,122,58,0.055)';
+    c.fill();
+    c.strokeStyle = 'rgba(150,104,46,0.07)';
+    c.lineWidth = 3;
+    c.stroke();
+  }
+  c.restore();
+  // motas
+  for (let i = 0; i < 240; i++) {
+    c.fillStyle = `rgba(128,88,42,${0.05 + azar() * 0.1})`;
+    c.beginPath();
+    c.arc(azar() * L, azar() * L, 0.6 + azar() * 1.6, 0, Math.PI * 2);
+    c.fill();
+  }
+  // fibras claras y oscuras
+  for (let i = 0; i < 1100; i++) {
+    const x = azar() * L, y = azar() * L, a = azar() * Math.PI, largo = 8 + azar() * 26;
+    const curva = (azar() - 0.5) * 1.6;
+    c.strokeStyle = azar() > 0.45 ? `rgba(140,100,52,${0.07 + azar() * 0.09})` : `rgba(255,248,225,${0.2 + azar() * 0.25})`;
+    c.lineWidth = 0.6 + azar() * 0.8;
+    c.beginPath();
+    c.moveTo(x, y);
+    c.quadraticCurveTo(x + Math.cos(a + curva) * largo * 0.5, y + Math.sin(a + curva) * largo * 0.5, x + Math.cos(a) * largo, y + Math.sin(a) * largo);
+    c.stroke();
+  }
+  // grano
+  const grano = document.createElement('canvas');
+  grano.width = grano.height = M;
+  const cg = grano.getContext('2d');
+  const puntos = cg.createImageData(M, M);
+  for (let i = 0; i < puntos.data.length; i += 4) {
+    const claro = azar() > 0.5;
+    puntos.data[i] = claro ? 255 : 120;
+    puntos.data[i + 1] = claro ? 246 : 86;
+    puntos.data[i + 2] = claro ? 220 : 40;
+    puntos.data[i + 3] = Math.floor(azar() * 22);
+  }
+  cg.putImageData(puntos, 0, 0);
+  c.drawImage(grano, 0, 0, L, L);
+  aclararHasta(c, 0.5);
+  return lienzo;
+}
+
+// Ningun punto del papel queda por debajo de esa luminancia (0 a 1): es lo que asegura el contraste de la letra.
+function aclararHasta(c, minima) {
+  const imagen = c.getImageData(0, 0, LADO_COMPARTIR, LADO_COMPARTIR);
+  const d = imagen.data;
+  const lineal = Float32Array.from({ length: 256 }, (_, v) => (v <= 10 ? v / 3294.6 : Math.pow((v / 255 + 0.055) / 1.055, 2.4)));
+  for (let i = 0; i < d.length; i += 4) {
+    while (0.2126 * lineal[d[i]] + 0.7152 * lineal[d[i + 1]] + 0.0722 * lineal[d[i + 2]] < minima) {
+      d[i] += Math.ceil((250 - d[i]) / 12);
+      d[i + 1] += Math.ceil((238 - d[i + 1]) / 12);
+      d[i + 2] += Math.ceil((208 - d[i + 2]) / 12);
+    }
+  }
+  c.putImageData(imagen, 0, 0);
+}
+
+const estiloPergamino = {
+  id: 'pergamino',
+  nombre: 'Pergamino',
+  fuentes: [`400 48px ${FUENTE_LECTURA}`, `600 40px ${FUENTE_LECTURA}`],
+  dibujar(ctx, verso) {
+    const L = LADO_COMPARTIR, centro = L / 2;
+    const caja = { arriba: 110, abajo: 922, ancho: 840 };
+    const altoCita = 134; // filete + cita
+
+    const bloque = LienzoTexto.ajustar(ctx, verso.palabras, {
+      ancho: caja.ancho, alto: caja.abajo - caja.arriba - altoCita,
+      max: 76, min: 40, interlinea: 1.38,
+      fuente: (t) => `400 ${t}px ${FUENTE_LECTURA}`,
+    });
+    if (!bloque) return false;
+
+    if (!fondoPergamino) fondoPergamino = crearPergamino();
+    ctx.drawImage(fondoPergamino, 0, 0);
+
+    // texto y cita, centrados como un solo grupo
+    const y = caja.arriba + (caja.abajo - caja.arriba - bloque.alto - altoCita) / 2;
+    LienzoTexto.dibujar(ctx, bloque, centro, y, (t) => (t.jesus ? '#7E1C12' : '#3B2414'));
+
+    ctx.save();
+    // filete fino que se desvanece en las puntas
+    const yFilete = y + bloque.alto + 44;
+    const filete = ctx.createLinearGradient(centro - 170, 0, centro + 170, 0);
+    filete.addColorStop(0, 'rgba(122,78,36,0)');
+    filete.addColorStop(0.5, 'rgba(122,78,36,0.85)');
+    filete.addColorStop(1, 'rgba(122,78,36,0)');
+    ctx.fillStyle = filete;
+    ctx.fillRect(centro - 170, yFilete, 340, 2);
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#7C321A';
+    ctx.font = `600 44px ${FUENTE_LECTURA}`;
+    ctx.fillText(verso.cita, centro, yFilete + 58);
+
+    ctx.fillStyle = '#5E4526';
+    ctx.font = `400 26px ${FUENTE_LECTURA}`;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '1.5px';
+    ctx.fillText(verso.pie, centro, 984);
+    ctx.restore();
+    return true;
+  },
+};
+
 const ESTILOS_COMPARTIR = [
   estiloClasico,
+  estiloPergamino,
 ];
