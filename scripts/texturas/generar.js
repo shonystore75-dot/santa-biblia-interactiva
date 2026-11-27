@@ -1,6 +1,8 @@
 // Regenera las imagenes del carrusel "Explorar" (papiros y vara) en /texturas.
 //
-// Uso:  node scripts/texturas/generar.js
+// Uso:  node scripts/texturas/generar.js              (todas)
+//       node scripts/texturas/generar.js pergamino-compartir   (solo las nombradas; las demas no se tocan)
+// 'pergamino-compartir' es la hoja cuadrada del estilo Pergamino al compartir un versiculo.
 //
 // Abre generar.html (que contiene las mismas funciones de ruido/canvas que usaba
 // index.html) en Chrome o Edge sin interfaz, recoge los PNG que dibuja y los
@@ -46,10 +48,12 @@ const texturas = JSON.parse(texto);
 
 (async () => {
   fs.mkdirSync(DESTINO, { recursive: true });
+  const pedidas = process.argv.slice(2);
   for (const [nombre, url] of Object.entries(texturas)) {
+    if (pedidas.length && !pedidas.includes(nombre)) continue;
     const png = Buffer.from(url.split(',')[1], 'base64');
     const salida = path.join(DESTINO, nombre + '.webp');
-    await sharp(png).webp({ quality: 92, alphaQuality: 100, effort: 6 }).toFile(salida);
+    await sharp(png).webp({ quality: nombre === 'pergamino-compartir' ? 86 : 92, alphaQuality: 100, effort: 6 }).toFile(salida);
     console.log(nombre + '.webp', Math.round(fs.statSync(salida).size / 1024) + ' KB', '(PNG ' + Math.round(png.length / 1024) + ' KB)');
   }
 })();

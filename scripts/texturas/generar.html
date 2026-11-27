@@ -164,12 +164,103 @@
   }
 
 
+  // Hoja cuadrada del estilo "Pergamino" al compartir un versiculo (compartir-estilos.js): mismas formulas,
+  // colores y tamano de grano que texturaPapiro, con el rasgado en los CUATRO lados sobre marfil.
+  // El centro se aclara sumando luz (las fibras conservan su fuerza) y, donde va la letra, ningun punto
+  // baja de la luminancia 0,41, que asegura un contraste de 4,5:1 con los colores del estilo.
+  function texturaCompartir() {
+    const L = 1080, semilla = 2;
+    const N = crearRuido(semilla * 97 + 11), R = mulberry(semilla * 31 + 5);
+    const SUP = [[0, 2.5], [5.8, 1.8], [10.9, 4.1], [18, 0.4], [22.8, 3.6], [29.4, 1.4], [35.4, 0.8], [40.1, 0.7], [46.6, 1.4], [51.2, 3.5], [57.4, 0.9], [62.2, 2.5], [67.1, 2.8], [73.3, 1.7], [81.1, 2.4], [86.1, 0.5], [91.5, 0.4], [98.5, 1], [100, 2.9]];
+    const INF = [[0, 3.2], [6.2, 0.8], [12, 2.2], [18.8, 0.4], [25.1, 2.9], [30.8, 3.3], [38.5, 2.5], [45.8, 3.7], [51.3, 1.5], [58.1, 3], [64.7, 2.6], [72.7, 2.5], [80.1, 2], [85.8, 3.6], [94.2, 4], [99.2, 2.1], [100, 3.2]];
+    // profundidad del borde en cada pixel de un lado; el perfil se repite cada 704 px, como en el carrusel
+    const lado = (puntos, desfase, espejo, k) => Float32Array.from({ length: L }, (_, p) => {
+      let u = ((p / 704 + desfase) % 1 + 1) % 1;
+      if (espejo) u = 1 - u;
+      u *= 100;
+      let base = puntos[puntos.length - 1][1];
+      for (let j = 1; j < puntos.length; j++) {
+        if (u <= puntos[j][0]) {
+          const a = puntos[j - 1], b = puntos[j];
+          base = a[1] + (b[1] - a[1]) * ((u - a[0]) / (b[0] - a[0] || 1));
+          break;
+        }
+      }
+      const q = N.n(p * 0.03 + k * 50, 20 + k);
+      return 10 + base * 8.57 + 4 * N.fbm(p * 0.06 + k * 9, 7.7, 3) + (q > 0.82 ? 9 * (q - 0.82) / 0.18 : 0);
+    });
+    const arriba = lado(SUP, 0.13, false, 0), abajo = lado(INF, 0.31, true, 1);
+    const izquierda = lado(INF, 0.57, false, 2), derecha = lado(SUP, 0.74, true, 3);
+    const distHoja = (x, y) => Math.min(y - arriba[x], L - abajo[x] - y, x - izquierda[y], L - derecha[y] - x);
+    const suave = (v) => { v = v < 0 ? 0 : v > 1 ? 1 : v; return v * v * (3 - 2 * v); };
+
+    const c = crearLienzo(L, L), g = c.getContext('2d', { willReadFrequently: true });
+    const img = g.createImageData(L, L), d = img.data;
+    const tira = 84, tonos = [];
+    for (let k = 0; k < 13; k++) tonos.push((R() - 0.5) * 0.12);
+    for (let y = 0; y < L; y++) {
+      for (let x = 0; x < L; x++) {
+        let dist = distHoja(x, y);
+        if (dist < 60) dist += (N.n(x * 0.33, y * 0.33) - 0.5) * 4 + (N.n(x * 1.1, y * 1.1) - 0.5) * 1.6;
+        let rr = 246, gg = 238, bb = 220; // marfil de fuera
+        const al = dist <= -1 ? 0 : dist >= 1.5 ? 1 : (dist + 1) / 2.5;
+        if (al < 1) { // sombra corta bajo la hoja
+          const a = 0.3 * suave((distHoja(x, Math.max(0, y - 5)) + 9) / 11);
+          rr += (70 - rr) * a; gg += (44 - gg) * a; bb += (24 - bb) * a;
+        }
+        if (al > 0) {
+          const fib = N.fbm(x * 0.010, y * 0.55, 3), fino = N.n(x * 0.9, y * 0.22), grande = N.fbm(x * 0.008 + 7, y * 0.01 + 3, 3);
+          const vert = N.fbm(x * 0.55 + 40, y * 0.014, 3);
+          const kk = Math.floor(x / tira), sx = x - kk * tira;
+          // trama al 80 %: la hoja se ve a escala 1:1 y asi queda como la del carrusel, que la pantalla suaviza
+          let t = 0.34 + grande * 0.6 + (fib - 0.5) * 0.37 + (vert - 0.5) * 0.16 + tonos[kk] * 0.85 + (fino - 0.5) * 0.095;
+          if (sx < 2) t -= 0.13 * (1 - sx / 2); else if (sx < 5) t += 0.032;
+          t = t < 0 ? 0 : t > 1 ? 1 : t;
+          let pr = 246 - 44 * t, pg = 226 - 64 * t, pb = 176 - 82 * t;
+          const claro = suave((dist - 22) / 110);
+          pr += 4 * claro; pg += 6 * claro; pb += 6 * claro;
+          let e = 1 - dist / 40; e = e < 0 ? 0 : e > 1 ? 1 : e; e *= e;
+          pr = pr * (1 - 0.3 * e) - 18 * e; pg = pg * (1 - 0.46 * e) - 14 * e; pb = pb * (1 - 0.66 * e) - 8 * e;
+          if (dist < 6) { const q = (6 - Math.max(dist, 0)) / 8; pr *= 1 - 0.34 * q; pg *= 1 - 0.46 * q; pb *= 1 - 0.55 * q; }
+          const costado = Math.min(x - izquierda[y], L - derecha[y] - x);
+          const sombra = 0.18 * (1 - suave(costado / 85)); // luz de los costados, suave; arriba y abajo, como en el carrusel, no hay
+          pr += (50 - pr) * sombra; pg += (28 - pg) * sombra; pb += (10 - pb) * sombra;
+          rr += (pr - rr) * al; gg += (pg - gg) * al; bb += (pb - bb) * al;
+        }
+        const i = (y * L + x) * 4;
+        d[i] = rr; d[i + 1] = gg; d[i + 2] = bb; d[i + 3] = 255;
+      }
+    }
+    g.putImageData(img, 0, 0);
+    // manchas de edad y motas
+    for (let m = 0; m < 9; m++) {
+      const rad = 50 + R() * 70, px = 70 + R() * (L - 140), py = 70 + R() * (L - 140), gr = g.createRadialGradient(px, py, 0, px, py, rad);
+      gr.addColorStop(0, `rgba(120,78,32,${0.08 + R() * 0.1})`); gr.addColorStop(1, 'rgba(120,78,32,0)');
+      g.fillStyle = gr; g.fillRect(px - rad, py - rad, rad * 2, rad * 2);
+    }
+    for (let m = 0; m < 340; m++) { g.fillStyle = `rgba(70,40,15,${0.25 + R() * 0.4})`; const sz = 1 + R() * 1.6; g.fillRect(55 + R() * (L - 110), 55 + R() * (L - 110), sz, sz); }
+    // limite de contraste en la zona de la letra, desvanecido a su alrededor
+    const todo = g.getImageData(0, 0, L, L), z = todo.data;
+    const lineal = Float32Array.from({ length: 256 }, (_, v) => (v <= 10 ? v / 3294.6 : Math.pow((v / 255 + 0.055) / 1.055, 2.4)));
+    for (let y = 80; y < 1010; y++) {
+      for (let x = 80; x < 1000; x++) {
+        const fuera = Math.max(116 - x, x - 964, 112 - y, y - 970, 0), minima = 0.415 - fuera * 0.004, i = (y * L + x) * 4;
+        while (0.2126 * lineal[z[i]] + 0.7152 * lineal[z[i + 1]] + 0.0722 * lineal[z[i + 2]] < minima) {
+          z[i] += Math.ceil((250 - z[i]) / 40); z[i + 1] += Math.ceil((238 - z[i + 1]) / 40); z[i + 2] += Math.ceil((208 - z[i + 2]) / 40);
+        }
+      }
+    }
+    g.putImageData(todo, 0, 0);
+    return c.toDataURL('image/png');
+  }
+
 // Tamano maximo que el carrusel puede mostrar (CSS px): hoja = 380-28 de ancho,
 // 280-28 de alto; vara = alto + 20. texturaPapiro ya multiplica por 2 y texturaVara por 3.
 const ANCHO_HOJA = 352, ALTO_HOJA = 252, N_PAPIROS = 3;
 const salida = {};
 for (let s = 1; s <= N_PAPIROS; s++) salida['papiro-' + s] = texturaPapiro(s, ANCHO_HOJA, ALTO_HOJA);
 salida['vara'] = texturaVara(ALTO_HOJA + 20);
+salida['pergamino-compartir'] = texturaCompartir();
 document.getElementById('salida').textContent = JSON.stringify(salida);
 document.title = 'listo';
 </script>
