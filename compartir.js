@@ -96,18 +96,13 @@ const Compartir = (() => {
 
   // ---------- envio ----------
 
-  // Convierte los lienzos a JPEG (base64) sin frenar la pantalla; se adelanta mientras la hoja esta abierta.
+  // Convierte los lienzos a JPEG (base64); se adelanta mientras la hoja esta abierta, despues de pintar la pantalla.
+  // Con toDataURL (unas decimas como mucho): en la WebView de Android, toBlob llega a tardar mas de 10 segundos.
   function codificar(resultado) {
     if (!resultado.datos) {
-      resultado.datos = Promise.all(resultado.lienzos.map(lienzo => new Promise((resolver, fallar) => {
-        lienzo.toBlob(blob => {
-          if (!blob) { fallar(new Error('sin imagen')); return; }
-          const lector = new FileReader();
-          lector.onload = () => resolver(lector.result.split(',')[1]);
-          lector.onerror = () => fallar(lector.error);
-          lector.readAsDataURL(blob);
-        }, TIPO, CALIDAD);
-      })));
+      resultado.datos = new Promise((resolver, fallar) => setTimeout(() => {
+        try { resolver(resultado.lienzos.map(lienzo => lienzo.toDataURL(TIPO, CALIDAD).split(',')[1])); } catch (e) { fallar(e); }
+      }, 0));
       resultado.datos.catch(() => { resultado.datos = null; });
     }
     return resultado.datos;
@@ -301,10 +296,10 @@ const Compartir = (() => {
           c.imageSmoothingQuality = 'high';
           c.drawImage(resultado.lienzos[0], 0, 0, mini.width, mini.height);
           if (resultado.dividido) nombre.textContent = `${estilo.nombre} · 2 imágenes`;
-          codificar(resultado).catch(() => {});
         }
         b.classList.add('lista');
         entregar();
+        return resultado;
       };
     });
 
@@ -322,16 +317,25 @@ const Compartir = (() => {
     if (elegida) fila.scrollLeft = elegida.offsetLeft - fila.offsetLeft - (fila.clientWidth - elegida.offsetWidth) / 2;
 
     // Primero se ve la hoja; las miniaturas se dibujan despues, una por cuadro y sin esperarse entre si.
+    // Con todas a la vista, se adelantan los JPEG (uno cada vez) para que el menu de Android salga antes.
+    const cuadro = (espera) => new Promise(r => requestAnimationFrame(() => setTimeout(r, espera)));
     (async () => {
+      const hechas = [];
       for (const dibujar of pendientes) {
-        await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
+        await cuadro(0);
         if (!fondo.isConnected) return;
-        dibujar();
+        hechas.push(dibujar());
+      }
+      for (const resultado of await Promise.all(hechas)) {
+        await cuadro(80);
+        if (!fondo.isConnected) return;
+        if (resultado) codificar(resultado).catch(() => {});
       }
     })();
   }
 
   borrarTemporales();
+  cargarFuentes().catch(() => {});
   // Los fondos se calculan al abrir la pagina, para que esten listos al tocar compartir.
   setTimeout(() => ESTILOS_COMPARTIR.forEach(e => { if (e.preparar) e.preparar().catch(() => {}); }), 300);
 
