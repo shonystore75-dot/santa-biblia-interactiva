@@ -84,6 +84,7 @@ const Compartir = (() => {
   async function generar(estilo, verso) {
     await cargarFuentes();
     await Promise.all((estilo.fuentes || []).map(f => document.fonts.load(f)));
+    if (estilo.preparar) await estilo.preparar();
     const palabras = palabrasDe(verso.html);
     const una = dibujarUna(estilo, palabras, verso.referencia);
     if (una) return { lienzos: [una], dividido: false };
@@ -94,6 +95,23 @@ const Compartir = (() => {
   }
 
   // ---------- envio ----------
+
+  // Convierte los lienzos a JPEG (base64) sin frenar la pantalla; se adelanta mientras la hoja esta abierta.
+  function codificar(resultado) {
+    if (!resultado.datos) {
+      resultado.datos = Promise.all(resultado.lienzos.map(lienzo => new Promise((resolver, fallar) => {
+        lienzo.toBlob(blob => {
+          if (!blob) { fallar(new Error('sin imagen')); return; }
+          const lector = new FileReader();
+          lector.onload = () => resolver(lector.result.split(',')[1]);
+          lector.onerror = () => fallar(lector.error);
+          lector.readAsDataURL(blob);
+        }, TIPO, CALIDAD);
+      })));
+      resultado.datos.catch(() => { resultado.datos = null; });
+    }
+    return resultado.datos;
+  }
 
   const conEnlace = (mensaje) => (ENLACE_INSTALACION ? `${mensaje}\n${ENLACE_INSTALACION}` : mensaje);
 
@@ -123,7 +141,8 @@ const Compartir = (() => {
     return archivos.rmdir({ path: CARPETA, directory: 'CACHE', recursive: true }).catch(() => {});
   }
 
-  async function compartirImagenes(lienzos, verso) {
+  async function compartirImagenes(resultado, verso) {
+    const lienzos = resultado.lienzos;
     const base = verso.referencia.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-');
     const nombres = lienzos.map((_, i) => `${base}${lienzos.length > 1 ? `-${i + 1}` : ''}.jpg`);
     const mensaje = conEnlace(NOMBRE_APP);
@@ -133,12 +152,12 @@ const Compartir = (() => {
       if (!Filesystem || !Share) throw new Error('faltan plugins');
       // La app que recibe la imagen puede leerla despues de cerrarse el menu: los temporales de un envio terminado
       // se borran antes del siguiente (y al volver a abrir Leer); los de un menu cancelado, en el momento.
+      const datos = await codificar(resultado);
       await borrarTemporales();
       const rutas = [];
       try {
         for (let i = 0; i < lienzos.length; i++) {
-          const datos = lienzos[i].toDataURL(TIPO, CALIDAD).split(',')[1];
-          const { uri } = await Filesystem.writeFile({ path: `${CARPETA}/${nombres[i]}`, data: datos, directory: 'CACHE', recursive: true });
+          const { uri } = await Filesystem.writeFile({ path: `${CARPETA}/${nombres[i]}`, data: datos[i], directory: 'CACHE', recursive: true });
           rutas.push(uri);
         }
       } catch (e) {
@@ -211,8 +230,9 @@ const Compartir = (() => {
       if (enCurso) return;
       enCurso = true;
       cerrar();
+      mostrarToast('Preparando…'); // respuesta inmediata: el menu de Android tarda un momento en salir
       try {
-        await compartirImagenes(resultado.lienzos, verso);
+        await compartirImagenes(resultado, verso);
       } catch (e) {
         mostrarToast('No se pudo compartir la imagen');
       } finally {
@@ -235,11 +255,28 @@ const Compartir = (() => {
       aviso.after(botones);
     }
 
+    let pedido = false;
+    const marcar = (elegido) => fila.querySelectorAll('.opcion-compartir').forEach(o => o.classList.toggle('elegida', o === elegido));
+
     const pendientes = ESTILOS_COMPARTIR.map(estilo => {
       let resultado; // undefined = generandose; false = fallo
-      const b = boton('opcion-compartir', '', () => {
-        if (resultado === undefined) return;
-        if (resultado === false) { mostrarToast('No se pudo crear la imagen'); return; }
+      let entregar;
+      const listo = new Promise(r => { entregar = r; });
+      const b = boton('opcion-compartir', '', async () => {
+        if (pedido) return; // ya se toco una miniatura que aun se esta preparando
+        if (resultado === undefined) {
+          pedido = true;
+          marcar(b);
+          b.querySelector('span').textContent = 'Preparando…';
+          await listo;
+          pedido = false;
+          if (!fondo.isConnected) return; // cancelado mientras se preparaba
+        }
+        if (resultado === false) {
+          b.querySelector('span').textContent = estilo.nombre;
+          mostrarToast('No se pudo crear la imagen');
+          return;
+        }
         guardarEstilo(estilo.id);
         if (!resultado || resultado.dividido) preguntarLargo(resultado);
         else enviar(resultado);
@@ -264,8 +301,10 @@ const Compartir = (() => {
           c.imageSmoothingQuality = 'high';
           c.drawImage(resultado.lienzos[0], 0, 0, mini.width, mini.height);
           if (resultado.dividido) nombre.textContent = `${estilo.nombre} · 2 imágenes`;
+          codificar(resultado).catch(() => {});
         }
         b.classList.add('lista');
+        entregar();
       };
     });
 
@@ -282,17 +321,19 @@ const Compartir = (() => {
     const elegida = fila.querySelector('.elegida');
     if (elegida) fila.scrollLeft = elegida.offsetLeft - fila.offsetLeft - (fila.clientWidth - elegida.offsetWidth) / 2;
 
-    // Primero se ve la hoja; las miniaturas se dibujan despues, una por cuadro.
+    // Primero se ve la hoja; las miniaturas se dibujan despues, una por cuadro y sin esperarse entre si.
     (async () => {
       for (const dibujar of pendientes) {
         await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
         if (!fondo.isConnected) return;
-        await dibujar();
+        dibujar();
       }
     })();
   }
 
   borrarTemporales();
+  // Los fondos se calculan al abrir la pagina, para que esten listos al tocar compartir.
+  setTimeout(() => ESTILOS_COMPARTIR.forEach(e => { if (e.preparar) e.preparar().catch(() => {}); }), 300);
 
   return { abrir, generar, palabrasDe };
 })();

@@ -315,3 +315,4 @@ temático que la diferencie claramente de apps como YouVersion o Bible.is.
 - Letra Source Serif 4 incluida en `fuentes/` (OFL). Plugin nuevo: `@capacitor/filesystem` (temporales en la caché, carpeta `compartir`). La imagen se envía en JPEG 95 %.
 - Al publicar la app: rellenar `ENLACE_INSTALACION` en `compartir.js`.
 - Probado en el Xiaomi: la imagen llega al menú y al selector de WhatsApp, cancelar no deja archivos y Leer va a 60 fps. Falta confirmar un envío completo.
+- Pergamino (2026-11-26): borde rasgado y tostado en los cuatro lados, como los rollos del carrusel (formulas de `scripts/texturas/generar.html`, recreadas en canvas), sobre marfil. La hoja se calcula en un Worker al abrir Leer (`preparar()` del estilo) y el JPEG se codifica con la hoja de compartir abierta. Pendiente: medir en el Xiaomi.
