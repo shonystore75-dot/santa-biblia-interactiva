@@ -22,6 +22,13 @@ def hasta(color,destino,fondos,minimo=4.6):
 def triple(h): return ','.join(str(v) for v in rgb(h))
 
 PALETA_POR_DEFECTO='turquesa'
+# Titulo y subtitulo del encabezado: UN SOLO ajuste para las 9 paletas (no repetirlo paleta por paleta).
+TITULO_SUBIR=10    # px que sube el bloque titulo/subtitulo
+TITULO_EXTRA=6     # px que los titulos largos pueden subir ademas, junto a los botones (temas.js usa la mitad si llevan tilde)
+# Excepciones SOLO donde el dibujo del encabezado lo exija; cada una se documenta en PROJECT_STATUS.md. Claves: titulo_subir, titulo_extra
+TITULO_EXCEPCIONES={
+'tierra':dict(titulo_subir=18),   # paisaje: el titulo va sobre el cielo, por encima del camino y las lomas
+}
 NOMBRES={'azul':'Azul clásico','borgona':'Borgoña real','olivo':'Verde olivo','tierra':'Tierra bíblica','purpura':'Púrpura espiritual','turquesa':'Turquesa renovación','nocturna':'Nocturna','marfil':'Marfil clásico','ambar':'Ámbar inspirador'}
 P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
 'azul':('#F7F5F0','#FFFCF6','#172B47','#102F50','#D6A84E'),
@@ -158,6 +165,17 @@ def derivar(n):
         d['sobre_acento']=hasta(x if L(x)<0.5 else f,'#000000' if L(x)<0.5 else '#FFFFFF',[d['acento_btn']],4.6)
     return d
 
+def reglas_titulo():
+    """posicion del titulo del encabezado: la regla compartida y, despues, las excepciones por paleta"""
+    o=['''/* ===== Titulo del encabezado (con su subtitulo): sube lo mismo en todas las paletas (TITULO_SUBIR en generar-temas.py).
+   Los titulos que no caben en su columna (temas.js les pone .titulo-ancho) se quedan en una linea y pasan POR ENCIMA de los botones de buscar y A-/A+ ===== */
+:root header:not(.hero) > div:has(> #titulo-header) { position: relative; top: -%dpx; --subir-extra: %dpx; min-width: 0; }
+'''%(TITULO_SUBIR,TITULO_EXTRA)]
+    for nn,e in TITULO_EXCEPCIONES.items():
+        v=(nn,e.get('titulo_subir',TITULO_SUBIR),e.get('titulo_extra',TITULO_EXTRA))
+        o.append(''':root[data-tema="%s"] header:not(.hero) > div:has(> #titulo-header) { top: -%dpx; --subir-extra: %dpx; }
+''' % v)
+    return ''.join(o)
 def css():
     o=['/* GENERADO por scripts/generar-temas.py: no editar a mano. 9 paletas; la de por defecto es Turquesa renovacion. */\n']
     def bloque(sel,n):
@@ -331,11 +349,9 @@ nav .item { -webkit-tap-highlight-color: transparent; }   /* sin el recuadro azu
 :root .contenido-ads .marcador { line-height: 1.35; }
 :root .contenido-ads .marcador-sub { font-size: 9px; line-height: 1.3; }
 
-/* ===== Titulo del encabezado: en Tierra va 18px mas arriba (con su subtitulo). Los titulos que no caben en su columna
-   (temas.js les pone .titulo-ancho) se quedan en una linea y pasan POR ENCIMA de los botones de buscar y A-/A+ ===== */
-:root[data-tema="tierra"] header:not(.hero) > div:has(> #titulo-header) { top: -18px; --subir-extra: 6px; }
-:root header:not(.hero) > div:has(> #titulo-header) { min-width: 0; }
-:root header:not(.hero) #titulo-header.titulo-ancho { white-space: nowrap; width: max-content; position: relative; }
+""")
+    o.append(reglas_titulo())
+    o.append(""":root header:not(.hero) #titulo-header.titulo-ancho { white-space: nowrap; width: max-content; position: relative; }
 
 /* ===== Numeros de versiculo (todas las paletas): letra serif de la app en negrita, sobre la linea, con subrayado dorado fino ===== */
 :root .phone .verso .num { display: inline-block; font-family: 'Source Serif 4', serif; font-weight: 700; font-size: 0.86em; line-height: 1.1;
