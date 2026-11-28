@@ -23,11 +23,11 @@ def triple(h): return ','.join(str(v) for v in rgb(h))
 
 PALETA_POR_DEFECTO='turquesa'
 # Titulo y subtitulo del encabezado: UN SOLO ajuste para las 9 paletas (no repetirlo paleta por paleta).
-TITULO_SUBIR=10    # px que sube el bloque titulo/subtitulo
-TITULO_EXTRA=6     # px que los titulos largos pueden subir ademas, junto a los botones (temas.js usa la mitad si llevan tilde)
+TITULO_SUBIR=18    # px que sube el bloque titulo/subtitulo
+TITULO_EXTRA=3     # px que los titulos largos pueden subir ademas, junto a los botones (temas.js usa la mitad si llevan tilde)
 # Excepciones SOLO donde el dibujo del encabezado lo exija; cada una se documenta en PROJECT_STATUS.md. Claves: titulo_subir, titulo_extra
 TITULO_EXCEPCIONES={
-'tierra':dict(titulo_subir=18),   # paisaje: el titulo va sobre el cielo, por encima del camino y las lomas
+# (hoy ninguna)
 }
 NOMBRES={'azul':'Azul clásico','borgona':'Borgoña real','olivo':'Verde olivo','tierra':'Tierra bíblica','purpura':'Púrpura espiritual','turquesa':'Turquesa renovación','nocturna':'Nocturna','marfil':'Marfil clásico','ambar':'Ámbar inspirador'}
 P={ # fondo, tarjeta, texto, nav, acento  (los colores base NO se tocan)
