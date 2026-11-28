@@ -1,2 +1,5 @@
 node_modules/
 www/
+Claude outputs/
+android/.idea/
+scripts/__pycache__/
